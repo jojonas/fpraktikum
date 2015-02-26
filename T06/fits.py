@@ -111,34 +111,6 @@ def _simple_peak(data, index):
 			break
 	return index
 
-def local_double_gauss_fit(data, mu1=0, mu2=0, sigma1=1, sigma2=1, A1=100, A2=100, N=5, errors=None, f=1.0):
-	func = lambda x, mu1, mu2, sigma1, sigma2, A1, A2: GAUSS(x,mu1,sigma1,A1) + GAUSS(x,mu2,sigma2,A2)
-	fit = Fit(func)
-	fit.mu1 = mu1
-	fit.mu2 = mu2
-	fit.sigma1 = sigma1
-	fit.sigma2 = sigma2
-	fit.A1 = A1
-	fit.A2 = A2
-
-	for i in range(N):
-		lower1 = max(int(fit.mu1-f*fit.sigma1), 0)
-		upper1 = min(int(fit.mu1+f*fit.sigma1), len(data))
-		lower2 = max(int(fit.mu2-f*fit.sigma2), 0)
-		upper2 = min(int(fit.mu2+f*fit.sigma2), len(data))
-
-		lower = min(lower1, lower2)
-		upper = max(upper1, upper2)
-
-		xdata = np.arange(lower, upper)
-		ydata = data[lower:upper]
-		yerrors = errors[lower:upper]
-		fit.fit(xdata, ydata, yerrors)
-		fit.sigma1 = abs(fit.sigma1)
-		fit.sigma2 = abs(fit.sigma2)
-
-	return fit
-
 def local_gauss_fit(data, mu=0, sigma=10, A=100, N=5, errors=None, f=1.0):
 	fit = Fit(GAUSS)
 	fit.mu = _simple_peak(data, mu)

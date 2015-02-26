@@ -97,15 +97,6 @@ class Experiment:
 			fit.plot(mu0-4*sigma0, mu0+4*sigma0, N=500, color="black")
 		return fit
 
-	def find_double_peak(self, mu1, sigma1, mu2, sigma2, plot=False):
-		fit = local_double_gauss_fit(self.data, mu1, mu2, sigma1, sigma2, A1=100, A2=100, errors=self.errors)
-		if plot:
-			lower = min(mu1-4*sigma1, mu2-4*sigma2)
-			upper = max(mu1+4*sigma1, mu2+4*sigma2)
-			fit.plot(lower, upper, N=500, color="black")
-		return fit
-
-
 def kalibrierung(plot=True):
 	print("##### CALIBRATION #####")
 	channels = []
@@ -116,26 +107,12 @@ def kalibrierung(plot=True):
 		print("="*10, filename, "="*10)
 		experiment = Experiment(PATH + "/data/" + filename, title=filename)
 		if plot: experiment.errorplot()
-		for i, peak in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
-			if len(peak) == 3:
-				mu0, sigma0, energy = peak
-				fit = experiment.find_peak(mu0, sigma0, plot=plot)
-				channels.append(fit.mu)
-				channel_errors.append(fit.sigma_mu)
-				energies.append(energy)
-				print("PEAK %d: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu, fit.sigma, fit.A, fit.chisqndof, energy))
-			elif len(peak) == 6:
-				mu1, sigma1, energy1, mu2, sigma2, energy2 = peak
-				fit = experiment.find_double_peak(mu1, sigma1, mu2, sigma2, plot=plot)
-				channels.append(fit.mu1)
-				channels.append(fit.mu2)
-				channel_errors.append(fit.sigma_mu1)
-				channel_errors.append(fit.sigma_mu2)
-				energies.append(energy1)
-				energies.append(energy2)
-				print("PEAK %da: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu1, fit.sigma1, fit.A1, fit.chisqndof, energy1))
-				print("PEAK %db: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu2, fit.sigma2, fit.A2, fit.chisqndof, energy2))
-
+		for i, (mu0, sigma0, energy) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
+			fit = experiment.find_peak(mu0, sigma0, plot=plot)
+			channels.append(fit.mu)
+			channel_errors.append(fit.sigma_mu)
+			energies.append(energy)
+			print("PEAK %d: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu, fit.sigma, fit.A, fit.chisqndof, energy))
 		if plot: plt.show()
 
 	X = np.array(energies)
