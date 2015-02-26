@@ -1,4 +1,6 @@
 import math
+import os
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
@@ -6,10 +8,11 @@ from matplotlib.ticker import FuncFormatter
 from mca import McaFile
 from dft import dft, smooth
 from funcs import GAUSS
-from peaks import gauss_fit, chisqNdof
-from linreg import linreg2
+from fits import linear_fit, local_gauss_fit, local_double_gauss_fit
 
 from manuell import *
+
+PATH = os.path.dirname(os.path.realpath(__file__))
 
 def testsignal():
 	N = 4096
@@ -23,9 +26,6 @@ def testsignal():
 	plt.show()
 
 class Experiment:
-	LEER = McaFile("data/G20_Leer.mca")
-	LEER_FACTOR = 0.5
-
 	def __init__(self, filename=None, title=None, energy_slope=1, energy_offset=0):
 		if filename:
 			file = McaFile(filename)
@@ -92,105 +92,112 @@ class Experiment:
 		plt.title(self.title)
 
 	def find_peak(self, mu0, sigma0, plot=False):
-		mu, sigma, A = gauss_fit(self.data, mu0, sigma0, 100, errors=self.errors)
+		fit = local_gauss_fit(self.data, mu0, sigma0, A=100, errors=self.errors)
 		if plot:
-			self.plot_peak(mu, sigma, A)
-		return mu, sigma, A
+			fit.plot(mu0-4*sigma0, mu0+4*sigma0, N=500, color="black")
+		return fit
 
-	def chisq_peak(self, mu, sigma, A):
-		lower = max(int(mu-sigma), 0)
-		upper = min(int(mu+sigma), self.count)
-		xdata = self.channels[lower:upper]
-		ydata = self.data[lower:upper]
-		yerrors = self.errors[lower:upper]
-		return chisqNdof(xdata, ydata, lambda x: GAUSS(x,A,mu,sigma), yerrors, nparams=3)
+	def find_double_peak(self, mu1, sigma1, mu2, sigma2, plot=False):
+		fit = local_double_gauss_fit(self.data, mu1, mu2, sigma1, sigma2, A1=100, A2=100, errors=self.errors)
+		if plot:
+			lower = min(mu1-4*sigma1, mu2-4*sigma2)
+			upper = max(mu1+4*sigma1, mu2+4*sigma2)
+			fit.plot(lower, upper, N=500, color="black")
+		return fit
 
-	def plot_peak(self, mu, sigma, A, color="black", npoints=100):
-		nx = np.linspace(mu-5*sigma, mu+5*sigma, npoints)
-		ny = GAUSS(nx, A, mu, sigma)
-		plt.plot(nx, ny, '-', color=color)
 
-		arrow_y = A*np.exp(-1/2)
-		opts = {
-			"length_includes_head": True,
-			"head_width": 4,
-			"head_length": 4,
-			"fc": color,
-			"ec": color,
-			"zorder": 100000
-		}
-
-		plt.axes().arrow(mu-sigma, arrow_y, 2*sigma, 0, **opts)
-		plt.axes().arrow(mu+sigma, arrow_y, -2*sigma, 0, **opts)
-		plt.axes().arrow(mu, 0, 0, A, **opts)
-
-def kalibrierung():
+def kalibrierung(plot=True):
+	print("##### CALIBRATION #####")
 	channels = []
 	channel_errors = []
 	energies = []
 
 	for filename, meta in kalib.items():
-		experiment = Experiment("data/" + filename, title=filename)
-		experiment.errorplot()
-		for mu0, sigma0, energy in meta["peaks"]:
-			mu, sigma, A = experiment.find_peak(mu0, sigma0)
-			experiment.plot_peak(mu, sigma, A)
-			#chisq = experiment.chisq_peak(mu, sigma, A)
-			channels.append(mu)
-			channel_errors.append(sigma)
-			energies.append(energy)
-		plt.show()
+		print("="*10, filename, "="*10)
+		experiment = Experiment(PATH + "/data/" + filename, title=filename)
+		if plot: experiment.errorplot()
+		for i, peak in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
+			if len(peak) == 3:
+				mu0, sigma0, energy = peak
+				fit = experiment.find_peak(mu0, sigma0, plot=plot)
+				channels.append(fit.mu)
+				channel_errors.append(fit.sigma_mu)
+				energies.append(energy)
+				print("PEAK %d: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu, fit.sigma, fit.A, fit.chisqndof, energy))
+			elif len(peak) == 6:
+				mu1, sigma1, energy1, mu2, sigma2, energy2 = peak
+				fit = experiment.find_double_peak(mu1, sigma1, mu2, sigma2, plot=plot)
+				channels.append(fit.mu1)
+				channels.append(fit.mu2)
+				channel_errors.append(fit.sigma_mu1)
+				channel_errors.append(fit.sigma_mu2)
+				energies.append(energy1)
+				energies.append(energy2)
+				print("PEAK %da: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu1, fit.sigma1, fit.A1, fit.chisqndof, energy1))
+				print("PEAK %db: channel %.1f, width %.1f, height: %.2f, chisq: %.2f, energy: %.2f keV" % (i, fit.mu2, fit.sigma2, fit.A2, fit.chisqndof, energy2))
 
-	X = energies
+		if plot: plt.show()
+
+	X = np.array(energies)
 	SX = 0.01/math.sqrt(12) #keV
-	Y = channels
-	SY = channel_errors
+	Y = np.array(channels)
+	SY = np.array(channel_errors)
 
 	plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt='s')
-	popt, perr = linreg2(X, Y, SX, SY)
-	slope, offset = popt
-	x = np.linspace(np.min(X), np.max(X), 100)
-	plt.plot(x, slope*x+offset, '-')
-	plt.xlabel("Energy / keV")
-	plt.ylabel("Channel")
-	plt.show()
 
-	return 1/slope, -offset/slope
+	fit = linear_fit(X, Y, xerr=SX, yerr=SY)
+	if plot:
+		fit.plot(np.min(X), np.max(X))
+		plt.xlabel("Energy / keV")
+		plt.ylabel("Channel")
+		plt.show()
+
+		err = fit.combine_errors(X, SX, SY)
+		fit.plot_residuums(X, Y, err, fmt="s")
+		plt.xlabel("Energy / keV")
+		plt.ylabel("Channel")
+		plt.show()
+
+	slope, offset = 1/fit.slope, -fit.offset/fit.slope
+
+	print("RESULT: linear fit with chisq: %.2f" % (fit.chisqndof))
+	print("RESULT: energy per bin: %.1f eV" % (slope*1000))
+	print("RESULT: energy of 0th bin: %.1f eV" % (offset*1000))
+	print()
+	return slope, offset
 
 
-def auswertung():
-	slope, offset = kalibrierung()
-	#slope = 0.0133341236267
-	#offset = 0.0409739312723
+def auswertung(plot=True):
+	slope, offset = kalibrierung(plot=plot)
 
-	print("slope =", slope)
-	print("offset =", offset)
-
+	print("##### UNKNOWN #####")
 	for filename, meta in data.items():
 		print("="*10, filename, "="*10)
-		experiment = Experiment("data/" + filename, title=filename, energy_slope=slope, energy_offset=offset)
+		experiment = Experiment(PATH + "/data/" + filename, title=filename, energy_slope=slope, energy_offset=offset)
 
-		experiment.subtract_empty("data/G20_Leer.mca", 0.5)
-		experiment.errorplot()
+		experiment.subtract_empty(PATH + "/data/G20_Leer.mca", 0.5)
+		if plot: experiment.errorplot()
 
-		for mu0, sigma0 in meta["peaks"]:
-			mu, sigma, A = experiment.find_peak(mu0, sigma0)
-			experiment.plot_peak(mu, sigma, A)
-			chisq = experiment.chisq_peak(mu, sigma, A)
+		for i, (mu0, sigma0) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
+			try:
+				fit = experiment.find_peak(mu0, sigma0, plot=plot)
+			except RuntimeError:
+				print("PEAK %d: NOT FOUND!" % i)
+			else:
+				energy = experiment.channel2energy(fit.mu)
+				width = experiment.channel2energy(fit.sigma)
+				print("PEAK %d: %.3f keV, width %.3f keV, height %d, chisq %.2f" % (i, energy, width, fit.A, fit.chisqndof))
 
-			mu = experiment.channel2energy(mu)
-			sigma = experiment.channel2energy(sigma)
-			print("Peak at %.3f keV with std %.3f keV and height %d... Chi^2/ndof: %.2f" % (mu, sigma, A, chisq))
-
-		experiment.set_energy_labels()
-
-		plt.show()
+		if plot:
+			experiment.set_energy_labels()
+			plt.show()
+	print()
 
 if __name__=="__main__":
 	# for filename in kalib:
 	# 	experiment = Experiment("data/" + filename)
 	# 	experiment.errorplot()
 	# 	plt.show()
-	auswertung()
+	auswertung(True)
 	#kalibrierung()
 	#testsignal()

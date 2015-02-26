@@ -3,7 +3,7 @@ from collections import OrderedDict
 kalib = OrderedDict()
 
 kalib["G20_Kalib_Cu.mca"] = { "peaks": [
-	(600, 10, 8.04), 
+	(600, 10, 8.04),
 	(665, 10, 8.91)
 ]}
 
@@ -23,13 +23,15 @@ kalib["G20_Kalib_Ag.mca"] = { "peaks": [
 ]}
 
 kalib["G20_Kalib_Ba.mca"] = { "peaks": [
-	(2380, 10, 31.82), # KL2
-	(2410, 10, 32.19), # KL3
-	(2720, 20, 36.38), # KM3
-	(2790, 10, 37.26), # KN2/3
+	# (2410, 10, 32.06), # K-alpha (Liste)
+	# (2720, 20, 36.55), # K-beta (Liste)
+	(2380, 10, 31.82, 2410, 10, 32.19),
+	(2720, 20, 36.38, 2790, 10, 37.26),
 ]}
 
 kalib["G20_Kalib_Tb.mca"] = { "peaks": [
+	# (3275, 20, 44.23), # K-alpha (Liste)
+	# (3770, 20, 50.65), # K-beta (Liste)
 	(470, 10, 6.28), # L2M1
 	(520, 10, 7.01), # L2M5
 	(550, 10, 7.37), # L3N4/5
