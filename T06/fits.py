@@ -93,11 +93,15 @@ class Fit:
 		y = self.apply(x)
 		plt.plot(x, y, '-', **plotopts)
 
-def linear_fit(x, y, yerr, xerr=0, N=10):
+def linear_fit(x, y, yerr, xerr=None, N=10):
 	fit = Fit(LINEAR)
-	for i in range(N):
-		err = fit.combine_errors(x, xerr, yerr)
-		fit.fit(x, y, err)
+	if xerr is None:
+		fit.fit(x, y, yerr)
+	else:
+		for i in range(N):
+			err = fit.combine_errors(x, xerr, yerr)
+			fit.fit(x, y, err)
+			
 	return fit
 
 

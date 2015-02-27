@@ -8,7 +8,7 @@ from matplotlib.ticker import FuncFormatter
 from mca import McaFile
 from dft import dft, smooth
 from funcs import GAUSS
-from fits import linear_fit, local_gauss_fit, local_double_gauss_fit
+from fits import linear_fit, local_gauss_fit
 
 from manuell import *
 
@@ -65,6 +65,9 @@ class Experiment:
 	def channel2energy(self, channel):
 		return self._energy_slope*channel + self._energy_offset
 
+	def channelwidth2energywidth(self, width):
+		return self._energy_slope*width
+
 	def set_energy_labels(self):
 		def func(x, pos):
 			return "%.2f" % self.channel2energy(x)
@@ -106,6 +109,7 @@ def kalibrierung(plot=True):
 	for filename, meta in kalib.items():
 		print("="*10, filename, "="*10)
 		experiment = Experiment(PATH + "/data/" + filename, title=filename)
+		#experiment.smooth(0.06)
 		if plot: experiment.errorplot()
 		for i, (mu0, sigma0, energy) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
 			fit = experiment.find_peak(mu0, sigma0, plot=plot)
@@ -120,10 +124,10 @@ def kalibrierung(plot=True):
 	Y = np.array(channels)
 	SY = np.array(channel_errors)
 
-	plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt='s')
-
 	fit = linear_fit(X, Y, xerr=SX, yerr=SY)
 	if plot:
+		plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt='s')
+
 		fit.plot(np.min(X), np.max(X))
 		plt.xlabel("Energy / keV")
 		plt.ylabel("Channel")
@@ -144,9 +148,7 @@ def kalibrierung(plot=True):
 	return slope, offset
 
 
-def auswertung(plot=True):
-	slope, offset = kalibrierung(plot=plot)
-
+def auswertung(slope, offset, plot=True):
 	print("##### UNKNOWN #####")
 	for filename, meta in data.items():
 		print("="*10, filename, "="*10)
@@ -170,11 +172,53 @@ def auswertung(plot=True):
 			plt.show()
 	print()
 
+def energieaufloesung(slope, offset, plot=True):
+	energies = []
+	widths = []
+	sigma_energies = []
+	sigma_widths = []
+
+	alldata = kalib
+	alldata.update(data)
+
+	for filename, meta in alldata.items():
+		experiment = Experiment(PATH + "/data/" + filename, title=filename, energy_slope=slope, energy_offset=offset)
+		for peak in meta["peaks"]:
+			mu0, sigma0 = peak[0], peak[1]
+			fit = experiment.find_peak(mu0, sigma0, plot=False)
+			print(experiment.channel2energy(fit.mu), experiment.channelwidth2energywidth(fit.sigma))
+			energies.append(experiment.channel2energy(fit.mu))
+			widths.append(experiment.channelwidth2energywidth(fit.sigma))
+			sigma_energies.append(experiment.channelwidth2energywidth(fit.sigma_mu))
+			sigma_widths.append(experiment.channelwidth2energywidth(fit.sigma_sigma))
+
+	X = np.array(energies)
+	Y = np.array(widths)
+	SX = np.array(sigma_energies)
+	SY = np.array(sigma_widths)
+
+	fit = linear_fit(X, Y, xerr=SX, yerr=SY)
+	print("RESULT: error fit with chisq: %.2f" % (fit.chisqndof))
+
+	if plot:
+		plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt='s')
+
+		fit.plot(np.min(X), np.max(X))
+		plt.xlabel("Energy / keV")
+		plt.ylabel("Peak width / keV")
+		plt.show()
+
+		err = fit.combine_errors(X, SX, SY)
+		fit.plot_residuums(X, Y, err, fmt="s")
+		plt.xlabel("Energy / keV")
+		plt.ylabel("Peak width / keV")
+		plt.show()
+
 if __name__=="__main__":
-	# for filename in kalib:
-	# 	experiment = Experiment("data/" + filename)
-	# 	experiment.errorplot()
-	# 	plt.show()
-	auswertung(True)
-	#kalibrierung()
+	#mng = plt.get_current_fig_manager()
+	#mng.window.state('zoomed')
+
+	slope, offset = kalibrierung(True)
+	#auswertung(slope, offset, True)
+	#energieaufloesung(slope, offset, True)
 	#testsignal()
