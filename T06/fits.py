@@ -93,6 +93,11 @@ class Fit:
 		y = self.apply(x)
 		plt.plot(x, y, '-', **plotopts)
 
+		props = dict(boxstyle='square', facecolor='white')
+		text = "\n".join((name + " = %.2f" % value for name, value in self._params.items()))
+		plt.gca().text(0.05, 0.95, text, transform=plt.gca().transAxes, fontsize=14,
+			verticalalignment='top', bbox=props)
+
 def linear_fit(x, y, yerr, xerr=None, N=10):
 	fit = Fit(LINEAR)
 	if xerr is None:
@@ -101,7 +106,7 @@ def linear_fit(x, y, yerr, xerr=None, N=10):
 		for i in range(N):
 			err = fit.combine_errors(x, xerr, yerr)
 			fit.fit(x, y, err)
-			
+
 	return fit
 
 
