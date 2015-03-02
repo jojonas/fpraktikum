@@ -1,3 +1,5 @@
+import sys
+
 import math
 import functools
 import inspect
@@ -6,12 +8,49 @@ from collections import OrderedDict
 
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from scipy.special import chdtrc
 import numpy as np
 
+import number
 from funcs import *
 
 def derivative(func, x, dx):
 	return (func(x+dx/2) - func(x-dx/2)) / dx
+
+def format_error(value, stat, sys=None, unit=""):
+	if unit:
+		unit = r'\enskip \mathrm{' + unit + '}'
+	if not sys:
+		value, stat = number.formatNumberPair(value, stat)
+		return r'$(' + value + r' \pm ' + stat + r'_\textrm{stat}) ' + unit + r'$'
+	else:
+		value, stat, sys = number.formatNumberPair(value, stat, sys)
+		return r'$(' + value + r' \pm ' + stat + r'_\textrm{stat} \pm ' + sys + r'_\textrm{sys}) ' + unit + r'$'
+
+def info_box(text, location='tl', margin=15, **custom):
+	options = {
+		"bbox": dict(boxstyle='square', facecolor='white'),
+		"fontsize": 12,
+		"linespacing": 1.4,
+	}
+	options.update(custom)
+
+	if location == 'tr':
+		plt.gca().annotate(text, xy=(1, 1), xytext=(-margin, -margin),
+			xycoords='axes fraction', textcoords='offset points',
+			horizontalalignment='right', verticalalignment='top', **options)
+	elif location == 'br':
+		plt.gca().annotate(text, xy=(1, 0), xytext=(-margin, margin),
+			xycoords='axes fraction', textcoords='offset points',
+			horizontalalignment='right', verticalalignment='bottom', **options)
+	elif location == 'bl':
+		plt.gca().annotate(text, xy=(0, 0), xytext=(margin, margin),
+			xycoords='axes fraction', textcoords='offset points',
+			horizontalalignment='left', verticalalignment='bottom', **options)
+	else:
+		plt.gca().annotate(text, xy=(0, 1), xytext=(margin, -margin),
+			xycoords='axes fraction', textcoords='offset points',
+			horizontalalignment='left', verticalalignment='top', **options)
 
 class Fit:
 	ERROR_PREFIX = "sigma_"
@@ -75,7 +114,13 @@ class Fit:
 		popt, pcov = curve_fit(self._func, xdata=xdata, ydata=ydata, p0=self.paramtuple(), sigma=sigma, absolute_sigma=True)
 		for name, value, error in zip(self._params, popt, np.sqrt(np.diag(pcov))):
 			self._params[name] = value
+			if math.isinf(error):
+				print("Warning: The error of '" + name + "' is infinite!\n" + \
+				"\tA likely cause of this is that one of the fit parameters has no influence on the result.\n" + \
+				"\tDouble-check your fitting function or try changing the inital parameters.\n"
+					, file=sys.stderr)
 			self._errors[self.ERROR_PREFIX + name] = error
+
 		self._ndof = len(xdata) - len(self._params)
 		self._chisq = np.power((self.apply(xdata) - ydata)/sigma, 2).sum()
 
@@ -83,20 +128,30 @@ class Fit:
 		slope = derivative(self.apply, x, dx)
 		return np.sqrt(np.power(yerr,2) + np.power(xerr*slope, 2))
 
-	def plot_residuums(self, xdata, ydata, sigma=None, **plotopts):
+	def plot_residuums(self, xdata, ydata, sigma=None, *, box=False, **plotopts):
 		y = ydata - self.apply(xdata)
 		plt.errorbar(xdata, y, yerr=sigma, **plotopts)
 		plt.axhline(0, color="gray")
+		if box:
+			text =  r"$ \chi^2 $ / ndf = " + number.formatNumber(self.chisq) + " / " \
+				+ number.formatNumber(self.ndof)
+			text += "\n" + "p = " + number.formatNumber(chdtrc(self.ndof, self.chisq))
+			info_box(text, location=box)
 
-	def plot(self, xmin=-1, xmax=1, N=100, **plotopts):
+	def plot(self, xmin=-1, xmax=1, N=100, *, box=False, units={}, **plotopts):
 		x = np.linspace(xmin, xmax, N)
 		y = self.apply(x)
 		plt.plot(x, y, '-', **plotopts)
 
-		props = dict(boxstyle='square', facecolor='white')
-		text = "\n".join((name + " = %.2f" % value for name, value in self._params.items()))
-		plt.gca().text(0.05, 0.95, text, transform=plt.gca().transAxes, fontsize=14,
-			verticalalignment='top', bbox=props)
+		if box:
+			lines = []
+			for name, value in self._params.items():
+				error = self._errors[self.ERROR_PREFIX + name]
+				unit = units.get(name, "")
+				line = name + " = " + format_error(value, error, unit=unit)
+				lines.append(line)
+			text =  "\n".join(lines)
+			info_box(text, location=box)
 
 def linear_fit(x, y, yerr, xerr=None, N=10):
 	fit = Fit(LINEAR)
