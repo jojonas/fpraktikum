@@ -1,10 +1,19 @@
 \documentclass{../Misc/MontavonLaTeX/Montavon}
 \usepackage{wasysym}
 \usepackage{multirow}
-\graphicspath {{out/}}
-\heads{RWTH Aachen \\ Fortgeschrittenenpraktikum}{T06 \\ Röntgenspektroskopie}{Gruppe 20 \\ 25. Februar 2015}
-\begin{document}
+\usepackage{isotope}
+\usepackage[autostyle=true,german=quotes]{csquotes}
 
+\graphicspath {{out/}{bilder/}{data/}}
+\heads{RWTH Aachen \\ Fortgeschrittenenpraktikum}{T06 \\ Röntgenspektroskopie}{Gruppe 20 \\ \today} % 25. Februar 2015
+
+\newcommand{\thirdwidth}{0.32\textwidth}
+\newcommand{\halfwidth}{0.48\textwidth}
+\newcommand{\fullwidth}{1.0\textwidth}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}\medskipamount
+\begin{document}
 \title{Fortgeschrittenenpraktikum \\ \quad \\ Protokoll zur Röntgenspektroskopie }
 \author{\emph{Gruppe 20} \\  Jonas Lieb, 312136 \\ Jan-Niklas Siekmann, 320781 \\ \ \\  RWTH Aachen}
 \maketitle
@@ -14,49 +23,260 @@
 \newpage
 
 \section{Einleitung}
+In diesem Versuch werden mehrere Metalle durch den Beschuss mit $\alpha$-Strahlung angeregt. Die emittierte charakteristische Röntgenstrahlung wird gemessen und den Spektrallinien zugeordnet. Nach einer Kalibration des Vielkanalanalysators mit bekannten Proben werden unbekannte Proben untersucht und enthaltene chemische Elemente identifiziert.
 
+\subsection{Theorie}
+Die Alphaquelle dieses Versuches ist \isotope[241]{Am} (Americium). Dieses zerfällt mit einer Halbwertszeit von 432,2 Jahren zu \isotope[237]{Np}. Dabei wird Alphastrahlung mit einer Energie von $5,484 \unit{MeV}$ frei. Sie hat eine Reichweite von ca. $4 \unit{cm}$. 
+
+Beim Auftreffen auf die zu untersuchende Probe wird diese angeregt. Das Alphateilchen (ein Heliumkern) entfernt dabei für gewöhnlich eines der inneren Elektronen. Energetisch höhere Elektronen aus Niveau $E_2$ nehmen den frei gewordenen Platz bei $E_1$ ein und emittieren dabei Röntgenstrahlung der Energie $E_2 - E_1$. Die Größenordnung dieser Röntgenstrahlung ist ca. $50 \unit{keV}$ und ist stark abhängig von der Kernladungszahl $Z$ des Materials.
+
+Detektiert werden die Gamma-Quanten durch einen Halbleiterdetektor. In diesem erzeugen die Photonen ein Elektron-Loch-Paar. Durch die anliegende Spannung werden die Elektronen zur Anode und die Löcher zur Kathode bewegt, wo die Ladung gemessen wird. 
+Solange das einfallende Photon innerhalb des Detektors vollkommen abgebremst wird, ist die gemessene Ladung proportional zur Energie des Photons. 
+Daher kann nach Verstärkung des Signals die Ladungsmessung in eine Energiemessung umgesetzt werden.
 
 \section{Durchführung}
 \subsection{Aufbau}
+Der Versuchsaufbau ist in Abbildung \ref{fig:Aufbau} dargestellt. 
+Er besteht im Wesentlichen aus einer \isotope[241]{Am} Alpha-Quelle, einer Probe und einem Messmodul.
+
+Beim Aufbau zur Kalibration des Vielkanalanalysators ist die Americium-Quelle zusammen mit 6 verschiedenen Proben (Kupfer, Rubidium, Molybdän, Silber, Barium und Terbium) in einem abgeschlossenen Gehäuse angebracht. Die bestrahlte Probe kann mithilfe einer Drehscheibe ausgewählt werden. Die Röntgenstrahlen entweichen daraufhin durch ein Loch im Deckel, sodass sie extern detektiert werden können.
+
+Zur Vermessung der unbekannten Proben wird ein offenerer Aufbau genutzt. Die Americium-Quelle bestrahlt die Probe in einem Winkel von ca. $45 \unit{\degree}$. Da erwartet wird, dass die charakteristische Röntgenstrahlung isotrop emittiert wird, ist der Winkel des Detektors irrelevant. Auch der Abstand des Detektors von der Probe wird in diesem Versuch nicht vermessen, da nur die Energien und relativen Peakhöhen von Interesse sind. Um viele Ereignisse zu messen, wird der Detektor jedoch möglichst nah an die Probe gefahren, um den vermessenen Raumwinkel zu maximieren.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\halfwidth]{20150225_133824}
+\includegraphics[width=\halfwidth]{20150225_133833}
+\caption{Versuchsaufbau: links: Kalibration, rechts: Vermessung der unbekannten Proben}
+\label{fig:Aufbau}
+\end{figure}
+
+Zum Schutz des Berylliumfensters im Detektor ist dieser zusätzlich mit einer roten Plastikkappe abgedeckt. 
+
+Das AmpTek Messmodul beinhaltet neben dem Detektor ebenfalls einen Verstärker und einen Vielkanalanalysator (Multi-Channel-Analyzer, MCA), der gemessene Energien auf 4069 Kanäle aufteilt. Das Modul ist über die USB-Schnittstelle mit der Software \enquote{AmpTek ADMCA} (siehe Abbildung \ref{fig:ADMCA}) verbunden, die zur Einstellung des Spektrometers und zur Aufzeichnung der Daten dient.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\fullwidth]{ScreenMessreihe}
+\caption{Screenshot der Amptek ADMCA-Software während der Datennahme}
+\label{fig:ADMCA}
+\end{figure}
+
 
 \subsection{Einstellungen}
+Die meisten Einstellungen wurden auf den voreingestellten Werten belassen.
+
+Die Messzeit betrug bei allen Messungen $15 \unit{min}$, nur die Leermessung wurde mit $30 \unit{min}$ durchgeführt und daher mit dem Faktor $0.5$ gewichtet.
 
 \subsubsection{Einstellung des Gains}
+Zum Einstellen des Verstärkungsfaktors (\emph{Gain}) wurde dieser so angepasst, dass die 4096 Kanäle des MCA im Versuch ausgenutzt werden. Dafür wurde im Kalibrationsgehäuse \enquote{Terbium} eingestellt und die $K_\beta$ Linie beobachtet, welche die höchste zu erwartende Energie darstellt. Die Verstärkung wurde so eingestellt, dass sich der $K_\beta$-Peak auf der ganz rechten Seite des Kanalspektrums befindet.
 
+Die resultierende Einstellung ist ein grober Verstärkungsfaktor (\emph{Coarse Gain}) von $21 \times$ und eine Feineinstellung (\emph{Fine Gain}) von $1.000$. 
 
 \section{Kalibration}
-\subsection{Theorie}
+\subsection{Durchführung}
+Zur Kalibrierung wurden die bekannten Proben Kupfer, Rubidium, Molybdän, Silber, Barium und Terbium vermessen. Nacheinander wurden diese auf der Drehscheibe ausgewählt und vor den Detektor gestellt. Pro Element wurde eine Messung von 15 Minuten aufgezeichnet. 
+Mithilfe dieser Messdaten und einer im Versuchsraum ausliegenden Tabelle können in der Auswertung bestimmten Kanälen Energien zugeordnet werden, und an die gesamten Daten kann eine Kalibrationsgerade angepasst werden, sodass die Kanal-Energiezuordnung für den zweiten Versuchsteil bestimmt ist.
 
 \subsection{Auswertung}
+
 \subsubsection{Rohdaten}
+Die Anzahl der pro Element gemessenen Ereignisse befinden sich in Tabelle \ref{tbl:KalibAnzahl}. Da die Daten unverändert gefittet werden, sind die Rohdaten hier nicht explizit abgebildet, sie sind jedoch in Abbildung \ref{fig:KalibDaten} als rote Markierungen zu sehen.  Klar zu erkennen sind hierbei die $K_\alpha$ und $K_\beta$ Peaks. Bei Elementen mit höherer Kernladungszahl, z.B. Barium und Terbium, ist zudem die Feinstrukturaufspaltung sichtbar.
+
+\begin{table}
+\centering
+\input{out/calib_counts.tex}
+\caption{Anzahl der aufgenommenen Kalibrationsdaten}
+\label{tbl:KalibAnzahl}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\halfwidth]{G20_Kalib_Cu_mca_all}
+\includegraphics[width=\halfwidth]{G20_Kalib_Rb_mca_all}
+
+\includegraphics[width=\halfwidth]{G20_Kalib_Mo_mca_all}
+\includegraphics[width=\halfwidth]{G20_Kalib_Ag_mca_all}
+
+\includegraphics[width=\halfwidth]{G20_Kalib_Ba_mca_all}
+\includegraphics[width=\halfwidth]{G20_Kalib_Tb_mca_all}
+\caption{Daten der Kalibration}
+\label{fig:KalibDaten}
+\end{figure}
 
 \subsubsection{Peakfindung}
+Da die Daten einem Poisson-Zählversuch entstammen, beträgt der Fehler auf die Anzahl Ereignisse pro Kanal: $\sigma_N = \sqrt{N}$, wobei $N$ die Anzahl der registrierten Ereignisse in diesem Kanal ist.
+
+Zur Peakfindung wird ein Algorithmus aus mehreren Schritten verwendet:
+Zunächst wird die ungefähre Position $x_0$ und Breite $\Delta x$ eines Peaks manuell aus dem Plot abgelesen und dem verarbeitenden Programm mitgeteilt. Dieses sucht um die angegebene Position nach einem Maximum $x_\textrm{max}$. 
+Die Daten werden danach auf den Bereich $(x_\textrm{max} - \Delta x, x_\textrm{max} + \Delta x)$ beschränkt.
+In den beschränkten Daten wird eine Anpassung durch die Methode der kleinsten Quadrate durchgeführt. Die anzupassende Funktion ist die Gaußkurve:
+\[
+	f(x) = A e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
+\]
+Danach wird $x_\textrm{max} = \mu$ und $\Delta x = \sigma$ gesetzt, die Daten werden erneut eingeschränkt (ausgehend von den Originaldaten) und gefittet.
+Dieser Vorgang wird 5 Mal wiederholt. 
+
+Dadurch, dass nur eine recht kleine Umgebung von $\pm 1 \sigma$ für die Anpassung verwendet wird,  ist diese Methode auch auf Mehrfach-Peaks anwendbar, die sich nicht zu sehr überlappen (Bedingung $\mu_2 - \mu_1 > \sigma_1 + \sigma_2$). Diese Methode wird einem Fit von einer zusammengesetzten Funktion aus zwei Gaußkurven bevorzugt, da sie numerisch stabiler ist. Die Beschränkung macht es jedoch unmöglich, die beiden Feinstrukturaufspaltungen des Barium $K_\alpha$ Peaks einzeln anzupassen, weshalb hier nur der höhere Peak (mit höherer Energie) erwähnt wird.
+
+Beispiele für angepasste Gaußkurven sind in Abbildung \ref{fig:GaussFit} zu sehen, die Fitergebnisse befinden sich in Tabelle \ref{tbl:Kalibration}.
+
+\begin{figure}[h]
+\includegraphics[width=\halfwidth]{G20_Kalib_Cu_mca_peak_1}
+\includegraphics[width=\halfwidth]{G20_Kalib_Tb_mca_peak_6}
+\caption{Beispiele für den Gauß-Fit}
+\label{fig:GaussFit}
+\end{figure}
+
+Die Fehler auf die Ergebnisse werden der Fitroutine entnommen, in diesem Fall der zurückgegebenen Kovarianzmatrix der Funktion \texttt{scipy.optimize.curve\_fit} aus dem Python Paket \enquote{SciPy}, welches die Fortran-Bibliothek \enquote{MINPACK} aus Python erreichbar macht.
+
+Die $\chi^2/\textrm{ndf}$ Werte von ca. $1$ zeigen, dass die Anpassungsmethode innerhalb der Fehler gerechtfertigt ist.
+
+\begin{table}[H]
+\centering
+\small
+\makebox[\textwidth][c]{\input{out/calib_peaks.tex}}
+\caption{Peak-Werte der Kalibrationsmessung. Bei den mit $^*$ gekennzeichneten Linien liegen die Literaturwerte der Feinstrukturaufspaltungen innerhalb der Fehler aufeinander.}
+\label{tbl:Kalibration}
+\end{table}
 
 
 \subsection{Erstellung der Kalibrationsgeraden}
+Die gemessenen Peaks werden nun manuell den Literaturwerten zugeordnet. Dabei wird für Kupfer, Rubidium, Molybdän und Silber die Zuordnung der $K_\alpha$ und $K_\beta$-Linien mithilfe der im Versuchsraum ausliegenden Daten vorgenommen. Für Barium und Terbium werden die Daten der \enquote{NIST X-Ray Transition Energies}-Datenbank\footnote{\url{http://physics.nist.gov/PhysRefData/XrayTrans/}, besucht am 27.02.2015} verwendet. Da in dieser Datenbank die relativen Peakhöhen nicht angegeben sind, werden die Peaks mit den kleinsten angegebenen experimentellen Fehlern benutzt, da angenommen wird, dass die stärksten Peaks mit dem geringste Fehler vermessen werden können.
 
-\begin{center}
-\input{out/calib.tex}
-\end{center}
+Die Energien sind in der letzten Spalte von Tabelle \ref{tbl:Kalibration} aufgetragen.
 
-\subsection{Fazit}
+Durch das Auftragen der zugeordneten Energie gegen den Kanal des Peaks kann eine Kalibrationsgerade (Abbildung \ref{fig:Kalibrationsgerade}) gebildet werden. Dabei werden die Fehler auf die Gauß-Peaks und ein Fehler von $0.02 \unit{keV}$ für die Energie benutzt. Letzterer entstammt der Unsicherheit, die sich beim Zuordnen der Peaks zu den Literaturwerten der NIST-Datenbank ergibt. 
+Sie werden auf die Fehler der Parameter der Geraden fortgepflanzt.
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\halfwidth]{calib_fit}
+\includegraphics[width=\halfwidth]{calib_residuum}
+\caption{Kalibrationsgerade}
+\label{fig:Kalibrationsgerade}
+\end{figure}
+
+%\begin{table}[h]
+%\centering
+%\input{out/calib.tex}
+%\caption{Kalibrationsergebnisse}
+%\label{tbl:Kalibrationsgerade}
+%\end{table}
+
+\subsection{Ergebnis}
+Mithilfe bekannter Proben und Energiewerte kann eine Zuordnung zwischen Kanal und Energie hergestellt werden. Diese ist hauptsächlich abhängig vom gewählten Verstärkungsfaktor. 
+Die in diesem Versuch verwendeten Einstellungen führen zu einer Einteilung von 
+\[ (13.3240 \pm 0.0040) \unit{eV/Kanal} \]
+wobei der erste Kanal die Energie 
+\[ (58.7 \pm 8.5) \unit{eV} \] 
+besitzt. Diese Werte werden im Folgenden verwendet werden und ihre Fehler als systematische Fehler fortgepflanzt.
 
 \section{Messung der unbekannten Proben}
-\subsection{Theorie}
+\subsection{Durchführung}
+Im 2. Versuchsteil wurden einige unbekannte Materialien spektroskopiert. Sie wurden dafür nacheinander auf ein Stück Pappe angebracht und in eine Halterung gesteckt. Im Winkel von $45 \unit{\degree}$ strahlte die Alpha-Quelle aus Americium auf die aktuelle Probe, sodass charakteristische Röntgenstrahlung austrat und mit dem Halbleiterdetektor gemessen werden konnte.
+Den Peaks wird nun mithilfe der Kalibration aus dem ersten Versuchsteil eine Energie zugeordnet, sodass die chemische Zusammensetzung bestimmt werden kann.
+
+Als unbekannte Materialien wurden ein 2-Cent-Stück, ein Kronkorken der Marke \enquote{Orangina}, eine gelbliche Metallplatte, eine Münze mit der Aufschrift \enquote{10} und ein Satz Bleistiftminen verwendet.
+Die Messung der letzteren beiden Gegenstände erwies sich jedoch als erfolglos, da nach manueller Inspektion hier das Hintergrundrauschen deutlich dominierte. 
+Deshalb werden nur die 2-Cent-Münze, der Kronkorken und die Metallplatte analysiert.
+
+\begin{figure}
+\centering
+\includegraphics[width=\thirdwidth]{20150225_142431}
+\includegraphics[width=\thirdwidth]{20150225_142534}
+\includegraphics[width=\thirdwidth]{20150225_142605}
+\caption{Proben: 2-Cent Münze, Kronkorken, Metallplatte}
+\end{figure}
+
+Da in diesem Aufbau neben der eigentlichen Probe auch das Metallgehäuse bestrahlt wurde, wird eine 30-minütige Leermessung abgezogen, bei der sich im Messaufbau ausschließlich ein Stück Pappe befand.
 
 \subsection{Auswertung}
 \subsubsection{Rohdaten}
+Die Rohdaten der Messung befinden sich in Abbildung \ref{fig:Unbekannte}, jeweils auf der linken Seite. Deutlich erkennbar ist der gemeinsame Hintergrund, der auch in der Leermessung (Abbildung \ref{fig:Leermessung}) erscheint. Er besteht aus einem Kontinuum am unteren Ende des Spektrums (bis $10 \unit{keV}$), einem Peak bei ca. $6.5 \unit{keV}$, einigen Peaks bei ca. $25$ bis $28 \unit{keV}$, und einem Peak bei ca. $49 \unit{keV}$. 
+Die Anzahl der registrierten Ereignisse pro Probe (Tabelle \ref{tbl:TestAnzahl}) zeigt, dass sehr viele Ereignisse dem Untergrund zuzuschreiben sind, und nur ca. 15 \% tatsächlich übrig bleiben.
+Eine eindeutige Zuordnung des Hintergrunds zu im Versuchsaufbau verwendeten Materialien ist nicht möglich.
 
-\subsubsection{Abzug der Leermessung}
+\begin{figure}[h]
+\centering
+\includegraphics[width=\fullwidth]{leer}
+\caption{Leermessung, wird im folgenden von den Rohdaten abgezogen}
+\label{fig:Leermessung}
+\end{figure}
 
-\subsubsection{Glättung durch Tiefpassfilter}
+\begin{table}[h]
+\centering
+\input{out/test_counts.tex}
+\caption{Anzahl der aufgenommenen Kalibrationsdaten}
+\label{tbl:TestAnzahl}
+\end{table}
+
+\subsubsection{Abzug der Leermessung und Kalibration der Werte}
+Zunächst wird von den Rohdaten der drei unbekannten Messreihen die
+Hälfte der Leermessung abgezogen. Die Hälfte deshalb, weil wir für
+die Leermessung doppelt so lange gemessen haben wie für die einzelnen
+Messreihen um eine möglichst genaue Aussage treffen zu können. Es
+sollte lediglich das Spektrum des jeweils verwendeten Gegenstandes
+übrig bleiben. Nun werden mithilfe der Kalibrationsdaten aus dem Vorversuch
+die Channel-Werte kalibriert. Dies führt zu folgenden Kurven
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\halfwidth]{G20_Unbekannt1_2cent_mca_raw}
+\includegraphics[width=\halfwidth]{G20_Unbekannt1_2cent_mca_all}
+\includegraphics[width=\halfwidth]{G20_Unbekannt3_kronkorken_mca_raw}
+\includegraphics[width=\halfwidth]{G20_Unbekannt3_kronkorken_mca_all}
+\includegraphics[width=\halfwidth]{G20_Unbekannt5_metallplatte_mca_raw}
+\includegraphics[width=\halfwidth]{G20_Unbekannt5_metallplatte_mca_all}
+\caption{Messdaten der Proben, vor und nach Aufbereitung der Daten (Abzug der Leermessung, Peakfinding)}
+\label{fig:Unbekannte}
+\end{figure}
+
+
+Es lassen sich sehr starke Intensitätsmaxima identifizieren. Der größere
+Peak lässt sich jeweils einem $K_{\alpha}$, der nächstliegende einem
+$K_{\beta}$ Übergang zuordnen.
+
+
+\subsection{Glättung durch einen Tiefpassfilter}
+Eine Methode, aus der Messung Rauschen zu entfernen, ist ein Tiefpassfilter. Dafür werden die Rohdaten zuerst fouriertransformiert, um die Signalstärke in Abhängigkeit einer Frequenz zu bekommen.
+Die Koeffizienten der fouriertransformierten Funktion $f(k)$ werden nun mit einer Stufenfunktion gefiltert:
+\[
+	f'_{k_\textrm{max}}(k) = \begin{cases} f(k) & k < k_\textrm{max} \\ 0 & \textrm{sonst} \end{cases}
+\]
+Daraufhin wird die inverse Fouriertransformation gebildet, um ein geglättetes Signal zu erhalten.
+
+Zur Abschätzung der Frequenz $k_\textrm{max}$, die die höchste Frequenz des erwarteten Signals darstellt, wird ein generiertes Signal benutzt:
+\[
+	f(x) = 2765 e^{-\frac{x - 601}{2 * 5.7^2}} + 528 e^{-\frac{x - 665}{2 * 6.0^2}}
+\]
+Dieses Signal ist angelehnt an die Peaks der Kalibrationsmessung von Kupfer. Es eignet sich für die obere Abschätzung der Grenzfrequenz, da die Peaks sehr scharf sind (d.h. breit im Frequenzraum).
+In Abbildung \ref{fig:Fourier} sind das Signal und die Fouriertransformierte geplottet. Die vertikale Linie stellt die nun gewählte Abschnittsfrequenz $k_\textrm{max}$ dar. Diese beträgt in dieser Darstellung $k_\textrm{max} = 0.1$.
+
+\begin{figure}[h]
+\includegraphics[width=\halfwidth]{testsignal}
+\includegraphics[width=\halfwidth]{testsignal_dft}
+\caption{Simuliertes Signal und dessen Fouriertransformierte}
+\label{fig:Fourier}
+\end{figure}
+
 
 \subsubsection{Peakfindung}
+Da die Glättung mithilfe eines Tiefpassfilters sehr aufwendig ist,
+und keine eindeutige Verbesserung der Ergebnisse herbeiführt verzichten
+wir auf die weitere Verwendung. Wir bestimmen die Lage der Maxima
+wiederum mithilfe eines Gauß-Fits, wie bereits im Vorversuch. Der
+Fehler auf die dadurch bestimmten Lagen der Maxima ergibt sich zum
+einen auf den Fehler aus dem Gauß-Fit, zum anderen pflanzt sich der
+Fehler auf die Kalibrationswerte hier fort. Es ergaben sich folgende
+Energie-Werte 
 
-
-\subsection{Fazit}
-
+\begin{table}[h]
+\centering
+\small
+\makebox[\textwidth][c]{\input{out/test_peaks.tex}}
+\end{table}
 
 \section{Energieauflösung}
 \subsection{Theorie}
@@ -67,6 +287,5 @@
 \subsection{Ergebnisse}
 
 \subsection{Verringerung der Fehler}
-
 
 \end{document}

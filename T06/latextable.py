@@ -5,13 +5,14 @@ class LatexTable:
 		self.file = codecs.open(filename, 'w', 'utf-8')
 		if header:
 			self.header(header)
+		self.multirowcounter = 0
 
 	def close(self):
 		if self.file:
 			self.file.close()
 			self.file = None
 
-	def header(self, *columns, count=None, align=None, borders=True):
+	def header(self, *columns, count=None, align=None, borders=True, lineafter=2):
 		if count is None:
 			count = len(columns)
 
@@ -26,7 +27,7 @@ class LatexTable:
 		self.hline()
 		if columns:
 			self.row(*columns)
-			self.hline(2)
+			self.hline(lineafter)
 
 	def footer(self):
 		self.hline()
@@ -35,11 +36,23 @@ class LatexTable:
 
 	def hline(self, count=1):
 		for _ in range(count):
-			self.file.write(r'\hline')
+			self.file.write(r'\hline ')
 		self.file.write("\n")
 
 	def row(self, *values):
-		values = (str(v) for v in values)
+		values = list(values)
+
+		for i, val in enumerate(values):
+			if isinstance(val, tuple):
+				if self.multirowcounter == 0:
+					text, self.multirowcounter = val
+					values[i] = r'\multirow{' + str(self.multirowcounter) + r'}{*}{' + text + r'}'
+				else:
+					values[i] = ''
+			else:
+				values[i] = str(val)
+
+		self.multirowcounter = max(self.multirowcounter-1, 0)
 		separator = " & "
 		self.file.write(separator.join(values))
 		self.file.write(" \\\\ \n")

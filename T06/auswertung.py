@@ -8,6 +8,9 @@ rcParams['text.latex.unicode'] = True
 #rcParams['text.latex.preamble']=[r'\usepackage{lmodern}']
 rcParams['font.family'] = 'serif'
 rcParams['font.serif'] = 'Computer Modern'
+rcParams['font.size'] = 18
+rcParams['savefig.bbox'] = 'tight'
+rcParams['axes.grid'] = True
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,19 +34,33 @@ def testsignal():
 	N = 4096
 	signal = np.zeros(N)
 	x = np.arange(N)
-	signal += GAUSS(x, 700, 600, 20)
-	signal += GAUSS(x, 150, 500, 10)
-	signal += GAUSS(x, 150, 660, 10)
-	f, fy = dft(signal)
-	plt.plot(f, np.abs(fy), 's')
-	plt.show()
+	signal += GAUSS(x, 601, 5.7, 2765)
+	signal += GAUSS(x, 665, 6.0, 528)
 
+	plt.clf()
+	plt.plot(x, signal, '.')
+	plt.xlabel("Kanal")
+	plt.ylabel("simulierte Höhe")
+	plt.savefig("out/testsignal." + SAVETYPE)
+
+	f, fy = dft(signal)
+	plt.clf()
+	plt.plot(f, np.abs(fy), '.')
+	plt.xlim(0,0.15)
+	plt.axvline(0.1)
+	plt.xlabel("Frequenz")
+	plt.ylabel("Betrag des Fouriertransformierten")
+	plt.savefig("out/testsignal_dft." + SAVETYPE)
+
+def clean_filename(filename):
+	return filename.replace(".", "_")
 
 class Experiment:
 	def __init__(self, filename=None, title=None, calibration=None):
 		if filename:
 			file = McaFile(filename)
 			self._data = file.data
+			self._mcameta = file.meta
 		else:
 			self._data = None
 
@@ -54,6 +71,10 @@ class Experiment:
 
 		self._errors = np.sqrt(self._data)
 		self._calibration = calibration
+
+	@property
+	def mcameta(self):
+		return self._mcameta
 
 	@property
 	def count(self):
@@ -130,44 +151,55 @@ def kalibration(plot=True):
 	channel_errors = []
 	energies = []
 
-	for filename, meta in kalib.items():
-		with LatexTable("out/" + filename + "_peaks.tex") as table:
-			table.header("Höhe", "Channel", "Breite")
+	with LatexTable("out/calib_peaks.tex") as peaktable, LatexTable("out/calib_counts.tex") as counttable:
+		peaktable.header("El.", "Höhe", "Channel", "Breite", r'$\chi^2/\textrm{ndf}$', "Linie", "Energie", lineafter=1)
+		counttable.header("Element", "Messdauer", "Ereignisse")
+		for filename, meta in kalib.items():
+			peaktable.hline()
 			print("="*10, filename, "="*10)
-			experiment = Experiment("data/" + filename, title=filename)
+			experiment = Experiment("data/" + filename, title=meta["title"])
+			counttable.row(meta["element"], r'$' + experiment.mcameta["Accumulation Time"] + r' \unit{s}$', experiment.mcameta["Slow Count"])
 			if plot:
 				plt.clf()
 				experiment.errorplot()
 				plt.title(meta["title"])
 			lines = []
-			for i, (mu0, sigma0, energy) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
+			for i, (mu0, sigma0, peak, energy) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
 				fit = experiment.find_peak(mu0, sigma0, plot=plot)
 				channels.append(fit.mu)
 				channel_errors.append(fit.sigma_mu)
 				energies.append(energy)
 				lines.append("Peak {:d}, Channel {:s}, Energy {:s}".format(i, format_error(fit.mu, fit.sigma_mu), format_error(energy, 0.01, unit='keV')))
-				table.row(format_error(fit.A, fit.sigma_A), format_error(fit.mu, fit.sigma_mu), format_error(fit.sigma, fit.sigma_sigma))
+
+				peaktable.row((meta["element"], len(meta["peaks"])),
+					format_error(fit.A, fit.sigma_A, parenthesis=False),
+					format_error(fit.mu, fit.sigma_mu, parenthesis=False),
+					format_error(fit.sigma, fit.sigma_sigma, parenthesis=False),
+					"%.2f" % fit.chisqndf,
+					r'$ ' + peak + r'$',
+					r'$ ' + ("%.2f" % energy) + r' \unit{keV}$'
+				)
 				if plot:
 					plt.xlim(fit.mu-5*fit.sigma, fit.mu+5*fit.sigma)
 					plt.autoscale(enable=True, axis='y')
-					plt.savefig("out/" + filename + "_peak_%d." % i + SAVETYPE)
+					plt.savefig("out/" + clean_filename(filename) + "_peak_%d." % i + SAVETYPE)
 			if plot:
 				text = "\n".join(lines)
-				info_box(text, location='tr')
+				#info_box(text, location='tr')
 				plt.xlim(0,4096)
 				plt.autoscale(enable=True, axis='y')
-				plt.savefig("out/" + filename + "_all." + SAVETYPE)
+				plt.savefig("out/" + clean_filename(filename) + "_all." + SAVETYPE)
 
 	X = np.array(channels)
 	SX = np.array(channel_errors)
 	Y = np.array(energies)
-	SY = 0.1/math.sqrt(12) #keV
+	SY = 0.02 #keV
 
 	fit = linear_fit(X, Y, xerr=SX, yerr=SY)
 	if plot:
 		plt.clf()
 		plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt=',')
-		fit.plot(np.min(X), np.max(X), box='br', units={"slope": "keV / Channel", "offset": "keV"})
+		fit.plot(np.min(X), np.max(X), box='tl', units={"slope": "keV / Channel", "offset": "keV"})
 		plt.xlabel(r"Channel")
 		plt.ylabel(r"$ E $ / keV")
 		plt.title(r"Kalibrationsgerade: Fit")
@@ -186,7 +218,7 @@ def kalibration(plot=True):
 		table.row("Steigung", format_error(fit.slope*1000, fit.sigma_slope*1000, unit="eV"))
 		table.row("Offset", format_error(fit.offset*1000, fit.sigma_offset*1000, unit="eV"))
 
-	print("RESULT: linear fit with chisq: %.2f" % (fit.chisqndof))
+	print("RESULT: linear fit with chisq: %.2f" % (fit.chisqndf))
 	print("RESULT: energy per bin: %.1f keV" % (fit.slope))
 	print("RESULT: energy of 0th bin: %.1f keV" % (fit.offset))
 	print()
@@ -195,18 +227,30 @@ def kalibration(plot=True):
 
 def auswertung(calibration, plot=True, smooth=False):
 	print("##### UNKNOWN #####")
-	for filename, meta in data.items():
-		with LatexTable("out/" + filename + "_peaks.tex") as table:
-			table.header("Höhe", "Channel", "Breite")
+
+	with LatexTable("out/test_peaks.tex") as peaktable, LatexTable("out/test_counts.tex") as counttable:
+		peaktable.header("Probe", "Höhe", "Energie", "Breite", lineafter=1)
+		counttable.header("Element", "Messdauer", "Ereignisse", "korrigiert", "Anteil")
+
+		leer = Experiment("data/G20_Leer.mca")
+		counttable.row("Leermessung", r'$' + leer.mcameta["Accumulation Time"] + r' \unit{s}$', leer.mcameta["Slow Count"], "-", "-")
+		counttable.hline()
+
+		for filename, meta in data.items():
+			peaktable.hline()
 			print("="*10, filename, "="*10)
-			experiment = Experiment("data/" + filename, title=filename, calibration=calibration)
+			experiment = Experiment("data/" + filename, title=meta["title"], calibration=calibration)
+
+			count = int(experiment.mcameta["Slow Count"])
+			reduced = int(count-0.5*int(leer.mcameta["Slow Count"]))
+			percentage = "%.1f \\%%" % (reduced/count * 100)
+			counttable.row(meta["title"], r'$' + experiment.mcameta["Accumulation Time"] + r' \unit{s}$', count, reduced, percentage)
 			if plot:
 				plt.clf()
 				experiment.errorplot()
-				plt.title(meta["title"] + " - vor Abzug der Leermessung")
+				plt.title("Probe: " + meta["title"] + " - Rohdaten")
 				plt.xlim(0,4096)
-				experiment.set_energy_labels(stepsize=5)
-				plt.savefig("out/" + filename + "_raw." + SAVETYPE)
+				plt.savefig("out/" + clean_filename(filename) + "_raw." + SAVETYPE)
 
 			experiment.subtract_empty("data/G20_Leer.mca", 0.5)
 
@@ -216,7 +260,7 @@ def auswertung(calibration, plot=True, smooth=False):
 			if plot:
 				plt.clf()
 				experiment.errorplot()
-				plt.title(meta["title"])
+				plt.title("Probe: " + meta["title"])
 				experiment.set_energy_labels(stepsize=0.1)
 
 			lines = []
@@ -234,22 +278,24 @@ def auswertung(calibration, plot=True, smooth=False):
 				string_sigma = format_error(sigma, error_sigma_stat, unit='keV')
 
 				lines.append(r"$E_" + str(i) + r"$ = " + string_mu)
-				table.row(format_error(fit.A, fit.sigma_A), string_mu, string_sigma)
+				peaktable.row((meta["title"], len(meta["peaks"])),
+					format_error(fit.A, fit.sigma_A, parenthesis=False), string_mu, string_sigma
+				)
 
 				if plot:
-					plt.title(meta["title"] + " - Peak %d" % i)
+					plt.title("Probe: " + meta["title"] + " - Peak %d" % i)
 					plt.xlim(fit.mu-5*fit.sigma, fit.mu+5*fit.sigma)
 					plt.autoscale(enable=True, axis='y')
-					plt.savefig("out/" + filename + "_peak_%d." % i + SAVETYPE)
+					plt.savefig("out/" + clean_filename(filename) + "_peak_%d." % i + SAVETYPE)
 
 			if plot:
-				plt.title(meta["title"])
+				plt.title("Probe: " + meta["title"])
 				experiment.set_energy_labels(stepsize=5)
 				plt.xlim(0,4096)
 				plt.autoscale(enable=True, axis='y')
 				text = "\n".join(lines)
 				info_box(text, location='tr')
-				plt.savefig("out/" + filename + "_all." + SAVETYPE)
+				plt.savefig("out/" + clean_filename(filename) + "_all." + SAVETYPE)
 	print()
 
 def energieaufloesung(calibration, plot=True):
@@ -259,7 +305,7 @@ def energieaufloesung(calibration, plot=True):
 	sigma_widths = []
 
 	for filename, meta in kalib.items():
-		experiment = Experiment("data/" + filename, title=filename, calibration=calibration)
+		experiment = Experiment("data/" + filename, title=meta["title"], calibration=calibration)
 		for peak in meta["peaks"]:
 			mu0, sigma0 = peak[0], peak[1]
 			fit = experiment.find_peak(mu0, sigma0, plot=False)
@@ -291,30 +337,38 @@ def energieaufloesung(calibration, plot=True):
 	# SX = sigma_energies
 	# SY = 2*Y * np.sqrt(np.power(sigma_widths/widths, 2) + np.power(sigma_energies/energies, 2))
 
-	X  = energies
-	Y = widths/energies
-	SX = sigma_energies
-	SY = Y*np.sqrt(np.power(sigma_widths/widths, 2) + np.power(sigma_energies/energies, 2))
+	#X  = energies
+	#Y = widths/energies
+	#SX = sigma_energies
+	#SY = Y*np.sqrt(np.power(sigma_widths/widths, 2) + np.power(sigma_energies/energies, 2))
+	#func = lambda x, a, b: np.sqrt(np.power(a/np.sqrt(x), 2) + np.power(b,2)) # + np.power(c/x, 2)
 
-	func = lambda x, a, b, c: np.sqrt(np.power(a/np.sqrt(x), 2) + np.power(b,2) + np.power(c/x, 2))
+	X = energies
+	Y = np.power(widths, 2)
+	SX = sigma_energies
+	SY = 2*widths*sigma_widths
+
+	func = lambda x, a0, a1, a2: a0+x*a1+np.power(x,2)*a2
 
 	fit = Fit(func)
-	fit.a = 0.05
-	fit.b = -0.01
-	fit.c = -0.1
+	fit.a0 = 1
+	fit.a1 = 1
+	fit.a2 = 1
+
 	for _ in range(10):
 		err = fit.combine_errors(X, SX, SY)
 		fit.fit(X, Y, err)
 
-	print("RESULT: error fit with chisq/ndf: %.2f" % (fit.chisqndof))
+	#print("RESULT: error fit with chisq/ndf: %.2f" % (fit.chisqndf))
 
 	if plot:
 		plt.clf()
 		plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt=',')
-		fit.plot(np.min(X), np.max(X), box='tr', units={'a': r'\sqrt{keV}', 'c': 'keV'})
+		fit.plot(np.min(X), np.max(X), box='br', units={'a': r'\sqrt{keV}', 'c': 'keV'})
 		plt.xlabel(r"$ E $ / keV")
 		plt.ylabel(r"$ \Delta E / E $")
-		plt.title(r'Energieauflösung: Fit zu $ \frac{\Delta E}{E} = \frac{a}{\sqrt{E}} \oplus b \oplus \frac{c}{E} $')
+		#plt.title(r'Energieauflösung: Fit zu $ \frac{\Delta E}{E} = \frac{a}{\sqrt{E}} \oplus b $') #  \oplus \frac{c}{E}
+		plt.title(r'Energieauflösung: Fit zu $ \Delta E^2 = a_0 + a_1 E + a_2 E^2 $') #  \oplus \frac{c}{E}
 		plt.savefig("out/energyresolution_fit." + SAVETYPE)
 
 		plt.clf()
@@ -331,14 +385,16 @@ def plot_leermessung(calibration):
 	experiment.errorplot()
 	experiment.set_energy_labels()
 	plt.savefig("out/leer." + SAVETYPE)
-
+	#plt.show()
 
 if __name__=="__main__":
 	#mng = plt.get_current_fig_manager()
 	#mng.window.state('zoomed')
 
-	fit = kalibration(True)
+	plot = True
+
+	fit = kalibration(plot)
 	plot_leermessung(fit)
-	auswertung(fit, True)
-	energieaufloesung(fit, True)
-	#testsignal()
+	auswertung(fit, plot)
+	energieaufloesung(fit, plot)
+	testsignal()

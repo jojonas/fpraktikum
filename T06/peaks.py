@@ -4,7 +4,7 @@ from scipy.optimize import curve_fit
 
 from funcs import GAUSS
 
-def chisqNdof(x, y, fit, yerr, nparams=0):
+def chisqndf(x, y, fit, yerr, nparams=0):
 	return (np.power((fit(x) - y)/yerr, 2)).sum() / (len(x)-nparams)
 
 def easy_peak(data, index):

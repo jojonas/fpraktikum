@@ -23,6 +23,7 @@
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
 \RequirePackage{upgreek}
+\RequirePackage{float}
 \RequirePackage[pdfborder={0 0 0},breaklinks=true]{hyperref}
 %-----------------------------------------------------------------------------------------------------------------------
 % Seitenformatierungsoptionen

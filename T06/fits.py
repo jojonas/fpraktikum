@@ -1,4 +1,5 @@
 import sys
+import re
 
 import math
 import functools
@@ -17,20 +18,38 @@ from funcs import *
 def derivative(func, x, dx):
 	return (func(x+dx/2) - func(x-dx/2)) / dx
 
-def format_error(value, stat, sys=None, unit=""):
+def exponent2latex(number):
+	return re.sub(r'([0-9\-.+]+)[Ee]([0-9\-+]+)', r'\1{\\times}10^{\2}', number)
+
+def format_error(value, stat, sys=None, unit="", parenthesis=True):
 	if unit:
 		unit = r'\enskip \mathrm{' + unit + '}'
 	if not sys:
 		value, stat = number.formatNumberPair(value, stat)
-		return r'$(' + value + r' \pm ' + stat + r'_\textrm{stat}) ' + unit + r'$'
+		retval = value + r' \pm ' + stat + r'_\textrm{stat}'
 	else:
 		value, stat, sys = number.formatNumberPair(value, stat, sys)
-		return r'$(' + value + r' \pm ' + stat + r'_\textrm{stat} \pm ' + sys + r'_\textrm{sys}) ' + unit + r'$'
+		retval = value + r' \pm ' + stat + r'_\textrm{stat} \pm ' + sys + r'_\textrm{sys}'
+
+	retval = exponent2latex(retval)
+
+	if parenthesis:
+		retval = '(' + retval + ')'
+
+	if unit:
+		retval += " " + unit
+
+	if unit and not parenthesis:
+		print("Warning: parenthesis turned off for a formatted number with unit.\n", file=sys.stderr)
+
+	retval = r'$' + retval + r'$'
+
+	return retval
 
 def info_box(text, location='tl', margin=15, **custom):
 	options = {
 		"bbox": dict(boxstyle='square', facecolor='white'),
-		"fontsize": 12,
+		"fontsize": 16,
 		"linespacing": 1.4,
 	}
 	options.update(custom)
@@ -67,7 +86,7 @@ class Fit:
 					self._params[name] = 0
 				self._errors[self.ERROR_PREFIX + name] = 0
 		self._chisq = 0
-		self._ndof = 0
+		self._ndf = 0
 
 	def __call__(self, x):
 		return self.apply(x)
@@ -99,12 +118,12 @@ class Fit:
 		return self._chisq
 
 	@property
-	def ndof(self):
-		return self._ndof
+	def ndf(self):
+		return self._ndf
 
 	@property
-	def chisqndof(self):
-		return self._chisq / self._ndof
+	def chisqndf(self):
+		return self._chisq / self._ndf
 
 	def fit(self, xdata, ydata, sigma=None):
 		assert xdata.shape == ydata.shape, "X and Y must have the same dimensions."
@@ -121,7 +140,7 @@ class Fit:
 					, file=sys.stderr)
 			self._errors[self.ERROR_PREFIX + name] = error
 
-		self._ndof = len(xdata) - len(self._params)
+		self._ndf = len(xdata) - len(self._params)
 		self._chisq = np.power((self.apply(xdata) - ydata)/sigma, 2).sum()
 
 	def combine_errors(self, x, xerr, yerr, dx=0.01):
@@ -134,8 +153,8 @@ class Fit:
 		plt.axhline(0, color="gray")
 		if box:
 			text =  r"$ \chi^2 $ / ndf = " + number.formatNumber(self.chisq) + " / " \
-				+ number.formatNumber(self.ndof)
-			text += "\n" + "p = " + number.formatNumber(chdtrc(self.ndof, self.chisq))
+				+ number.formatNumber(self.ndf)
+			text += "\n" + "p = " + number.formatNumber(chdtrc(self.ndf, self.chisq))
 			info_box(text, location=box)
 
 	def plot(self, xmin=-1, xmax=1, N=100, *, box=False, units={}, **plotopts):
@@ -165,19 +184,16 @@ def linear_fit(x, y, yerr, xerr=None, N=10):
 	return fit
 
 
-def _simple_peak(data, index):
-	for i in range(len(data)):
-		if index+1 < len(data) and data[index+1] > data[index]:
-			index += 1
-		elif index-1 >= 0 and data[index-1] > data[index]:
-			index -= 1
-		else:
-			break
-	return index
+def _simple_peak(data, index, sigma):
+	lower = index-sigma
+	upper = index+sigma
+
+	maxindex = np.argmax(data[lower:upper])
+	return maxindex + lower
 
 def local_gauss_fit(data, mu=0, sigma=10, A=100, N=5, errors=None, f=1.0):
 	fit = Fit(GAUSS)
-	fit.mu = _simple_peak(data, mu)
+	fit.mu = _simple_peak(data, mu, sigma)
 	fit.sigma = sigma
 	fit.A = A
 
@@ -192,3 +208,6 @@ def local_gauss_fit(data, mu=0, sigma=10, A=100, N=5, errors=None, f=1.0):
 		fit.sigma = abs(fit.sigma)
 
 	return fit
+
+if __name__=="__main__":
+	print(exponent2latex("123e3, 1e-55"))

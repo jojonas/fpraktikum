@@ -18,17 +18,14 @@ class McaFile:
 				elif line == "<<END>>":
 					mode = None
 				else:
-					try:
-						if mode == 'data':
-							self.data.append(int(line))
-						elif mode == 'pmca':
-							name, value = line.rpartition(" - ")
-							self.meta[name] = value
-						elif mode == 'dpp':
-							name, value = line.rpartition(": ")
-							self.meta[name] = value
-					except ValueError:
-						pass
+					if mode == 'data':
+						self.data.append(int(line))
+					elif mode == 'pmca':
+						name, _, value = line.rpartition(" - ")
+						self.meta[name] = value
+					elif mode == 'dpp':
+						name, _, value = line.rpartition(": ")
+						self.meta[name] = value
 
 		self.data = np.array(self.data)
 
