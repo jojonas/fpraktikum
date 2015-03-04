@@ -125,7 +125,7 @@ class Fit:
 	def chisqndf(self):
 		return self._chisq / self._ndf
 
-	def fit(self, xdata, ydata, sigma=None):
+	def fit(self, xdata, ydata, sigma):
 		assert xdata.shape == ydata.shape, "X and Y must have the same dimensions."
 		assert sigma is None or sigma.shape == ydata.shape, "Errors and Y data must have the same dimensions."
 		assert len(xdata) >= len(self._params), "Must have more data than free parameters."
@@ -191,7 +191,7 @@ def _simple_peak(data, index, sigma):
 	maxindex = np.argmax(data[lower:upper])
 	return maxindex + lower
 
-def local_gauss_fit(data, mu=0, sigma=10, A=100, N=5, errors=None, f=1.0):
+def local_gauss_fit(data, mu=0, sigma=10, A=100, errors=None, N=5, f=1.0):
 	fit = Fit(GAUSS)
 	fit.mu = _simple_peak(data, mu, sigma)
 	fit.sigma = sigma

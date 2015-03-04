@@ -5,7 +5,8 @@
 \usepackage[autostyle=true,german=quotes]{csquotes}
 
 \graphicspath {{out/}{bilder/}{data/}}
-\heads{RWTH Aachen \\ Fortgeschrittenenpraktikum}{T06 \\ Röntgenspektroskopie}{Gruppe 20 \\ \today} % 25. Februar 2015
+\heads{RWTH Aachen \\ Fortgeschrittenenpraktikum}{T06 \\ Röntgenspektroskopie}{Gruppe 20 \\ 25. Februar 2015} 
+\date{25. Februar 2015}
 
 \newcommand{\thirdwidth}{0.32\textwidth}
 \newcommand{\halfwidth}{0.48\textwidth}
@@ -194,7 +195,7 @@ Da in diesem Aufbau neben der eigentlichen Probe auch das Metallgehäuse bestrah
 \subsection{Auswertung}
 \subsubsection{Rohdaten}
 Die Rohdaten der Messung befinden sich in Abbildung \ref{fig:Unbekannte}, jeweils auf der linken Seite. Deutlich erkennbar ist der gemeinsame Hintergrund, der auch in der Leermessung (Abbildung \ref{fig:Leermessung}) erscheint. Er besteht aus einem Kontinuum am unteren Ende des Spektrums (bis $10 \unit{keV}$), einem Peak bei ca. $6.5 \unit{keV}$, einigen Peaks bei ca. $25$ bis $28 \unit{keV}$, und einem Peak bei ca. $49 \unit{keV}$. 
-Die Anzahl der registrierten Ereignisse pro Probe (Tabelle \ref{tbl:TestAnzahl}) zeigt, dass sehr viele Ereignisse dem Untergrund zuzuschreiben sind, und nur ca. 15 \% tatsächlich übrig bleiben.
+Die Anzahl der registrierten Ereignisse pro Probe (Tabelle \ref{tbl:TestAnzahl}) zeigt, dass sehr viele Ereignisse dem Untergrund zuzuschreiben sind, und nur rund 15 \% übrig bleiben.
 Eine eindeutige Zuordnung des Hintergrunds zu im Versuchsaufbau verwendeten Materialien ist nicht möglich.
 
 \begin{figure}[h]
@@ -212,13 +213,13 @@ Eine eindeutige Zuordnung des Hintergrunds zu im Versuchsaufbau verwendeten Mate
 \end{table}
 
 \subsubsection{Abzug der Leermessung und Kalibration der Werte}
-Zunächst wird von den Rohdaten der drei unbekannten Messreihen die
-Hälfte der Leermessung abgezogen. Die Hälfte deshalb, weil wir für
-die Leermessung doppelt so lange gemessen haben wie für die einzelnen
-Messreihen um eine möglichst genaue Aussage treffen zu können. Es
-sollte lediglich das Spektrum des jeweils verwendeten Gegenstandes
-übrig bleiben. Nun werden mithilfe der Kalibrationsdaten aus dem Vorversuch
-die Channel-Werte kalibriert. Dies führt zu folgenden Kurven
+Als erster Schritt der Analyse wird die Leermessung von den Rohdaten subtrahiert. Da die Leermessung doppelt so lang wie die Bestimmungsmessung durchgeführt wurde, wird sie mit dem Faktor $0.5$ gewichtet:
+\[ N' = N - 0.5 \cdot N_\textrm{leer} \]
+\[ \sigma_{N_\textrm{leer}} = \sqrt{N_\textrm{leer}} \Rightarrow \sigma_{N'} = \sqrt{N + 0.5^2 N_\textrm{leer}}  \]
+
+Zu beachten ist, dass nun die statistische Unsicherheit der Bestimmungsmessung mit der statistischen Unsicherheit der Leermessung kombiniert wird, damit die Anpassung beide Fehler berücksichtigt. Daher fließt die Unsicherheit der Leermessung in diese Auswertung nicht als systematischer, sondern als statistischer Fehler ein.
+
+Die Kanalwerte 
 
 
 \begin{figure}[h]

@@ -1,0 +1,17 @@
+# Messzeit: 2 Minuten
+# Natrium
+# Spalten: Winkel, Anzahl, Anzahl2
+# Delay: PM1 45ns delayed
+# Fehler auf den Winkel: 0.3°
+
+-10	4049	3818
+-8	4937	4522
+-6	5581	5354
+-4	6277	5850
+-2	6766	6461
+0	6961	6761
+2	7038	6836
+4	6619	6479
+6	6220	5902
+8	5580	5354
+10	4773	4627

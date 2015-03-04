@@ -76,7 +76,7 @@ def plot_delay_spectrum():
 	x1 = -x1
 	plt.errorbar(x1,y1, yerr=np.sqrt(y1), fmt='s')
 	plt.errorbar(x2,y2, yerr=np.sqrt(y2), fmt='s')
-	plt.xlabel("$\Delta T$")
+	plt.xlabel(r"$\Delta T / \textrm{ns}$")
 	plt.ylabel("Count")
 	plt.show()
 

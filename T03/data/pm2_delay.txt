@@ -2,6 +2,8 @@
 # Spalten: Delay, Anzahl
 # Natrium, 180°
 
+0	351
+
 5	358
 10	292
 15	292
