@@ -1,0 +1,18 @@
+# Messzeit 10 Sekunden, 1. Photomultiplier
+# Spalten: Delay, Anzahl
+# Natrium, 180°
+
+5	416
+10	489
+15	477
+20	524
+25	553
+30	587
+35	580
+40	599
+45	626
+50	571
+55	568
+60	565
+65	570
+70	515
