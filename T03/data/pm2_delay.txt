@@ -1,4 +1,4 @@
-# Messzeit 10 Sekunden, 2. Photomultiplier
+# Messzeit 10 Sekunden, 2. Photomultiplier verspaetet
 # Spalten: Delay, Anzahl
 # Natrium, 180°
 

@@ -32,7 +32,47 @@ def formatNumberPair(value, *errors, precision=2, separator=" +- "):
 		results.append(error)
 	return tuple((str(r) for r in results))
 
-if __name__=="__main__":
-	for number in (5, 2000, -0.0000121233, 193890.2, -123123123123123, 0.0002312):
-		print(number, "=>", formatNumber(number))
-	print(formatNumberPair(12345678.0, 0.23))
+def formatQuantityLatex(value, stat, sys=None, unit="", parenthesis=True, math=True):
+	if not sys:
+		value, stat = formatNumberPair(value, stat)
+		retval = value + r' \pm ' + stat + (r'_\textrm{stat}' if latex else '')
+
+	else:
+		value, stat, sys = formatNumberPair(value, stat, sys)
+		retval = value + r' \pm ' + stat + (r'_\textrm{stat}' if latex else '') + r' \pm ' + sys + (r'_\textrm{sys}' if latex else '')
+
+	retval = exponent2latex(retval)
+
+	if parenthesis:
+		retval = '(' + retval + ')'
+
+	if unit:
+		retval += " " + r'\enskip \mathrm{' + unit + '}'
+
+	if unit and not parenthesis:
+		print("Warning: parenthesis turned off for a formatted number with unit.\n", file=sys.stderr)
+
+	if math:
+		retval = r'$' + retval + r'$'
+
+	return retval
+
+def formatQuantity(value, stat, sys=None, unit="", parenthesis=True):
+	if not sys:
+		value, stat = formatNumberPair(value, stat)
+		retval = value + ' \u00B1 ' + stat
+
+	else:
+		value, stat, sys = formatNumberPair(value, stat, sys)
+		retval = value + ' \u00B1 ' + stat + ' \u00B1 ' + sys
+
+	if parenthesis:
+		retval = '(' + retval + ')'
+
+	if unit:
+		retval += " " + unit
+
+	if unit and not parenthesis:
+		print("Warning: parenthesis turned off for a formatted number with unit.\n", file=sys.stderr)
+
+	return retval

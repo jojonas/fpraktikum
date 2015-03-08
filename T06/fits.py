@@ -21,7 +21,7 @@ def derivative(func, x, dx):
 def exponent2latex(number):
 	return re.sub(r'([0-9\-.+]+)[Ee]([0-9\-+]+)', r'\1{\\times}10^{\2}', number)
 
-def format_error(value, stat, sys=None, unit="", parenthesis=True):
+def format_error(value, stat, sys=None, unit="", parenthesis=True, surroundmath=True):
 	if unit:
 		unit = r'\enskip \mathrm{' + unit + '}'
 	if not sys:
@@ -42,7 +42,8 @@ def format_error(value, stat, sys=None, unit="", parenthesis=True):
 	if unit and not parenthesis:
 		print("Warning: parenthesis turned off for a formatted number with unit.\n", file=sys.stderr)
 
-	retval = r'$' + retval + r'$'
+	if surroundmath:
+		retval = r'$' + retval + r'$'
 
 	return retval
 
@@ -191,7 +192,7 @@ def _simple_peak(data, index, sigma):
 	maxindex = np.argmax(data[lower:upper])
 	return maxindex + lower
 
-def local_gauss_fit(data, mu=0, sigma=10, A=100, errors=None, N=5, f=1.0):
+def local_gauss_fit(data, mu=0, sigma=10, A=100, xerrors=None, yerrors=None, N=5, f=1.0):
 	fit = Fit(GAUSS)
 	fit.mu = _simple_peak(data, mu, sigma)
 	fit.sigma = sigma
@@ -203,8 +204,8 @@ def local_gauss_fit(data, mu=0, sigma=10, A=100, errors=None, N=5, f=1.0):
 
 		xdata = np.arange(lower, upper)
 		ydata = data[lower:upper]
-		yerrors = errors[lower:upper]
-		fit.fit(xdata, ydata, yerrors)
+		errors = fit.combine_errors(xdata, xerrors[lower:upper], yerrors[lower:upper])
+		fit.fit(xdata, ydata, errors)
 		fit.sigma = abs(fit.sigma)
 
 	return fit

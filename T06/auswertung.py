@@ -69,7 +69,7 @@ class Experiment:
 		else:
 			self.title = filename
 
-		self._errors = np.sqrt(self._data)
+		self._errors = np.sqrt(self._data+1)
 		self._calibration = calibration
 
 	@property
@@ -133,16 +133,25 @@ class Experiment:
 		errors_lower = self.data - np.maximum(self.data-self.errors, 0)
 		errors_no_0 = np.vstack((errors_lower, self.errors))
 
-		plt.errorbar(self.channels, self.data, yerr=errors_no_0, fmt=',', color="red")
+		plt.plot(self.channels, self.data, '.-', color="black")
+		plt.fill_between(self.channels, self.data-errors_lower, self.data+self.errors, color="black", alpha=0.2)
+		plt.xlabel("Channel")
+		plt.xlim(np.min(self.channels), np.max(self.channels))
+		plt.ylabel("Count")
+		plt.title(self.title)
+
+	def plot(self):
+		plt.plot(self.channels, self.data, '-', color="black")
 		plt.xlabel("Channel")
 		plt.xlim(np.min(self.channels), np.max(self.channels))
 		plt.ylabel("Count")
 		plt.title(self.title)
 
 	def find_peak(self, mu0, sigma0, plot=False):
-		fit = local_gauss_fit(self.data, mu0, sigma0, A=100, errors=self.errors)
+		xerrs = np.ones_like(self.data)/math.sqrt(12)
+		fit = local_gauss_fit(self.data, mu0, sigma0, A=100, xerrors=xerrs, yerrors=self.errors)
 		if plot:
-			fit.plot(fit.mu-4*fit.sigma, fit.mu+4*fit.sigma, N=500, color="black")
+			fit.plot(fit.mu-4*fit.sigma, fit.mu+4*fit.sigma, N=500, color="red")
 		return fit
 
 def kalibration(plot=True):
@@ -151,12 +160,18 @@ def kalibration(plot=True):
 	channel_errors = []
 	energies = []
 
-	with LatexTable("out/calib_peaks.tex") as peaktable, LatexTable("out/calib_counts.tex") as counttable:
-		peaktable.header("El.", "Höhe", "Channel", "Breite", r'$\chi^2/\textrm{ndf}$', "Linie", "Energie", lineafter=1)
+	with LatexTable("out/calib_peaks.tex") as peaktable, LatexTable("out/calib_counts.tex") as counttable, LatexTable("out/calib_relamp.tex") as relamptable:
+		peaktable.header("El.", "Höhe", "Channel", "Breite", r'$\chi^2/\textrm{ndf}$', "Linie", "Energie", lineafter=0)
+		peaktable.row("", "", r"$x_\textrm{max}$", r"$\Delta x$", "", "", "")
+		peaktable.hline()
+
+		relamptable.header("Element", "Peak", "Relative Höhe", "Literaturwert", lineafter=1)
 		counttable.header("Element", "Messdauer", "Ereignisse")
+
 		for filename, meta in kalib.items():
 			peaktable.hline()
-			print("="*10, filename, "="*10)
+			relamptable.hline()
+			#print("="*10, filename, "="*10)
 			experiment = Experiment("data/" + filename, title=meta["title"])
 			counttable.row(meta["element"], r'$' + experiment.mcameta["Accumulation Time"] + r' \unit{s}$', experiment.mcameta["Slow Count"])
 			if plot:
@@ -164,12 +179,26 @@ def kalibration(plot=True):
 				experiment.errorplot()
 				plt.title(meta["title"])
 			lines = []
-			for i, (mu0, sigma0, peak, energy) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
+			kalpha = None
+			for i, (mu0, sigma0, peak, energy, lrel) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
 				fit = experiment.find_peak(mu0, sigma0, plot=plot)
 				channels.append(fit.mu)
 				channel_errors.append(fit.sigma_mu)
+				#channel_errors.append(fit.sigma) # FEHLER
 				energies.append(energy)
 				lines.append("Peak {:d}, Channel {:s}, Energy {:s}".format(i, format_error(fit.mu, fit.sigma_mu), format_error(energy, 0.01, unit='keV')))
+
+				if not kalpha:
+					kalpha = (fit.A, fit.sigma_A)
+				fehler = np.sqrt(np.power(fit.sigma_A/kalpha[0],2)+np.power(fit.A/np.power(kalpha[0],2)*kalpha[1], 2))
+				rel = format_error(fit.A / kalpha[0]*100, fehler*100, unit=r'\%')
+				if kalpha[0] == fit.A:
+					rel = r"100 \%"
+				#rel = _n(fit.A/kalpha[0]*100, precision=3) + r"\%"
+				lrel = _n(lrel, precision=3) + r"\%"
+				relamptable.row((meta["element"], len(meta["peaks"])),
+					r'$ ' + peak + r'$', rel, lrel
+				)
 
 				peaktable.row((meta["element"], len(meta["peaks"])),
 					format_error(fit.A, fit.sigma_A, parenthesis=False),
@@ -193,7 +222,7 @@ def kalibration(plot=True):
 	X = np.array(channels)
 	SX = np.array(channel_errors)
 	Y = np.array(energies)
-	SY = 0.02 #keV
+	SY = 0.01 # 1 eV
 
 	fit = linear_fit(X, Y, xerr=SX, yerr=SY)
 	if plot:
@@ -213,15 +242,15 @@ def kalibration(plot=True):
 		plt.title(r"Kalibrationsgerade: Residuen")
 		plt.savefig("out/calib_residuum." + SAVETYPE)
 
-	with LatexTable("out/calib.tex") as table:
-		table.header(count=2)
-		table.row("Steigung", format_error(fit.slope*1000, fit.sigma_slope*1000, unit="eV"))
-		table.row("Offset", format_error(fit.offset*1000, fit.sigma_offset*1000, unit="eV"))
+	s = format_error(fit.slope*1000, fit.sigma_slope*1000, unit="eV / Kanal", surroundmath=False)
+	o = format_error(fit.offset*1000, fit.sigma_offset*1000, unit="eV", surroundmath=False)
 
-	print("RESULT: linear fit with chisq: %.2f" % (fit.chisqndf))
-	print("RESULT: energy per bin: %.1f keV" % (fit.slope))
-	print("RESULT: energy of 0th bin: %.1f keV" % (fit.offset))
-	print()
+	with open('out/calib.tex', 'w') as file:
+		file.write(r'Die in diesem Versuch verwendeten Einstellungen f\"uhren zu einer Einteilung von \[ ' +s+ r' \] wobei der erste Kanal die Energie \[ '+o+r' \] besitzt.')
+
+	# print("RESULT: linear fit with chisq: %.2f" % (fit.chisqndf))
+	# print("RESULT: energy per bin: %.1f keV" % (fit.slope))
+	# print("RESULT: energy of 0th bin: %.1f keV" % (fit.offset))
 	return fit
 
 
@@ -229,7 +258,9 @@ def auswertung(calibration, plot=True, smooth=False):
 	print("##### UNKNOWN #####")
 
 	with LatexTable("out/test_peaks.tex") as peaktable, LatexTable("out/test_counts.tex") as counttable:
-		peaktable.header("Probe", "Höhe", "Energie", "Breite", lineafter=1)
+		peaktable.header("Probe", "Höhe", "Energie", "Breite", lineafter=0)
+		peaktable.row("", "", r"$E_\textrm{max}$", r"$\Delta E$")
+		peaktable.hline()
 		counttable.header("Element", "Messdauer", "Ereignisse", "korrigiert", "Anteil")
 
 		leer = Experiment("data/G20_Leer.mca")
@@ -238,7 +269,7 @@ def auswertung(calibration, plot=True, smooth=False):
 
 		for filename, meta in data.items():
 			peaktable.hline()
-			print("="*10, filename, "="*10)
+			#print("="*10, filename, "="*10)
 			experiment = Experiment("data/" + filename, title=meta["title"], calibration=calibration)
 
 			count = int(experiment.mcameta["Slow Count"])
@@ -247,7 +278,7 @@ def auswertung(calibration, plot=True, smooth=False):
 			counttable.row(meta["title"], r'$' + experiment.mcameta["Accumulation Time"] + r' \unit{s}$', count, reduced, percentage)
 			if plot:
 				plt.clf()
-				experiment.errorplot()
+				experiment.plot()
 				plt.title("Probe: " + meta["title"] + " - Rohdaten")
 				plt.xlim(0,4096)
 				plt.savefig("out/" + clean_filename(filename) + "_raw." + SAVETYPE)
@@ -286,6 +317,8 @@ def auswertung(calibration, plot=True, smooth=False):
 					plt.title("Probe: " + meta["title"] + " - Peak %d" % i)
 					plt.xlim(fit.mu-5*fit.sigma, fit.mu+5*fit.sigma)
 					plt.autoscale(enable=True, axis='y')
+					l, u = plt.ylim()
+					plt.ylim(0, u)
 					plt.savefig("out/" + clean_filename(filename) + "_peak_%d." % i + SAVETYPE)
 
 			if plot:
@@ -296,9 +329,40 @@ def auswertung(calibration, plot=True, smooth=False):
 				text = "\n".join(lines)
 				info_box(text, location='tr')
 				plt.savefig("out/" + clean_filename(filename) + "_all." + SAVETYPE)
-	print()
+
+
+def test_smoothing(calibration):
+	print("##### SMOOTHING TEST #####")
+
+	with LatexTable("out/test_smoothing.tex") as peaktable:
+		peaktable.header(" ", r'\multicolumn{3}{|c|}{ohne Gl\"attung}', r'\multicolumn{3}{|c|}{mit Gl\"attung}', align=["c"]*7, lineafter=0)
+		peaktable.row("Probe", "Höhe", "Breite",  r'$\chi^2/\textrm{ndf}$', "Höhe", "Breite", r'$\chi^2/\textrm{ndf}$')
+		peaktable.hline()
+		for filename, meta in data.items():
+			peaktable.hline(1)
+
+			experiment = Experiment("data/" + filename, calibration=calibration, title=meta["title"])
+			experiment2 = Experiment("data/" + filename, calibration=calibration, title=meta["title"])
+			experiment.subtract_empty("data/G20_Leer.mca", 0.5)
+			experiment2.subtract_empty("data/G20_Leer.mca", 0.5)
+			experiment2.smooth(0.1)
+			lines = []
+			for i, (mu0, sigma0) in enumerate(sorted(meta["peaks"], key=lambda peak: peak[0]), 1):
+				fit = experiment.find_peak(mu0, sigma0, plot=plot)
+				fit2 = experiment2.find_peak(mu0, sigma0, plot=plot)
+
+				peaktable.row((meta["title"], len(meta["peaks"])),
+					_n(fit.mu, precision=3),
+					_n(fit.sigma, precision=3),
+					_n(fit.chisqndf),
+					_n(fit2.mu, precision=3),
+					_n(fit2.sigma, precision=3),
+					_n(fit2.chisqndf),
+				)
 
 def energieaufloesung(calibration, plot=True):
+	print("##### ENERGY RESOLUTION #####")
+
 	energies = []
 	widths = []
 	sigma_energies = []
@@ -348,12 +412,12 @@ def energieaufloesung(calibration, plot=True):
 	SX = sigma_energies
 	SY = 2*widths*sigma_widths
 
-	func = lambda x, a0, a1, a2: a0+x*a1+np.power(x,2)*a2
+	func = lambda x, a0, a1,: a0+x*a1 #+np.power(x,2)*a2
 
 	fit = Fit(func)
 	fit.a0 = 1
 	fit.a1 = 1
-	fit.a2 = 1
+	#fit.a2 = 1
 
 	for _ in range(10):
 		err = fit.combine_errors(X, SX, SY)
@@ -364,22 +428,53 @@ def energieaufloesung(calibration, plot=True):
 	if plot:
 		plt.clf()
 		plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt=',')
-		fit.plot(np.min(X), np.max(X), box='br', units={'a': r'\sqrt{keV}', 'c': 'keV'})
+		fit.plot(np.min(X), np.max(X), box='br', units={'a0': 'keV', 'a1': r'\sqrt{keV}'})
 		plt.xlabel(r"$ E $ / keV")
-		plt.ylabel(r"$ \Delta E / E $")
+		plt.ylabel(r"$ \Delta E^2 / keV^2$")
 		#plt.title(r'Energieauflösung: Fit zu $ \frac{\Delta E}{E} = \frac{a}{\sqrt{E}} \oplus b $') #  \oplus \frac{c}{E}
-		plt.title(r'Energieauflösung: Fit zu $ \Delta E^2 = a_0 + a_1 E + a_2 E^2 $') #  \oplus \frac{c}{E}
+		plt.title(r'Energieauflösung: Fit zu $ \Delta E^2 = a_0 + a_1 E $') #  \oplus \frac{c}{E}
 		plt.savefig("out/energyresolution_fit." + SAVETYPE)
 
 		plt.clf()
 		err = fit.combine_errors(X, SX, SY)
 		fit.plot_residuums(X, Y, err, box='tr', fmt=",")
 		plt.xlabel(r"$ E $ / keV")
-		plt.ylabel(r"$ \Delta E / E $")
+		plt.ylabel(r"$ \Delta E^2 / keV^2$")
 		plt.title("Energieauflösung: Residuen")
 		plt.savefig("out/energyresolution_residuum." + SAVETYPE)
 
+	with LatexTable("out/energyresolution.tex") as table:
+		table.header("Parameter", "Wert")
+		table.row("$a_0$", format_error(fit.a0, fit.sigma_a0, unit="keV^2"))
+		table.row("$a_1$", format_error(fit.a1, fit.sigma_a1, unit="keV"))
+		#table.row("$a_2$", format_error(fit.a2, fit.sigma_a2))
+		table.hline()
+		a = math.sqrt(fit.a0)
+		b = math.sqrt(fit.a1)
+		#c = math.sqrt(fit.a2)
+		sa = 0.5*fit.sigma_a0/a
+		sb = 0.5*fit.sigma_a1/b
+		#sc = 0.5*fit.sigma_a2/c
+		table.row("$a$", format_error(a, sa, unit="keV"))
+		table.row("$b$", format_error(b, sb, unit="\sqrt{keV}"))
+		#table.row("$c$", format_error(c, sc))
+
+	with LatexTable("out/energyresolution_examples.tex") as table:
+		energies = np.linspace(10,60,6)
+		sigmas = np.sqrt(fit.apply(energies))
+		deltas = sigmas * 2*math.sqrt(2*math.log(2))
+		table.header("Energie", "Auflösung", "Relative Auflösung", "FWHM", lineafter=0)
+		table.row("$E$", "$\sigma$", "$\sigma / E$", "$2 \sqrt{2 \ln{2}} \sigma$")
+		table.hline(2)
+		for energy, sigma, delta in zip(energies, sigmas, deltas):
+			e = "%d keV" % energy
+			s = _n(sigma*1000) + " eV"
+			d = "%d eV" % (delta*1000)
+			table.row(e, s, _n(sigma/energy*100) + r"\%", d)
+
 def plot_leermessung(calibration):
+	print("##### PLOT EMPTY #####")
+
 	experiment = Experiment("data/G20_Leer.mca", title="Leermessung", calibration=calibration)
 	plt.clf()
 	experiment.errorplot()
@@ -395,6 +490,7 @@ if __name__=="__main__":
 
 	fit = kalibration(plot)
 	plot_leermessung(fit)
-	auswertung(fit, plot)
+	auswertung(fit, plot, False)
 	energieaufloesung(fit, plot)
 	testsignal()
+	test_smoothing(fit)

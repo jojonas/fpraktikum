@@ -21,30 +21,7 @@ def derivative(func, x, dx):
 def exponent2latex(number):
 	return re.sub(r'([0-9\-.+]+)[Ee]([0-9\-+]+)', r'\1{\\times}10^{\2}', number)
 
-def format_error(value, stat, sys=None, unit="", parenthesis=True):
-	if unit:
-		unit = r'\enskip \mathrm{' + unit + '}'
-	if not sys:
-		value, stat = number.formatNumberPair(value, stat)
-		retval = value + r' \pm ' + stat + r'_\textrm{stat}'
-	else:
-		value, stat, sys = number.formatNumberPair(value, stat, sys)
-		retval = value + r' \pm ' + stat + r'_\textrm{stat} \pm ' + sys + r'_\textrm{sys}'
 
-	retval = exponent2latex(retval)
-
-	if parenthesis:
-		retval = '(' + retval + ')'
-
-	if unit:
-		retval += " " + unit
-
-	if unit and not parenthesis:
-		print("Warning: parenthesis turned off for a formatted number with unit.\n", file=sys.stderr)
-
-	retval = r'$' + retval + r'$'
-
-	return retval
 
 def info_box(text, location='tl', margin=15, **custom):
 	options = {
@@ -167,10 +144,19 @@ class Fit:
 			for name, value in self._params.items():
 				error = self._errors[self.ERROR_PREFIX + name]
 				unit = units.get(name, "")
-				line = name + " = " + format_error(value, error, unit=unit)
+				line = name + " = " + number.formatQuantityLatex(value, error, unit=unit)
 				lines.append(line)
 			text =  "\n".join(lines)
 			info_box(text, location=box)
+
+	def __str__(self):
+		retval = "<Fit: "
+		for name in self._params:
+			value = self._params[name]
+			error = self._errors[self.ERROR_PREFIX + name]
+			retval += name + " = " + number.formatQuantity(value, error) + ", "
+		retval += ">"
+		return retval
 
 def linear_fit(x, y, yerr, xerr=None, N=10):
 	fit = Fit(LINEAR)
@@ -191,11 +177,11 @@ def _simple_peak(data, index, sigma):
 	maxindex = np.argmax(data[lower:upper])
 	return maxindex + lower
 
-def local_gauss_fit(data, mu=0, sigma=10, A=100, errors=None, N=5, f=1.0):
+def local_gauss_fit(data, mu=0, sigma=10, errors=None, N=5, f=1.0):
 	fit = Fit(GAUSS)
 	fit.mu = _simple_peak(data, mu, sigma)
 	fit.sigma = sigma
-	fit.A = A
+	fit.A = data[fit.mu]
 
 	for i in range(N):
 		lower = max(int(fit.mu-f*fit.sigma), 0)
