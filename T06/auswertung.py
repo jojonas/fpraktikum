@@ -124,7 +124,7 @@ class Experiment:
 		file = McaFile(filename)
 		self._data -= factor*file.data
 		self._data[self._data<0] = 0
-		self._errors = np.sqrt(np.power(self._errors, 2) + factor**2 * file.data)
+		self._errors = np.sqrt(np.power(self._errors, 2) + factor**2 * (file.data+1))
 
 	def smooth(self, fmax):
 		self._data = smooth(self._data, fmax)

@@ -50,7 +50,7 @@ Daher kann nach Verstärkung des Signals die Ladungsmessung in eine Energiemessu
 \subsection{Benennungsschema}
 
 Die Benennung der charakteristischen Spektrallinien folgt einem bestimmten Schema: wird das Elektron aus der innersten (K-)Schale entfernt, so entsteht eine \emph{K-Linie}. Wenn es aus der 2. (L-)Schale entfernt wird, nennt man die resultierende Linie \emph{L-Linie}. 
-Zu dem Buchstaben wird ein griechischer Buchstabe als Index angegeben, der der Energiedifferenz zwischen entferntem und nachrückendem Elektron wiedergibt: ein Übergang aus der L- in die K-Linie heißt $K_\alpha$, aus der M- in die K-Linie heißt $K_\beta$, und aus der M- in die L-Linie heißt $L_\alpha$.
+Zu dem lateinischen Buchstaben wird ein griechischer Buchstabe als Index angegeben, der die Energiedifferenz zwischen entferntem und nachrückendem Elektron wiedergibt: ein Übergang aus der L- in die K-Linie heißt $K_\alpha$, aus der M- in die K-Linie heißt $K_\beta$, und aus der M- in die L-Linie heißt $L_\alpha$.
 Unter Umständen wird dazu noch ein weiterer Index aus einer arabischen Zahl angegeben. Dieser zeigt die Feinstrukturaufspaltung an. Zum Beispiel ergeben sich für das schwerste hier verwendete Element, Terbium, die Linien $K_{\alpha 1}, K_{\alpha 2}, K_{\beta 1}, K_{\beta 2}$.
 
 \section{Durchführung}
@@ -205,7 +205,7 @@ Diese Werte werden im Folgenden verwendet werden und ihre Fehler als systematisc
 
 \section{Messung der unbekannten Proben}
 \subsection{Durchführung}
-Im 2. Versuchsteil wurden einige unbekannte Materialien spektroskopiert. Sie wurden dafür nacheinander auf ein Stück Pappe angebracht und in eine Halterung gesteckt. Im Winkel von ca. $45 \unit{\degree}$ strahlte die Alpha-Quelle aus Americium auf die aktuelle Probe, sodass charakteristische Röntgenstrahlung austrat und mit dem Halbleiterdetektor gemessen werden konnte.
+Im 2. Versuchsteil wurden einige unbekannte Materialien spektroskopiert. Sie wurden dafür nacheinander auf einem Stück Pappe montiert und in eine Halterung gesteckt. Im Winkel von ca. $45 \unit{\degree}$ strahlte die Americium-Alpha-Quelle auf die aktuelle Probe, sodass charakteristische Röntgenstrahlung austrat und mit dem Halbleiterdetektor gemessen werden konnte.
 Den Peaks wird nun mithilfe der Kalibration aus dem ersten Versuchsteil eine Energie zugeordnet, sodass die chemische Zusammensetzung bestimmt werden kann.
 
 Als unbekannte Materialien wurden eine 2-Cent-Münze (Euro), ein Kronkorken der Marke \enquote{Orangina}, eine gelbliche Metallplatte, eine sehr leichte Münze mit der Aufschrift \enquote{10} und ein Satz Bleistiftminen verwendet.
@@ -247,7 +247,7 @@ Es ist bisher nicht gelungen, eine eindeutige Zuordnung der Hintergrundpeaks zu 
 \subsubsection{Abzug der Leermessung und Kalibration der Werte}
 Als erster Schritt der Analyse wird die Leermessung von den Rohdaten subtrahiert. Da die Leermessung doppelt so lang wie die Bestimmungsmessung durchgeführt wurde, wird sie vorher mit dem Faktor $0.5$ gewichtet:
 \[ N' = N - 0.5 \cdot N_\textrm{leer} \]
-\[ \sigma_{N_\textrm{leer}} = \sqrt{N_\textrm{leer}} \Rightarrow \sigma_{N'} = \sqrt{N + 0.5^2 N_\textrm{leer}}  \]
+\[ \sigma_N = \sqrt{N+1}, \sigma_{N_\textrm{leer}} = \sqrt{N_\textrm{leer}+1} \Rightarrow \sigma_{N'} = \sqrt{N + 0.25 N_\textrm{leer} + 1.25}  \]
 
 Zu beachten ist, dass nun die statistische Unsicherheit der Bestimmungsmessung mit der statistischen Unsicherheit der Leermessung kombiniert wird, damit die Anpassung beide Fehler berücksichtigt. Daher fließt die Unsicherheit der Leermessung in diese Auswertung nicht als systematischer, sondern als statistischer Fehler ein.
 
@@ -322,7 +322,7 @@ Da die Glättung der Werte insgesamt keine deutliche Verbesserung der Messergebn
 
 \subsection{Fazit}
 \subsubsection{2-Cent-Münze}
-Die 2-Cent-Münze weißt Peaks bei ca. $8.08 \unit{keV}$ und $8.94 \unit{keV}$ auf. Diese könnten mit der $K_\alpha$ und $K_\beta$ Linie bei $8.05 \unit{keV}$ und $8.90 \unit{keV}$ von Kupfer\cite{atomdaten} korrespondieren. Allerdings befinden sich die Literaturwerte viele Standardabweichungen von den gemessenen Peaks entfernt, daher könnten auch andere Elemente in Betracht gezogen werden. Die Europäische Zentralbank gibt an, dass ein 2-Cent-Stück aus einem mit Kupfer ummantelten Eisenkern besteht\cite{muenzen}. Die charakteristischen Linien von Eisen liegen bei 	$E_{K_\alpha} = 6.40 \unit{keV}$ und $E_{K_\beta} = 7.06 \unit{keV}$\cite{nist} und sind im Spektrum nicht zu erkennen, weil der Kupfermantel die Alpha-Strahlung vollständig absorbiert.
+Die 2-Cent-Münze weißt Peaks bei ca. $8.08 \unit{keV}$ und $8.94 \unit{keV}$ auf. Diese könnten zu der $K_\alpha$ und $K_\beta$ Linie bei $8.05 \unit{keV}$ und $8.90 \unit{keV}$ von Kupfer\cite{atomdaten} korrespondieren. Allerdings befinden sich die Literaturwerte viele Standardabweichungen von den gemessenen Peaks entfernt, daher könnten auch andere Elemente in Betracht gezogen werden. Die Europäische Zentralbank gibt an, dass ein 2-Cent-Stück aus einem mit Kupfer ummantelten Eisenkern besteht\cite{muenzen}. Die charakteristischen Linien von Eisen liegen bei 	$E_{K_\alpha} = 6.40 \unit{keV}$ und $E_{K_\beta} = 7.06 \unit{keV}$\cite{nist} und sind im Spektrum nicht zu erkennen, weil der Kupfermantel die Alpha-Strahlung vollständig absorbiert.
 
 \subsubsection{Kronkorken}
 Der Kronkorken der Marke \enquote{Orangina} zeigt Peaks bei $6.46 \unit{keV}$ und $7.09 \unit{keV}$. Kornkorken sind i.d.R. gefertigt aus Weißblech, welches wiederum aus Stahl mit einer Zinnumhüllung besteht.
@@ -412,7 +412,7 @@ Außerdem wurde die Energieauflösung des Halbleiterdetektors bestimmt, welche c
 
 Der Versuch hat gezeigt, dass die Röntgenfluoreszenzspektroskopie für dichte Materialien eine geeignete Identifikationsmethode ist, da sie zerstörungsfrei Aufschlüsse über die chemische Zusammensetzung von Festkörpern gibt.
 
-
+\newpage
 \begin{thebibliography}{xxxx}
 \bibitem{anleitung} Praktikumsanleitung: Versuch T06, Röntgenfluoreszenzspektroskopie. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/T06.pdf} [Stand: 05.03.2015]
 \bibitem{nubase} Audi, Bersillon, Blachot, Wapstra: The \{NUBASE\} evaluation of nuclear and decay properties. Nuclear Physics A, Volume 624 (1997)
