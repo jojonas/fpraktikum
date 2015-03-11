@@ -395,18 +395,6 @@ def energieaufloesung(calibration, plot=True):
 	sigma_energies = np.array(sigma_energies)
 	sigma_widths = np.array(sigma_widths)
 
-	# X = energies
-	# Y = np.power(widths/energies, -2)
-	#
-	# SX = sigma_energies
-	# SY = 2*Y * np.sqrt(np.power(sigma_widths/widths, 2) + np.power(sigma_energies/energies, 2))
-
-	#X  = energies
-	#Y = widths/energies
-	#SX = sigma_energies
-	#SY = Y*np.sqrt(np.power(sigma_widths/widths, 2) + np.power(sigma_energies/energies, 2))
-	#func = lambda x, a, b: np.sqrt(np.power(a/np.sqrt(x), 2) + np.power(b,2)) # + np.power(c/x, 2)
-
 	X = energies
 	Y = np.power(widths, 2)
 	SX = sigma_energies
@@ -417,13 +405,11 @@ def energieaufloesung(calibration, plot=True):
 	fit = Fit(func)
 	fit.a0 = 1
 	fit.a1 = 1
-	#fit.a2 = 1
 
 	for _ in range(10):
 		err = fit.combine_errors(X, SX, SY)
 		fit.fit(X, Y, err)
 
-	#print("RESULT: error fit with chisq/ndf: %.2f" % (fit.chisqndf))
 
 	if plot:
 		plt.clf()
@@ -431,7 +417,6 @@ def energieaufloesung(calibration, plot=True):
 		fit.plot(np.min(X), np.max(X), box='br', units={'a0': 'keV', 'a1': r'\sqrt{keV}'})
 		plt.xlabel(r"$ E $ / keV")
 		plt.ylabel(r"$ \Delta E^2 / keV^2$")
-		#plt.title(r'Energieauflösung: Fit zu $ \frac{\Delta E}{E} = \frac{a}{\sqrt{E}} \oplus b $') #  \oplus \frac{c}{E}
 		plt.title(r'Energieauflösung: Fit zu $ \Delta E^2 = a_0 + a_1 E $') #  \oplus \frac{c}{E}
 		plt.savefig("out/energyresolution_fit." + SAVETYPE)
 
@@ -447,17 +432,13 @@ def energieaufloesung(calibration, plot=True):
 		table.header("Parameter", "Wert")
 		table.row("$a_0$", format_error(fit.a0, fit.sigma_a0, unit="keV^2"))
 		table.row("$a_1$", format_error(fit.a1, fit.sigma_a1, unit="keV"))
-		#table.row("$a_2$", format_error(fit.a2, fit.sigma_a2))
 		table.hline()
 		a = math.sqrt(fit.a0)
 		b = math.sqrt(fit.a1)
-		#c = math.sqrt(fit.a2)
 		sa = 0.5*fit.sigma_a0/a
 		sb = 0.5*fit.sigma_a1/b
-		#sc = 0.5*fit.sigma_a2/c
 		table.row("$a$", format_error(a, sa, unit="keV"))
 		table.row("$b$", format_error(b, sb, unit="\sqrt{keV}"))
-		#table.row("$c$", format_error(c, sc))
 
 	with LatexTable("out/energyresolution_examples.tex") as table:
 		energies = np.linspace(10,60,6)
