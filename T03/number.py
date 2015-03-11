@@ -1,4 +1,9 @@
 from decimal import Decimal, Context, InvalidOperation
+import re
+
+def exponent2latex(number):
+	return re.sub(r'([0-9\-.+]+)[Ee]([0-9\-+]+)', r'\1{\\times}10^{\2}', number)
+
 
 def formatNumber(number, *, precision=2):
 	c = Context(prec=precision)
@@ -32,14 +37,14 @@ def formatNumberPair(value, *errors, precision=2, separator=" +- "):
 		results.append(error)
 	return tuple((str(r) for r in results))
 
-def formatQuantityLatex(value, stat, sys=None, unit="", parenthesis=True, math=True):
+def formatQuantityLatex(value, stat, sys=None, unit="", parenthesis=True, math=True, suffix=True):
 	if not sys:
 		value, stat = formatNumberPair(value, stat)
-		retval = value + r' \pm ' + stat + (r'_\textrm{stat}' if latex else '')
+		retval = value + r' \pm ' + stat + (r'_\textrm{stat}' if suffix else '')
 
 	else:
 		value, stat, sys = formatNumberPair(value, stat, sys)
-		retval = value + r' \pm ' + stat + (r'_\textrm{stat}' if latex else '') + r' \pm ' + sys + (r'_\textrm{sys}' if latex else '')
+		retval = value + r' \pm ' + stat + (r'_\textrm{stat}' if suffix else '') + r' \pm ' + sys + (r'_\textrm{sys}' if suffix else '')
 
 	retval = exponent2latex(retval)
 
