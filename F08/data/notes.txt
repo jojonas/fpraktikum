@@ -1,0 +1,14 @@
+Nd-YAG-Laser
+============
+
+* Aufbau Nr. 3
+
+* im ersten Teil (Messung der Temperaturabhängigkeit) abfahren in ca. 0.5 Grad Schritten, bei interessanten Stellen genauer
+
+* Feststellung: Hysterese. Beim 2. Durchgang (Überprüfen) Minima festgestellt mit Offset von +1 Grad (vorher z.B. 32 Grad, nun 33 Grad)
+
+* Nutzen Minimum bei (jetzt) 38.6 +- 0.2 Grad (in den Daten bei ca. 37 Grad)
+
+* Abfahren der Kennlinie in 10 mA Schritten. Versehentlich über Messbereich gegangen, daher nachmessen der Werte => Muss vermutlich separat gefittet werden
+
+* 197 mA, 38.6 Grad. Vmax: 293mV, Vmin: 196mV, delta_t = 240us

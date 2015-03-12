@@ -1,0 +1,87 @@
+# Leistung in Abhängigkeit des Stromes
+# Temperatur: 38.6 Grad
+# 1000:1 Daempfer (gemessene Leistungen sind /1000 kleiner)
+# ZERO Modus (Abzug des Hintergrunds, daher negative Werte moeglich)
+
+# Spalten: Strom (mA), Leistung (muW)
+# Fehler: 1/sqrt(12) mA,
+# 10mA Schritte, Messbereich 300muW
+
+10		-2
+20		-2
+30		-2
+40		-2
+50		-2
+60		-2
+70		-2
+80		-2
+90		-2
+100		-1
+110		-1
+120		-1
+130		-1
+140		-1
+150		-1
+160		-1
+170		0
+180		1
+190		7
+200		14
+210		22
+220		29
+230		37
+240		46
+250		53
+260		61
+270		70
+280		78
+290		86
+300		94
+310		102
+320		110
+330		118
+340		126
+350		134
+360		143
+370		151
+380		160
+390		168
+400		176
+410		184
+420		193
+430		201
+440		210
+450		219
+460		228
+470		237
+480		247
+490		256
+500		264
+510		273
+520		282
+530		291
+# Daten rausnehmen weil Messbereich überschritten
+#540		301
+#550		310
+#560		325
+#570		328
+# Messbereich gewechselt (jetzt 0-1mW)
+#580		339
+#590		348
+#600		357
+#610		367
+#620		376
+
+
+# Luecke nachmessen im 1mW Messbereich
+520		281
+530		290
+540		299
+550		308
+560		317
+570		325
+580		334
+590		344
+600		353
+610		362
+620		371

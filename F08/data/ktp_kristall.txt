@@ -1,0 +1,58 @@
+# Temperatur: 34.9 Grad
+# KTP Kristall eingebaut
+# Gruener Filter
+# LaserMate-Q auf 532nm
+# Messbereich: 300uW
+
+# Spalten: Strom mA, Leistung in uW
+# keinen Daempfer
+
+# +- 1
+650	150
+640	138
+630	128
+620	118
+610	109
+600	102
+590	90
+580	83
+570	73
+560	68
+550	62
+540	56
+530	52
+520	47
+510	41
+500	36
+490	33
+480	30
+470	24
+460	20
+450	16
+440	14
+430	11
+420	10
+# ab hier Messbereich 10uW, +- 0.03 uW
+420	10.0
+410	8.56
+400	6.54
+390	5.18
+380	3.75
+370	2.67
+360	2.22
+350	1.80
+340	1.20
+330	0.82
+# ab hier Messbereich 1uW, +- 0.02 uW
+330	0.856
+320	0.535
+310	0.314
+300	0.153
+290	0.063
+280	0.026
+270	0.022
+# ab hier Messbereich 100nW, +- 0.2 nW
+270	0.0219
+260	0.0202
+250	0.020
+# Ab jetzt gleich, Restlicht!
