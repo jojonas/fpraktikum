@@ -105,6 +105,8 @@ class Fit:
 				self._errors[self.ERROR_PREFIX + name] = 0
 		self._chi2 = 0
 		self._ndf = 0
+		self._data_min = None
+		self._data_max = None
 
 	def __call__(self, x):
 		return self.apply(x)
@@ -166,6 +168,8 @@ class Fit:
 		assert xdata.shape == ydata.shape, "X and Y must have the same dimensions."
 		assert sigma is None or sigma.shape == ydata.shape, "Errors and Y data must have the same dimensions."
 		assert len(xdata) >= len(self._params), "Must have more data than free parameters."
+
+		self._ndf = max(0, len(xdata) - len(self._params))
 
 		if solver=="curve_fit":
 			from scipy.optimize import curve_fit
@@ -253,8 +257,9 @@ class Fit:
 		else:
 			raise ValueError("Invalid solver.")
 
+		self._data_min = xdata.min()
+		self._data_max = xdata.max()
 
-		self._ndf = max(0, len(xdata) - len(self._params))
 		self._chi2 = self.calculate_chi2(xdata, ydata, sigma)
 
 	def combine_errors(self, x, xerr, yerr, dx=_epsilon):
@@ -271,7 +276,12 @@ class Fit:
 			text += "\n" + "p = " + number.formatNumber(self.pvalue)
 			info_box(text, location=box)
 
-	def plot(self, xmin=-1, xmax=1, N=100, *, box=False, units={}, factors={}, **plotopts):
+	def plot(self, xmin=None, xmax=None, N=100, *, box=False, units={}, factors={}, **plotopts):
+		if xmin is None:
+			xmin = self._data_min
+		if xmax is None:
+			xmax = self._data_max
+
 		x = np.linspace(xmin, xmax, N)
 		y = self.apply(x)
 		assert x.shape == y.shape
@@ -338,6 +348,3 @@ def local_gauss_fit(data, mu=0, sigma=10, errors=None, N=5, f=1.0):
 		fit.sigma = abs(fit.sigma)
 
 	return fit
-
-if __name__=="__main__":
-	print(exponent2latex("123e3, 1e-55"))

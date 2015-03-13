@@ -29,7 +29,7 @@
 \author{\emph{Gruppe 20} \\  Jonas Lieb, 312136 \\ Jan-Niklas Siekmann, 320781 \\ \ \\  RWTH Aachen}
 \maketitle
 \begin{abstract}
-In diesem Versuch werden durch radioaktive Zerfälle verursachte Röntenquanten beobachtet. Im ersten Versuchsteil werden dazu die Energiespektren der Elemente Natrium, Europium, Cäsium und Cobalt im Bereich von bis zu ca. $1 \unit{MeV}$ analysiert. Mithilfe dieser Daten und externer Literaturwerte kann so ein Vielkanalanalysator kalibriert werden.
+In diesem Versuch werden durch radioaktive Zerfälle verursachte Röntenquanten beobachtet. Im ersten Versuchsteil werden dazu die Energiespektren der Elemente Natrium, Cobalt, Cäsium und Europium im Bereich von bis zu ca. $1 \unit{MeV}$ analysiert. Mithilfe dieser Daten und externer Literaturwerte kann so ein Vielkanalanalysator kalibriert werden.
 Im zweiten Versuchsteil wird die Winkelkorrelation von emittierten Röntgenquanten der Elemente Natrium und Cobalt untersucht und Aussagen über die Winkelauflösung des verwendeten Messaufbaus getroffen.
 \end{abstract}
 \newpage
@@ -51,7 +51,7 @@ Radioaktiver $\alpha$ und $\beta$-Zerfall hinterlässt die zerfallenen Kerne im 
 \subsubsection{Natrium}
 Die $\gamma$-Quanten von Natrium entstammen einem anderen Prozess. \isotope[22]{Na} zerfällt über $\beta+$-Zerfall zu \isotope[22]{Ne}. Dabei wird ein Positron frei, welches nach kurzer Zeit mit einem Elektron des Natriums annihiliert. Aufgrund der Impulserhaltung werden dabei zeitgleich zwei Photonen mit der Energie $m_e c^2 = 511 \unit{keV}$ frei, welche in einem Winkel von $180 \unit{\degree}$ im Ruhesystem der Annihilation emittiert werden. 
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
 \centering
 \begin{fmffile}{annihilation}
 \begin{fmfgraph*}(160,100)
@@ -86,11 +86,33 @@ Aus theoretischen Betrachtungen, die hier nicht weiter erläutert werden, ergibt
 
 \subsection{Messgeräte und Module}
 \subsubsection{Photomultiplier}
-\subsubsection{Single Channel Analyser}
-\subsubsection{Multi Channel Analyser}
-\subsubsection{Koinzidenzeinheit}
-\subsubsection{Counter}
+Die $\gamma$-Quanten werden mit einem \emph{Szintilationsdetektor} und einem \emph{Photomultiplier} detektiert. Passiert ein $\gamma$-Quant das Szintillationsmaterial (Thalium dotiertes Natrium-Jodid), so emittiert dieses weitere Photonen. Diese werden in den Photomultiplier geleitet, wo sie mithilfe des Photoeffektes \emph{Primärelektronen} aus einem Metall lösen. Diese werden über eine Spannung beschleunigt und lösen aus einem zweiten Metallstück weitere \emph{Sekundärelektronen}. Diese Kaskade setzt sich über mehrere Stufen fort, sodass die gemessene Ladung ein vielfaches der Ladung der Primärelektronen beträgt.
 
+Der Photomultiplier (inklusive Szintilator) wird im Folgenden mit PM abgekürzt.
+
+\subsubsection{Single Channel Analyser}
+Ein Single Channel Analyser ist ein Modul, welches einen analogen Input analysiert und ein digitales Signal (Spannung 0 oder 1) aussendet, wenn dort ein Peak detektiert wurde, dessen Amplitude sich in einem zuvor eingestellten Fenster befindet.
+
+Im Folgenden wird dieses Modul mit SCA abgekürzt. 
+
+\subsubsection{Multi Channel Analyser}
+Ein Multi Channel Analyser ordnet Peaks eines analogen Signals aufgrund ihrer Amplitude in verschiedene Kanäle ein. In diesem Versuch wird das analoge Signal der Photomultiplier analysiert. Da die im Photomultiplier gemessene Ladung proportional zur deponierten Energie ist, erstellt der Multi-Channel-Analyser Energiespektra (hier aus 16384 Kanälen), die zuerst kalibriert werden müssen. 
+
+Im Folgenden wird dieses Modul mit MCA abgekürzt. 
+
+\subsubsection{Koinzidenzeinheit}
+Eine Koinzidenzeinheit dient zur Erkennung zweier gleichzeitiger Signale. 
+
+Dafür wartet das Modul zuerst darauf, dass auf dem ersten Eingang ein logischer Puls empfangen wird. Währenddessen wird das Signal des zweiten Einganges ignoriert.
+Sobald ein Puls auf dem ersten Eingang festgestellt wurde, wartet das Modul für eine fest voreingestellte \emph{Auflösungszeit} auf einen Puls auf dem zweiten Kanal. Wird dieser vernommen, so legt das Modul ein positives Signal auf seinen Ausgang. 
+Während dieser zweiten Phase der Koinzidenzdetektion ignoriert das Modul jegliche Pulse auf dem ersten Kanal.
+
+Die Einstellung der Auflösungszeit hat einen starken Einfluss auf den Verlauf der Messung. Wird sie groß gewählt, so ist die Toleranz der Zeitdifferenz zwischen den beiden Pulsen sehr groß, allerdings wird das System auch schnell gesättigt, da pro Auflösungszeitintervall maximal eine Koinzidenz festgestellt werden kann. Die Größenordnung der Auflösungzeit in diesem Versuch beträgt $50 \unit{ns}$.
+
+\subsubsection{Counter}
+Ein Counter-Modul zählt die Anzahl der eingehenden positiven Pulse und stellt sie auf einem Display dar. Außerdem beinhaltet das verwendete Modul eine Uhr, die den Counter nur für eine voreingestellte Zeit sensitiv schaltet. Dies macht präzise und vergleichbare Messungen der Ereignisraten möglich.
+
+Der Counter wird in diesem Versuch entweder hinter den SCA oder die Koinzidenzeinheit geschaltet, um Pulse mit bestimmter Energie oder koinzidente Pulse zu messen. 
 
 \section{Durchführung}
 
@@ -104,88 +126,279 @@ Aus theoretischen Betrachtungen, die hier nicht weiter erläutert werden, ergibt
 \label{fig:Aufbau}
 \end{figure}
 
-Der Versuchsaufbau ist in\ref{fig:Aufbau} dargestellt. Er besteht aus der zentralen Halterung für die verschiedenen verwendeten Radioaktiven Isotope. Darum verteilt ist eine regulierbare Bleiabschirmung angebracht. Hinter der Abschirmung befinden sich links ein Photomultiplier, und um 180$\circ$ dazu ein weiterer, der auslenkbar auf einem Winkelmaß justiert ist, sodass für den zweiten Photomultiplier der Auslenkwinkel verändert werden kann um das gesamte Winkelspektrum abzutasten. Die Einstellungen der beiden Detektoren lauten wie folgt:
+Der Versuchsaufbau ist in Abbildung \ref{fig:Aufbau} dargestellt. Kernstück des Aufbaus ist eine zentrale Halterung für die verschiedenen verwendeten radioaktiven Proben. Um die Halterung ist eine einstellbare Bleiabschirmung angebracht. Hinter der Abschirmung befindet sich links der fest montierte Photomultiplier PM 1. Rechts im Bild befindet sich der analoge Aufbau des Photomultipliers PM 2. Dieser ist auf einem Winkelmaß justiert, sodass der Auslenkwinkel eingestellt und abgelesen werden kann, damit das gesamte Winkelspektrum von fast $180 \unit{\degree}$ abgetastet wird. Die Maße der beiden Detektoren und ihrer Abschirmungen sind:
 
+\begin{table}[htbp]
+\centering
 \begin{tabular}{|c|c|c|}
-\hline 
- & Photomultiplier 1 (PM1)  & Photomultiplier 2 (PM2)\tabularnewline
-\hline 
-Spaltbreite (mm) & $7.45\pm0.05$ & $6.70\pm0.05$\tabularnewline
-\hline 
-Höhe des Detektors (mm) & $80.75\pm0.05$ & $80.70\pm0.05$\tabularnewline
-\hline 
-Abstand zum rad. Isotop (mm) & $91.5\pm0.1$ & $78.5\pm0.1$\tabularnewline
-\hline 
+\hline
+ & Photomultiplier 1 (PM1)  & Photomultiplier 2 (PM2) \\
+\hline
+Spaltbreite & $(7.45\pm0.05) \unit{mm}$ & $(6.70\pm0.05) \unit{mm}$ \\
+Höhe des Detektors & $(80.75\pm0.05) \unit{mm}$ & $(80.70\pm0.05) \unit{mm}$ \\
+Abstand zur Probe & $(91.5\pm0.1) \unit{mm}$ & $(78.5\pm0.1) \unit{mm}$ \\ 
+\hline
 \end{tabular}
+\label{tbl:Detektorwerte}
+\end{table}
 
-Von den Photomultipliern werden die Signale an die Nuclear Instrument Module (kurz NIM) weitergeleitet die sich in einem NIM-Crate (siehe [Bild NIM-Crate]) befinden. Die beiden linken Module sind für die Hochspannungsversorgung der Photomultiplier verantwortlich. Das dritte Modul ist ein kombiniertes Modul das die Einstellung des Verstärkungsfaktors ermöglicht und desweiteren einen Single-Channel-Analyser (kurz SCA) beinhaltet. Dieses Modul ist an den ersten Photomultiplier gekoppelt. Für den zweiten Photomultiplier übernimmt das vierte Modul die Einstellung des Verstärkungsfaktors, das fünfte Modul beinhaltet den dazugehörigen SCA. Das sechste Modul ist die Koinzidenzheit, die im zweiten Versuchsteil verwendet wird. Im siebten Modulplatz steckt ein Delay-Modul zur Signalverzögerung. Schließlich folgt der Counter, dieser zählt die Signale der SCA's bzw. der Koinzidenzheit. Im letzten Steckplatz befindet sich der Multi-Channel-Analyser (kurz MCA) der im ersten Versuchsteil benötigt wird. Dieser ist wiederum mit einem Computer verbunden. 
+Von den Photomultipliern werden die Signale an die Nuclear Instrument Module (kurz NIM) weitergeleitet, die sich in einem NIM-Crate (siehe Abbildung \ref{fig:Aufbau}) befinden. Die beiden linken Module sind für die Hochspannungsversorgung der Photomultiplier verantwortlich. Bei dem dritten Modul handelt sich um ein kombiniertes Modul, das einen Verstärker und einen Single-Channel-Analyser (kurz SCA) beinhaltet. Dieses Modul ist an den ersten Photomultiplier gekoppelt. Für den zweiten Photomultiplier übernimmt das vierte Modul die Verstärkung, das fünfte Modul beinhaltet den dazugehörigen SCA. Das sechste Modul ist die Koinzidenzheit, die im zweiten Versuchsteil verwendet wird. Im siebten Modulplatz steckt ein Delay-Modul zur Signalverzögerung. Schließlich folgt der Counter, dieser zählt die Signale der SCAs bzw. der Koinzidenzheit. Im letzten Steckplatz befindet sich der Multi-Channel-Analyser (kurz MCA), der im ersten Versuchsteil benötigt wird. Dieser ist wiederum über eine USB-Schnittstelle mit einem Computer verbunden, auf dem eine Auslese- und Aufnahmesoftware der Firma \emph{Canberra} gestartet wird. 
 
 
 \subsection{Verwendete Isotope}
 In diesem Versuch werden mehrere verschiedene radioaktive Proben verwendet. Im Folgenden die physikalischen Daten der einzelnen Proben:
 
-\begin{tabular}{|c|c|c|}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c||c|}
 \hline 
-Bezeichnung & Aktivität am Tag des Versuchs (kBq) &  Halbwertszeit (d)\tabularnewline
+Bezeichnung & Anfangsaktivität & Halbwertszeit & am Tag des Versuchs \\
 \hline 
-$^{22}Na$ &  106.5 & $950.5\pm0.4$\tabularnewline
-\hline 
-$^{60}Co$ & 662.1 & $1925.3\pm0.4$\tabularnewline
-\hline 
-$^{152}Eu$ &  29.6 & $4943\pm5$\tabularnewline
-\hline 
-$^{127}Cs$ &  36.2 & $11000\pm90$\tabularnewline
+\isotope[22]{Na} & $(370 \pm 3) \unit{kBq}$ & $(950.5 \pm 0.4) \unit{d}$ & $(106.5 \pm 0.8) \unit{kBq}$ \\
+\isotope[60]{Co} & $(740 \pm 3) \unit{kBq}$ & $(1925.3\pm0.4) \unit{d}$ & $ (662 \pm 3) \unit{kBq}$ \\
+\isotope[127]{Cs} & $(37.0 \pm 0.3) \unit{kBq}$ & $(11000\pm90) \unit{d}$ & $ (36.2 \pm 0.3) \unit{kBq}$ \\
+\isotope[152]{Eu} & $(37.0 \pm 0.3) \unit{kBq}$ & $(4943\pm5) \unit{d}$ & $ (29.6 \pm 0.2) \unit{kBq}$ \\
 \hline 
 \end{tabular}
+\label{tbl:activities}
+\end{table}
 
 \subsection{Einstellung des Verstärkungsfaktors}
-Zunächst müssen die Verstärkungsfaktoren eingstellt werden. Dazu wird die $^{152}Eu$ Quelle verwendet mithilfe der groben (Coarse) und feinen (Fine) Einstellungen die Verstärkung so eingestellt, dass die Intensitätsmaxima des Europiums das gesamte Spektrum der ca 16384 Kanäle abgedeckt wird. Es wird das Europium-Spekrum gewählt, da diese die höchste zu erwartende Energie enthält. Daraus resultieren folgende Einstellung für die Verstärkungsfaktoren:
+Zunächst müssen die Verstärkungsfaktoren eingestellt werden. Dazu wird die \isotope[152]{Eu} Quelle in den Messaufbau eingesetzt und mithilfe der groben (\emph{Coarse}) und feinen (\emph{Fine}) Einstellung die Verstärkung so eingestellt, dass die Intensitätsmaxima des Europiums das gesamte Spektrum der 16384 Kanäle abdecken. Es wird das Europium-Spekrum gewählt, da dieses die höchste zu erwartende Energie von $E = 1408.013 \unit{keV}$ enthält. Daraus resultieren folgende Einstellung für die Verstärkungsfaktoren:
 
-\begin{tabular}{|c|c|c|}
-\hline 
-\multicolumn{3}{|c|}{Verstärkungsfaktoren }\tabularnewline
-\hline 
-Gain & PM1 & PM2 \tabularnewline
-\hline 
-Coarse  & 16.00 & 30\tabularnewline
-\hline 
-Fine & 1.50 & 6.0\tabularnewline
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|} \hline Gain & PM1 & PM2 \\
+\hline
+Coarse  & 16.00 & 30 \\
+Fine & 1.50 & 6.0 \\
 \hline 
 \end{tabular}
+\end{table}
 
 
 \section{Energiespektroskopie}
 \subsection{Theorie}
-Durch das Ausmessen der Spektren verschiedener Quellen mit dem ersten Detektor und dem MCA kann dieser kalibriert werden, sodass die Kanäle durch Energiewerte ersetzt werden. Dies erfolgt durch Anpassung der gemessen Intensitätsmaxima an die bekannten Strahlungsemissionen der einzelnen Quellen. Danach können die kalibrierten Messwerte verwendet werden um zum einen die Energieauflösung des Detektors, zum anderen die Effizienz zu bestimmen. Die Energieauflösung berechnet sich an den Peaks durch $\frac{\Delta E}{E}$. 
-Die intrinsische Effizienz ist definiert als das Verhältnis von im Detektor in ein elektrisches Signal umgewandelten Ereignissen zu den ingesamt am Detektor ankommenden Ereignissen. Es lässt sich zeigen dass für die intrinsische Effizienz folgendes gilt:
-$$\epsilon_{int} = \frac{4\pi*r^{2}*m}{F_{D}*A*I_{\Gamma}}$$
-	
+In diesem Versuchsteil werden die Energiespektra der Elemente Natrium, Cobalt, Cäsium und Europium vermessen. Aus den Messwerten werden in der Analyse die Position und Breite der vermessenen Peaks festgestellt.
+Diese Daten werden Literaturwerten von bekannten Energiepeaks der einzelnen Proben zugeordnet. 
+
+Dadurch kann eine Ausgleichsgerade erstellt werden, die jedem Kanal einen Energiewert zuordnet. Mit dieser Geraden und den Peakbreiten werden die Energieauflösung und die Effizienz des Detektors bestimmt. Die Energieauflösung berechnet sich an den Peaks durch $\frac{\Delta E}{E}$. Die intrinsische Effizienz ist definiert als das Verhältnis der Anzahl von im Detektor gemessenen Ereignissen zur Anzahl der theoretisch möglichen Ereignisse, die den Detektor erreichen. Es lässt sich zeigen, dass für die intrinsische Effizienz gilt:
+\begin{equation}
+\epsilon_{int} = \frac{4\pi \cdot r^{2} \cdot m}{F_{D} \cdot A \cdot I_{\Gamma}}
+\label{eq:Effizienz}
+\end{equation}
+
+Dabei ist $r$ der Abstand zwischen dem Detektor und der Probe, $m$ die gemessene Zählrate (Ereignisse pro Sekunde), $F_D$ die effektive Detektorfläche, $A$ die Aktivität der Probe und $I_\Gamma$ das Verhältnis zwischen betrachteter Strahlungsart und gesamter $\gamma$-Abstrahlung.
 
 \subsection{Durchführung}
-Es wird der oben beschriebene Grundaufbau verwendet. Der zweite Photomultiplier wird nicht benötigt. Das Signal des ersten Photomultipliers wird über das kombinierte Modul ohne Verwendung des SCA's direkt an den MCA weitergegeben. Die anderen Module werden nicht benötigt. 
-Nacheinander werden die Vier oben genannten Quellen im Zentrum des Versuchsaufbaus montiert. Dann wird jeweils ??min das dazugehörige Spekrum mit dem MCA aufgenommen. 
+Es wird der oben beschriebene Grundaufbau verwendet. Der zweite Photomultiplier wird nicht benötigt. Die einzelnen Proben werden im Messaufbau platziert und ihre Photonenemission mit dem Photomultiplier jeweils $10 \unit{min}$ lang  vermessen. Das Signal wird nach der  Verstärkung direkt an den MCA geleitet. Dieser teilt die Signale aufgrund ihrer Pulshöhe in 16384 Kanäle auf. Die gemessenen Anzahlen pro Bin werden als \texttt{.tka}-Datei abgespeichert und im Folgenden analysiert.
 
 \subsection{Auswertung}
 \subsubsection{Rohdaten}
-\subsubsection{Abzug der Leermessung}
-\subsubsection{Peakfindung}
-\subsubsection{Erstellung der Kalibrationsgeraden}
-\subsubsection{Energieauflösung}
-\subsubsection{Effizienz}
+Es zeigten sich folgende Messungen für die verschiedenen Messreihen. 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{EnergiespektrumNa_tka_all}
+\includegraphics[width=\halfwidth]{EnergiespektrumCo_tka_all}
+\includegraphics[width=\halfwidth]{EnergiespektrumCs_tka_all}
+\includegraphics[width=\halfwidth]{EnergiespektrumEu_tka_all}
+\caption{Rohdaten der Kalibrationsmessung (inkl. Gaußkurven)}
+\label{fig:Kalib}
+\end{figure}
 
+An die deutlichen Peaks wurde mithilfe eines Peakfinder-Algorithmus eine Gaußkurve angefittet um die exakte Lage der Peaks zu bestimmen. 
+
+\subsubsection{Peakfindung}
+Zur Peakfindung wird ein Algorithmus aus mehreren Schritten verwendet:
+Zunächst wird die ungefähre Position $x_0$ und Breite $\Delta x_0$ eines Peaks manuell aus dem Plot abgelesen und dem verarbeitenden Programm mitgeteilt. Dieses sucht um die angegebene Position nach einem Maximum $x_\textrm{max}$. 
+Die Daten werden danach auf den Bereich $(x_\textrm{max} - \Delta x, x_\textrm{max} + \Delta x)$ beschränkt.
+In den beschränkten Daten wird eine Anpassung durch die Methode der kleinsten Quadrate durchgeführt. Die anzupassende Funktion ist die Gaußkurve:
+\[
+	f(x) = A e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
+\]
+Danach wird $x_\textrm{max} = \mu$ und $\Delta x = \sigma$ gesetzt, die Daten werden erneut eingeschränkt (ausgehend von den Originaldaten) und gefittet.
+Dieser Vorgang wird 5 Mal wiederholt. 
+Beispiele für angepasste Gaußkurven sind in Abbildung \ref{fig:GaussFit} zu sehen, die Fitergebnisse befinden sich in Tabelle \ref{tbl:Kalibration}.
+\begin{figure}[htbp]
+%\includegraphics[width=\halfwidth]{}
+%\includegraphics[width=\halfwidth]{}
+\caption{Beispiele für den Gauß-Fit}
+\label{fig:GaussFit}
+\end{figure}
+Die Fehler auf die Ergebnisse $\sigma_{x_\textrm{max}}, \sigma_{\Delta_x}$ werden der Fitroutine entnommen, in diesem Fall der zurückgegebenen Kovarianzmatrix der Funktion \texttt{scipy.optimize.curve\_fit} aus dem Python Paket \enquote{SciPy}, welches die Fortran-Bibliothek \enquote{MINPACK} aus Python erreichbar macht.
+\begin{table}[htbp]
+\centering
+\small
+%\makebox[\textwidth][c]{\input{out/calib_peaks.tex}}
+\caption{Peak-Werte der Kalibrationsmessung}
+\label{tbl:Kalibration}
+\end{table}
+
+\subsubsection{Erstellung der Kalibrationsgeraden}
+Die gemessenen Peaks werden nun manuell den Literaturwerten zugeordnet. Die zugehörigen Energien wurden aus QUELLE entnommen. Die angenommenen Energien sind der letzten Spalte von Tabelle \ref{tbl:Kalibration} zu entnehmen. 
+Durch das Auftragen der zugeordneten Energie gegen den Kanal des Peaks kann eine Kalibrationsgerade (Abbildung \ref{fig:Kalibrationsgerade}) gebildet werden. Dabei werden die Fehler auf die Gauß-Peaks $\sigma_{x_\textrm{max}}$ und ein Fehler von $??? \unit{keV}$ für die Energie benutzt. Letzterer ist eine manuelle Abschätzung über die Identifikationsgüte.
+Diese Fehler werden auf die Fehler der Parameter der Geraden fortgepflanzt.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{calib_fit}
+\includegraphics[width=\halfwidth]{calibresiduum}
+\caption{Kalibrationsgerade}
+\label{fig:Kalibrationsgerade}
+\end{figure}
+
+Mithilfe bekannter Proben und Energiewerte kann eine Zuordnung zwischen Kanal und Energie hergestellt werden. Diese ist hauptsächlich abhängig vom gewählten Verstärkungsfaktor. 
+%\input{out/calib.tex}
+Diese Werte werden im Folgenden verwendet werden und ihre Fehler als systematische Fehler fortgepflanzt.
+
+
+
+\subsubsection{Energieauflösung}
+Die Breite der Peaks kann aus der begrenzten Energieauflösung des Detektors stammen. 
+Die Energieauflösung eines Detektors beschreibt man gewöhnlicherweise mit folgenden zwei Termen:
+\begin{enumerate}
+
+\item konstanter Term: dieser kommt von Fehlern mit konstanter Verteilung, wie z.B. durch elektrisches Rauschen. 
+Rauschen:
+\[
+\sigma_E = \textrm{konst} \eqdef a
+\]
+
+\item Poisson-Term: Ein in den Detektor einfallendes Photon der Energie $E$ erzeugt $N$ Elektronen-Loch-Paare, wobei $N \propto E$. Diese Elektronen-Loch-Paare werden an den Elektroden gezählt, die Anzahl pro Zeitintervall ist daher poissonverteilt. Da viele Elektronen gezählt werden ($N \gg 1$) ergibt sich 
+\[ \sigma_E \propto \sigma_N = \sqrt{N} \propto \sqrt{E} \Rightarrow \sigma_E \propto \sqrt{E} \eqdef b \sqrt{E} \]
+
+%\item Proportionaler Term: Zusätzlich gibt es Fehler wie z.B. Unreinheiten des Detektors, die die Anzahl $N$ der Elektronen-Loch-Paare direkt beeinflussen und daher einen zur Energie proportionalen Term einbringen: 
+%\[ \sigma_E \propto E \eqdef c E \]
+\end{enumerate}
+
+Diese Terme werden quadratisch addiert, die Proportionalitäten werden durch die Parameter $a$ und $b$ ausgedrückt:
+\[
+	\sigma_E^2 \defeq \left(a\right)^2 + \left(b \sqrt{E}\right)^2 = a^2 + b^2 E
+\]
+Die Schätzung der Parameter erfolgt wieder durch eine Geradenanpassung. Aufgetragen sind diesmal $\Delta_E^2$ gegen $E_\textrm{max}$, zur besseren Konvergenz der Parameter wird $a_0 = a^2$, $a_1 = b^2$ definiert. Aus dem Ergebnis werden die ursprünglichen Werte $a$ und $b$ samt ihrer Fehler mit Gaußscher Fehlerfortpflanzung berechnet (Tabelle \ref{tbl:Energieauflösung}).
+
+\begin{figure}[htbp]
+\includegraphics[width=\halfwidth]{energyresolution_fit}
+\includegraphics[width=\halfwidth]{energyresolution_residual}
+\caption{Parameteranpassung für die Energieauflösung}
+\label{fig:Energieaufloesung}
+\end{figure}
+
+
+\begin{table}[htbp]
+\centering
+%\input{out/energyresolution.tex}
+\caption{Anpassungsergebnisse der Energieauflösung}
+\label{tbl:Energieauflösung}
+\end{table}
+
+\subsubsection{Effizienz}
+Anhand \ref{eq:Effizienz} kann die intrinsische Effizienz des Detektors berechnet werden. Dazu werden zum einen die Werte aus \ref{tbl:Detektorwerte} benötigt. Zum anderen die aktuellen Aktivitäten der Quellen die
+\ref{tbl:activities} entnommen werden können, sowie die Zählrate m, die den Messreihen entnommen wird, benötigt. Mit Gauß'scher Fehlerfortpflanzung führt dies zu folgendem Wert für die Effizienz des Detektors: 
+ERGEBNIS
+ 
 \subsection{Ergebnis}
 
+
 \section{Koinzidenzmessung}
-\subsection{Theorie}
-\subsection{Durchführung}
+In diesem Versuchsabschnitt werden unterschiedliche $\gamma\gamma$-Koinzidenzen gemessen. Zum ersten der Annihilationspeak von \isotope[22]{Na}, bei dem theoretisch beide $\gamma$-Quanten unter einem Winkel von $180 \degree$ zueinander entstehen. 
+Im zweiten Teil wird die Winkelkorrelation der zwei $\gamma$-Quanten gemessen, die beim Zerfall von \isotope[60]{Co} entstehen. 
+\subsection{Annihilationspeak von \isotope[22]{Na}}
+\subsubsection{Theorie}
+\isotope[22]{Na} zerfällt in folgendem $\beta^{+}$-Zerfall:
+\begin{equation}
+\isotope[22][11]{Na} \rightarrow \isotope[22][10]{Ne} + e^{+} + \nu_{e}
+\end{equation}
+Das freigewordene Positron kollidiert nun zeitnah mit einem Elektron aus der umgebenden Materie. Durch Paarvernichtung werden dann zwei $\gamma$-Quanten der Energie 511 keV erzeugt, die aufgrund der Impulserhaltung, unter einem Winkel von $180 \degree$ auseinander driften. 
+Fährt man nun das Winkelspektrum mit dem zweiten PM ab, so können beide $\gamma$-Quanten gleichzeitig eingefangen werden, wodurch die Koinzidenzeinheit anschlägt. Damit kann dann schließlich eine Verteilungsfunktion, abhängig vom Winkel $\theta$ erstellt werden, anhand derer 
+bestätigt werden sollte, dass oben genannte Winkelbeziehung gilt.
+\subsubsection{Durchführung}
+Dazu wird der Aufbau aus \ref{fig:Aufbau} verwendet. Es werden dieses Mal beide Photomultiplier verwendet. Dazu werden beide SCA-Module benötigt, die ihre Signale an die Koinzidenzeinheit weitergeben. Diese ist schließlich mit dem Counter verbunden. Desweiteren wird im Lauf des Versuchs das Delay-Modul benötigt. 
+Zunächst wird auf der Winkelskala ein Winkel von $0 \degree$ eingestellt um die Grundeinstellungen vorzunehmen. 
 
+Zunächst müssen beide SCA-Module eingestellt werden. Dazu wird jeder PM mit dem dazugehörigen SCA verbunden und diese nacheinander direkt mit dem Counter. Dann wird in den Einstellungen des SCA's ein festes Fenster von 0.2V eingestellt, und danach das gesamte Spektrum von 0-10V in 0.1V Schritten abgetastet. Dasselbe wird für den zweiten SCA wiederholt. 
+Aus den aufgenommenen Werten kann danach das Maximum an Counts entnommen, und damit die optimalen Einstellungen der SCA's abgelesen werden. 
+Da man nicht davon ausgehen kann, dass beide Schaltungen genau gleich schnell die Signale weiterleiten, muss danach mithilfe des Delay-Moduls die optimale Verzögerung des Systems, sowie die optimale Auflösungszeit der Koinzidenzeinheit bestimmt werden. Dazu wird das Delay-Modul hintereinander in beide Schaltzweige 
+eingefügt und dort der gesamte Bereich an möglichen Verzögerungen abgetastet. Wenn die optimalen Einstellungen bekannt sind, kann mit der eigentlichen Messung begonnen werden. Dazu wird der zweite Photomultiplier in $2 \degree$-Schritten durch das Winkelspektrum gefahren und jedes mal für 2min die Anzahl an Koinzidenzen aufgenommen. 
+\subsubsection{Einstellungen}
+Die Abtastung mithilfe der SCA's, führte zu perfekten Einstellungen für
 
-\subsection{Annihilationspeak von Na-22}
-\subsubsection{Rohdaten}
+\begin{tabular}{|c|c|c|}
+\hline 
+\multicolumn{3}{|c|}{Einstellungen SCA}\tabularnewline
+\hline
+\hline 
+ & SCA 1 & SCA 2\tabularnewline
+\hline 
+$E$(V) & 2.8 & 3.2\tabularnewline
+\hline 
+$\Delta E$(V) & 0.8 & 0.6\tabularnewline
+\hline
+\end{tabular}
 
+Zur Bestimmung des optimalen Delays wurde das Delay-Modul in beide Zweige eingebaut und jeweils die Verzögerung von 0-90ns in 5ns-Schritten moduliert. Dazu wurde die Anzahl an Koinzidenzen gemessen. Es ergab sich folgende Verteilung:
+\begin{figure}[htbp]
+\includegraphics[width=\halfwidth]{delay_fit}
+\includegraphics[width=\halfwidth]{delay_residual}
+\caption{Gaußverteilung der Verzögerung}
+\label{fig:Delay}
+\end{figure}
+Die optimale Verzögerung wird demnach erreicht, wenn wir den ersten Zweig um 45ns verzögern. Die Auflösungszeit der Koinzidenzeinheit wurde auf ca. 50ns gesetzt. 
+Mit diesen Einstellungen wurde danach die Winkelverteilung des Natriums aufgenommen. 
 
-\subsection{Winkelkorrelation von Co-60}
-\subsubsection{Rohdaten}
+\subsubsection{Messdaten}
+Es wurde der Bereich von $-10 \degree$ bis $+10 \degree$ in $2 \degree$-Schritten abgefahren. Pro Winkeleinstellung wurde 2min gemessen. 
+Dies führt zu folgender Winkelverteilung
+
+\begin{figure}[htbp]
+\includegraphics[width=\halfwidth]{coincidence_na_2_fit}
+\includegraphics[width=\halfwidth]{coincidence_na_2_residual}
+\caption{Annihilationspeak von \isotope[22]{Na}}
+\label{fig:NA22}
+\end{figure}
+
+\subsubsection{Ergebnis}
+Das Zentrum der Winkelverteilung liegt nicht wie erwartet bei $0 \degree$. Stattdessen scheint die Winkelskala einen Offset von $+1 \degree$ aufzuweisen. Ansonsten ist die Verteilung um diesen Mittelwert Gaußverteilt und fällt schnell zu den Seiten hin ab. 
+Die Messung bestätigt also die Theorie. CHI2 VON EINHALB, FÜR KOMMENTAR FEHLT FEHLERBETRACHTUNG
+
+\subsection{Winkelkorrelation von \isotope[60]{Co}}
+\subsubsection{Theorie}
+\subsubsection{Durchführung}
+Im Gegensatz zur Messung des Annihilationspeaks von \isotope[22]{Na}, werden bei der Messung der Winkelkorrelation von \isotope[60]{Co} die $\gamma$-Quanten von zwei verschiedenen Peaks aus dem Strahlungsspektrum der Cobalt-Strahlung miteinander koinzidiert. Deshalb müssen die SCA's jeweils auf eins der Strahlungsmaxima eingestellt werden. Danach wird das mögliche Winkelspektrum von 
+$-75 \degree$ bis $75 \degree$ in $10 \degree$-Schritten durchfahren. Pro Winkel werden 10min lang gemessen. 
+\subsubsection{Einstellungen}
+Das Prozedere in der Bestimmung der Einstellungen für die SCA's ist dieselbe wie im vorangegangenen Versuch, allerdings haben wir diesmal eine Schrittweite von 0.2V verwendet. Während des Abtastens zeigen sich zwei deutliche Count-Peaks. Der erste SCA wird auf den ersten Peak, der zweite dementsprechend auf den zweiten Peak eingestellt. 
+
+\begin{tabular}{|c|c|c|}
+\hline 
+\multicolumn{3}{|c|}{Einstellungen SCA}\tabularnewline
+\hline
+\hline 
+ & SCA 1 & SCA 2\tabularnewline
+\hline 
+$E$(V) & 7.0 & 8.6\tabularnewline
+\hline 
+$\Delta E$(V) & 0.8 & 1.0\tabularnewline
+\hline
+\end{tabular}
+
+Die Auflösungszeit wurde für diese Versuchsreihe auf 100ns gesetzt. Es zeigt sich, dass die Messung am sinnvollsten ist, wenn kein zusätzlicher Delay in die Schaltung eingebaut wird. 
+
+\subsubsection{Messdaten}
+Für die Messung der Koinzidenzen des Cobalt-Zerfalls zeigt sich folgende Abhängigkeit vom Auslenkwinkel des zweiten Photomultipliers
+
+\begin{figure}[h]
+\includegraphics[width=\halfwidth]{coincidence_co_fit}
+\includegraphics[width=\halfwidth]{coincidence_co_residual}
+\caption{Winkelkorrelation von \isotope[60]{Co}}
+\label{fig:Co60}
+\end{figure}
+
+\subsubsection{Auswertung}
+
+An diese Messwerte wurde folgende Funktion angefittet (siehe rote Kurve in \ref{fig:Co60})
+\[
+	W(\theta) = 1 + a_{2} \cdot \cos^2(\theta) + a_{4} \cdot \cos^4(\theta)
+\]
 
 \subsection{Ergebnis}
 
