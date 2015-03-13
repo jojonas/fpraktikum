@@ -1,0 +1,195 @@
+\documentclass{../Misc/MontavonLaTeX/Montavon}
+\usepackage{wasysym}
+\usepackage{multirow}
+\usepackage{isotope}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage{mathtools}
+\usepackage[superscript,biblabel]{cite}
+
+\usepackage{feynmp}
+\DeclareGraphicsRule{.1}{mps}{*}{}
+
+
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\eqdef}{=\vcentcolon}
+
+\graphicspath {{out/}{bilder/}{data/}}
+\heads{RWTH Aachen \\ Fortgeschrittenenpraktikum}{T03 \\ Winkelkorrelation}{Gruppe 20 \\ 05. März 2015} 
+\date{05. März 2015}
+
+\newcommand{\thirdwidth}{0.32\textwidth}
+\newcommand{\halfwidth}{0.48\textwidth}
+\newcommand{\fullwidth}{1.0\textwidth}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}\medskipamount
+\begin{document}
+
+\title{Fortgeschrittenenpraktikum \\ \quad \\ Protokoll zur $\gamma\gamma$-Winkelkorrelation }
+\author{\emph{Gruppe 20} \\  Jonas Lieb, 312136 \\ Jan-Niklas Siekmann, 320781 \\ \ \\  RWTH Aachen}
+\maketitle
+\begin{abstract}
+In diesem Versuch werden durch radioaktive Zerfälle verursachte Röntenquanten beobachtet. Im ersten Versuchsteil werden dazu die Energiespektren der Elemente Natrium, Europium, Cäsium und Cobalt im Bereich von bis zu ca. $1 \unit{MeV}$ analysiert. Mithilfe dieser Daten und externer Literaturwerte kann so ein Vielkanalanalysator kalibriert werden.
+Im zweiten Versuchsteil wird die Winkelkorrelation von emittierten Röntgenquanten der Elemente Natrium und Cobalt untersucht und Aussagen über die Winkelauflösung des verwendeten Messaufbaus getroffen.
+\end{abstract}
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Einleitung}
+
+Durch radioaktiven Zerfall werden fast immer Röntenquanten frei. Diese stammen dabei entweder direkt aus der Abregung des Atomkernes oder alternativ aus Annihilation von Positronen aus $\beta+$-Zerfall mit Elektronen des Materials. Bei den Übergängen werden ein oder zwei Photonen praktisch gleichzeitig freigesetzt. 
+
+In diesem Versuch werden diese beiden Arten der Photonenproduktion berücksichtigt und untersucht.
+Die Röntgenquanten werden in Szintillatoren und Photomultipliern in elektrischen Strom umgewandelt und analysiert. Dabei wird zur Aufnahme des Spektrums im ersten Versuchsteil ein Computer verwendet, im zweiten Teil wird eine Koinzidenzschaltung aufgebaut, mit derer Hilfe die Winkelkorrelation vermessen wird.
+
+\subsection{Theorie}
+\subsubsection{Gamma-Emission}
+Radioaktiver $\alpha$ und $\beta$-Zerfall hinterlässt die zerfallenen Kerne im angeregten Zustand, d.h. sie besitzen eine höhere Energie als ihre Grundzustandsenergie. In einer Kaskade begeben sich die Kerne nun vom angeregten in den Grundzustand. Um Energieerhaltung während dieser Kaskade zu gewährleisten, wird die überschüssige Energie in Form von Photonen mit $\Delta E = h \nu$ abgestrahlt.
+
+\subsubsection{Natrium}
+Die $\gamma$-Quanten von Natrium entstammen einem anderen Prozess. \isotope[22]{Na} zerfällt über $\beta+$-Zerfall zu \isotope[22]{Ne}. Dabei wird ein Positron frei, welches nach kurzer Zeit mit einem Elektron des Natriums annihiliert. Aufgrund der Impulserhaltung werden dabei zeitgleich zwei Photonen mit der Energie $m_e c^2 = 511 \unit{keV}$ frei, welche in einem Winkel von $180 \unit{\degree}$ im Ruhesystem der Annihilation emittiert werden. 
+
+\begin{figure}[htb]
+\centering
+\begin{fmffile}{annihilation}
+\begin{fmfgraph*}(160,100)
+\fmfleft{positron,electron}
+\fmfright{gamma1,gamma2}
+\fmflabel{$e$}{positron}
+\fmflabel{$e$}{electron}
+\fmflabel{$\gamma$}{gamma1}
+\fmflabel{$\gamma$}{gamma2}
+\fmf{fermion}{electron,i2,i1,positron}
+\fmf{photon}{i1,gamma1}
+\fmf{photon}{i2,gamma2}
+\end{fmfgraph*}
+\end{fmffile}
+\caption{Feynman-Diagramm der Annihilation}
+\end{figure}
+
+Daher ist die in diesem Versuchsteil erwartete Korrelationsfunktion trivial: 
+\[
+W(\theta) = \delta(\theta - \pi)
+\]
+
+\subsubsection{Cobalt}
+Bei \isotope[60]{Co} wird eine 4(2)-2(2)-0-Kaskade betrachtet. Die Energiedifferenzen dabei betragen $\gamma_1 = 1173.23 \unit{keV}$ und $\gamma_2 = 1332.51 \unit{keV}$. Daher werden dort zwei distinkte Peaks erwartet. 
+Das mittlere Energieniveau dieser Kaskade weist mit $0.7 \unit{ps}$ eine extrem kurze Lebensdauer auf, weshalb die beiden emittierten Photonen praktisch zeitgleich detektiert werden.
+
+Die räumliche Verteilung der $\gamma$-Quanten ist vorerst isotrop. Da jedoch durch das erste Photon eine Quantisierungsachse festgelegt wird, ist die Emission des zweiten Photons nicht mehr rein zufällig, sondern korreliert mit dem Winkel. 
+Aus theoretischen Betrachtungen, die hier nicht weiter erläutert werden, ergibt sich die folgende Winkelkorrelation:
+\[
+	W(\theta) = 1 + \frac{1}{8} \cdot \cos^2(\theta) + \frac{1}{24} \cdot \cos^4(\theta)
+\]
+
+\subsection{Messgeräte und Module}
+\subsubsection{Photomultiplier}
+\subsubsection{Single Channel Analyser}
+\subsubsection{Multi Channel Analyser}
+\subsubsection{Koinzidenzeinheit}
+\subsubsection{Counter}
+
+
+\section{Durchführung}
+
+\subsection{Aufbau}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{Versuchsaufbau}
+\includegraphics[width=\halfwidth]{NIM-Crate}
+\caption{Versuchsaufbau: links: Photomultiplier , rechts: NIM-Crate}
+\label{fig:Aufbau}
+\end{figure}
+
+Der Versuchsaufbau ist in\ref{fig:Aufbau} dargestellt. Er besteht aus der zentralen Halterung für die verschiedenen verwendeten Radioaktiven Isotope. Darum verteilt ist eine regulierbare Bleiabschirmung angebracht. Hinter der Abschirmung befinden sich links ein Photomultiplier, und um 180$\circ$ dazu ein weiterer, der auslenkbar auf einem Winkelmaß justiert ist, sodass für den zweiten Photomultiplier der Auslenkwinkel verändert werden kann um das gesamte Winkelspektrum abzutasten. Die Einstellungen der beiden Detektoren lauten wie folgt:
+
+\begin{tabular}{|c|c|c|}
+\hline 
+ & Photomultiplier 1 (PM1)  & Photomultiplier 2 (PM2)\tabularnewline
+\hline 
+Spaltbreite (mm) & $7.45\pm0.05$ & $6.70\pm0.05$\tabularnewline
+\hline 
+Höhe des Detektors (mm) & $80.75\pm0.05$ & $80.70\pm0.05$\tabularnewline
+\hline 
+Abstand zum rad. Isotop (mm) & $91.5\pm0.1$ & $78.5\pm0.1$\tabularnewline
+\hline 
+\end{tabular}
+
+Von den Photomultipliern werden die Signale an die Nuclear Instrument Module (kurz NIM) weitergeleitet die sich in einem NIM-Crate (siehe [Bild NIM-Crate]) befinden. Die beiden linken Module sind für die Hochspannungsversorgung der Photomultiplier verantwortlich. Das dritte Modul ist ein kombiniertes Modul das die Einstellung des Verstärkungsfaktors ermöglicht und desweiteren einen Single-Channel-Analyser (kurz SCA) beinhaltet. Dieses Modul ist an den ersten Photomultiplier gekoppelt. Für den zweiten Photomultiplier übernimmt das vierte Modul die Einstellung des Verstärkungsfaktors, das fünfte Modul beinhaltet den dazugehörigen SCA. Das sechste Modul ist die Koinzidenzheit, die im zweiten Versuchsteil verwendet wird. Im siebten Modulplatz steckt ein Delay-Modul zur Signalverzögerung. Schließlich folgt der Counter, dieser zählt die Signale der SCA's bzw. der Koinzidenzheit. Im letzten Steckplatz befindet sich der Multi-Channel-Analyser (kurz MCA) der im ersten Versuchsteil benötigt wird. Dieser ist wiederum mit einem Computer verbunden. 
+
+
+\subsection{Verwendete Isotope}
+In diesem Versuch werden mehrere verschiedene radioaktive Proben verwendet. Im Folgenden die physikalischen Daten der einzelnen Proben:
+
+\begin{tabular}{|c|c|c|}
+\hline 
+Bezeichnung & Aktivität am Tag des Versuchs (kBq) &  Halbwertszeit (d)\tabularnewline
+\hline 
+$^{22}Na$ &  106.5 & $950.5\pm0.4$\tabularnewline
+\hline 
+$^{60}Co$ & 662.1 & $1925.3\pm0.4$\tabularnewline
+\hline 
+$^{152}Eu$ &  29.6 & $4943\pm5$\tabularnewline
+\hline 
+$^{127}Cs$ &  36.2 & $11000\pm90$\tabularnewline
+\hline 
+\end{tabular}
+
+\subsection{Einstellung des Verstärkungsfaktors}
+Zunächst müssen die Verstärkungsfaktoren eingstellt werden. Dazu wird die $^{152}Eu$ Quelle verwendet mithilfe der groben (Coarse) und feinen (Fine) Einstellungen die Verstärkung so eingestellt, dass die Intensitätsmaxima des Europiums das gesamte Spektrum der ca 16384 Kanäle abgedeckt wird. Es wird das Europium-Spekrum gewählt, da diese die höchste zu erwartende Energie enthält. Daraus resultieren folgende Einstellung für die Verstärkungsfaktoren:
+
+\begin{tabular}{|c|c|c|}
+\hline 
+\multicolumn{3}{|c|}{Verstärkungsfaktoren }\tabularnewline
+\hline 
+Gain & PM1 & PM2 \tabularnewline
+\hline 
+Coarse  & 16.00 & 30\tabularnewline
+\hline 
+Fine & 1.50 & 6.0\tabularnewline
+\hline 
+\end{tabular}
+
+
+\section{Energiespektroskopie}
+\subsection{Theorie}
+Durch das Ausmessen der Spektren verschiedener Quellen mit dem ersten Detektor und dem MCA kann dieser kalibriert werden, sodass die Kanäle durch Energiewerte ersetzt werden. Dies erfolgt durch Anpassung der gemessen Intensitätsmaxima an die bekannten Strahlungsemissionen der einzelnen Quellen. Danach können die kalibrierten Messwerte verwendet werden um zum einen die Energieauflösung des Detektors, zum anderen die Effizienz zu bestimmen. Die Energieauflösung berechnet sich an den Peaks durch $\frac{\Delta E}{E}$. 
+Die intrinsische Effizienz ist definiert als das Verhältnis von im Detektor in ein elektrisches Signal umgewandelten Ereignissen zu den ingesamt am Detektor ankommenden Ereignissen. Es lässt sich zeigen dass für die intrinsische Effizienz folgendes gilt:
+$$\epsilon_{int} = \frac{4\pi*r^{2}*m}{F_{D}*A*I_{\Gamma}}$$
+	
+
+\subsection{Durchführung}
+Es wird der oben beschriebene Grundaufbau verwendet. Der zweite Photomultiplier wird nicht benötigt. Das Signal des ersten Photomultipliers wird über das kombinierte Modul ohne Verwendung des SCA's direkt an den MCA weitergegeben. Die anderen Module werden nicht benötigt. 
+Nacheinander werden die Vier oben genannten Quellen im Zentrum des Versuchsaufbaus montiert. Dann wird jeweils ??min das dazugehörige Spekrum mit dem MCA aufgenommen. 
+
+\subsection{Auswertung}
+\subsubsection{Rohdaten}
+\subsubsection{Abzug der Leermessung}
+\subsubsection{Peakfindung}
+\subsubsection{Erstellung der Kalibrationsgeraden}
+\subsubsection{Energieauflösung}
+\subsubsection{Effizienz}
+
+\subsection{Ergebnis}
+
+\section{Koinzidenzmessung}
+\subsection{Theorie}
+\subsection{Durchführung}
+
+
+\subsection{Annihilationspeak von Na-22}
+\subsubsection{Rohdaten}
+
+
+\subsection{Winkelkorrelation von Co-60}
+\subsubsection{Rohdaten}
+
+\subsection{Ergebnis}
+
+\section{Zusammenfassung}
+
+
+\end{document}
