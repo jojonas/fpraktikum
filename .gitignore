@@ -1,8 +1,14 @@
 __pycache__/
 *.py[cod]
 
+*.1
+*.t1
+*.mp
+
 *.log
 *.aux
 *.out
 *.synctex.gz
 *.toc
+
+ProtokolleJoel*
