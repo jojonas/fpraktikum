@@ -12,3 +12,11 @@ Nd-YAG-Laser
 * Abfahren der Kennlinie in 10 mA Schritten. Versehentlich über Messbereich gegangen, daher nachmessen der Werte => Muss vermutlich separat gefittet werden
 
 * 197 mA, 38.6 Grad. Vmax: 293mV, Vmin: 196mV, delta_t = 240us
+
+
+2. Versuchstag
+
+Initiale 1060nm Ausgansleistung: 12.2mW bei 34.9 Grad, 653mA
+ausgeschaltete Pockelszelle: 530uW
+Fehler: nicht getriggert (Verstärkung des Frequenzgenerators zu niedrig)
+Einbautrick: erst locker einsetzen und rumspielen
