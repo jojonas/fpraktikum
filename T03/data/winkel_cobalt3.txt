@@ -1,5 +1,5 @@
 # Cobalt
-# Messzeit ???
+# Messzeit 10 Minuten
 # Spalten: Winkel (in Grad), Anzahl
 
 75	224
