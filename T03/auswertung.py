@@ -14,10 +14,12 @@ rcParams['axes.grid'] = True
 
 import numpy as np
 import matplotlib.pyplot as plt
+from uncertainties import ufloat
 
 from funcs import *
 from fits import Fit, _simple_peak, linear_fit
 from tka import TkaFile
+from latextable import LatexTable
 
 from manuell import *
 from number import *
@@ -59,45 +61,66 @@ def plot_energy_spectra():
 	widths = []
 	energies = []
 
-	total_count = 0
-	total_time = 0
 
-	for filename, meta in energy_spectra.items():
-		tka = TkaFile("data/" + filename)
-		x = np.arange(len(tka))
-		y = tka.data
+	with LatexTable("out/calib_peaks.tex") as peaktable, LatexTable("out/rates.tex") as ratetable:
+		peaktable.header("El.", "Höhe", r"Channel $x_\textrm{max}$", r"Breite $\Delta x$", r'$\chi^2/\textrm{ndf}$', "Energie / keV", lineafter=1)
+		ratetable.header("El.", "Events", "Messzeit", "Rate")
 
-		errors = np.sqrt(y+1)
+		for filename, meta in energy_spectra.items():
+			peaktable.hline()
 
-		plt.clf()
-		plt.plot(x, y, ',', color="black")
+			tka = TkaFile("data/" + filename)
+			x = np.arange(len(tka))
+			y = tka.data
 
-		for i, (mu0, sigma0, energy, sigma_energy) in enumerate(meta["peaks"], 1):
-			fit = local_fit(x,y,errors, mu=mu0, sigma=sigma0)
-			fit.plot(fit.mu-5*fit.sigma, fit.mu+5*fit.sigma, 1000, zorder=10000, color="red")
-			mus.append((fit.mu, fit.error_mu))
+			errors = np.sqrt(y+1)
 
-			if meta["element"] in ("Na", "Cs"):
-				E_gamma = 0.09863 * fit.mu - 19.056
-				m_electron = 511 # keV
-				E_compton = E_gamma / (1 + m_electron / (2*E_gamma))
+			plt.clf()
+			plt.plot(x, y, ',', color="black")
 
-				c_compton = (E_compton+19.056) / 0.09863
+			for i, (mu0, sigma0, energy, sigma_energy) in enumerate(meta["peaks"], 1):
+				fit = local_fit(x,y,errors, mu=mu0, sigma=sigma0)
+				fit.plot(fit.mu-5*fit.sigma, fit.mu+5*fit.sigma, 1000, zorder=10000, color="red")
+				mus.append((fit.mu, fit.error_mu))
 
-				plt.axvline(c_compton, color="red", linestyle="--")
+				if meta["element"] in ("Na", "Cs"):
+					E_gamma = 0.09863 * fit.mu - 19.056
+					m_electron = 511 # keV
+					E_compton = E_gamma / (1 + m_electron / (2*E_gamma))
 
-			widths.append((fit.sigma, fit.error_sigma))
-			energies.append((energy, sigma_energy))
-			print(meta["element"], i, fit)
+					c_compton = (E_compton+19.056) / 0.09863
 
-		plt.xlabel("Kanal")
-		plt.ylabel("Count")
-		plt.xlim(0, 2**14)
-		plt.title(meta["title"])
-		plt.savefig("out/" + clean_filename(filename) + "_all." + SAVETYPE)
+					plt.axvline(c_compton, color="red", linestyle="--")
 
-		total_count += y.sum()
-		total_time += tka.real_time
+				peaktable.row((meta["element"], len(meta["peaks"])),
+					formatQuantityLatex(fit.A, fit.error_A, parenthesis=False, suffix=False),
+					formatQuantityLatex(fit.mu, fit.error_mu, parenthesis=False, suffix=False),
+					formatQuantityLatex(fit.sigma, fit.error_sigma, parenthesis=False, suffix=False),
+					"%.2f" % fit.chi2ndf,
+					formatQuantityLatex(energy, sigma_energy, parenthesis=False, suffix=False)
+				)
+
+				widths.append((fit.sigma, fit.error_sigma))
+				energies.append((energy, sigma_energy))
+				print(meta["element"], i, fit)
+
+			plt.xlabel("Kanal")
+			plt.ylabel("Count")
+			plt.xlim(0, 2**14)
+			plt.title(meta["title"])
+			plt.savefig("out/" + clean_filename(filename) + "_all." + SAVETYPE)
+
+			N = ufloat(y.sum(), errors.sum())
+			t = ufloat(tka.real_time, 1/math.sqrt(12))
+			m = N/t # Hz/Bq
+			#r = ufloat(91.5, 0.01) # mm
+			#A = ufloat(*meta["activity"])*1000 # Bq
+			#I_g = 1
+			#d = ufloat(20, 10)
+			#F_D = r / d * ufloat(7.45, 0.05) * ufloat(80.75, 0.05) # mm^2
+
+			#efficiency = 4*math.pi * r**2 * m / (F_D * A * I_g)
+			ratetable.row(meta["element"], formatUFloatLatex(N), formatUFloatLatex(t, unit="s"), formatUFloatLatex(m, unit="1/s"))
 
 	mus, error_mus = np.array(mus).T
 	widths, error_widths = np.array(widths).T
@@ -125,18 +148,28 @@ def plot_energy_spectra():
 	plt.ylabel("Energie / keV")
 	plt.savefig("out/calibresiduum." + SAVETYPE)
 
+	s = formatQuantityLatex(fit.slope*1000, fit.error_slope*1000, unit="eV / Kanal", math=False)
+	o = formatQuantityLatex(fit.offset*1000, fit.error_offset*1000, unit="eV", math=False)
+
+	with open('out/calib.tex', 'w') as file:
+		file.write(r'Die in diesem Versuch verwendeten Einstellungen f\"uhren zu einer Einteilung von \[ ' +s+ r' \] wobei der erste Kanal die Energie \[ '+o+r' \] besitzt.')
 
 	# Energieauflösung
+	error_widths = np.sqrt(np.power(fit.error_slope * widths, 2) + np.power(error_widths * fit.slope, 2))
+	widths = widths * fit.slope
+
+	error_energies = np.sqrt(np.power(fit.error_offset,2) + np.power(mus*fit.error_slope, 2) + np.power(fit.slope*error_mus,2))
+	energies = fit.slope * mus  + fit.offset
+
 	X = energies
-	Y = np.power(widths, 2)
+	Y = widths
 	SX = error_energies
-	SY = 2*widths*error_widths
+	SY = error_widths
 
-	func = lambda x, a0, a1,: a0+x*a1
-
+	func = lambda E, a, b: np.sqrt(np.power(a*E,2) + np.power(b,2)*E)
 	fit = Fit(func)
-	fit.a0 = 1
-	fit.a1 = 1
+	fit.a = 0.01
+	fit.b = 0.01
 
 	for _ in range(10):
 		err = fit.combine_errors(X, SX, SY)
@@ -144,38 +177,27 @@ def plot_energy_spectra():
 
 	plt.clf()
 	plt.errorbar(X, Y, xerr=SX, yerr=SY, fmt=',', color="black")
-	fit.plot(box='br', units={'a0': 'keV', 'a1': r'\sqrt{keV}'}, color="red")
+	fit.plot(box='br', units={'b': r'\sqrt{\textrm{keV}}'}, color="red")
 	plt.xlabel(r"$ E $ / keV")
-	plt.ylabel(r"$ \Delta E^2 / keV^2$")
-	plt.title(r'Energieauflösung: Fit zu $ \Delta E^2 = a_0 + a_1 E $')
+	plt.ylabel(r"$ \Delta E / keV$")
+	plt.title(r'Energieauflösung: Fit zu $ \Delta E = \sqrt{\left(a E\right)^2 + b^2 E} $')
 	plt.savefig("out/energyresolution_fit." + SAVETYPE)
 
-	if fit.a1 >= 0:
-		a = math.sqrt(fit.a1)
-		error_a = fit.error_a1 / (2*a)
-		print("a =", formatQuantity(a, error_a))
-	else:
-		print("Parameter a complex.")
-
-	if fit.a0 >= 0:
-		b = math.sqrt(fit.a0)
-		error_b = fit.error_a0 / (2*b)
-		print("b =", formatQuantity(b, error_b))
-	else:
-		print("Parameter b complex.")
+	print("a =", formatQuantity(fit.a, fit.error_a))
+	print("b =", formatQuantity(fit.b, fit.error_b))
 
 	plt.clf()
 	err = fit.combine_errors(X, SX, SY)
 	fit.plot_residual(X, Y, err, box='tr', fmt=",", color="black")
 	plt.xlabel(r"$ E $ / keV")
-	plt.ylabel(r"$ \Delta E^2 / keV^2$")
+	plt.ylabel(r"$ \Delta E / keV$")
 	plt.title("Energieauflösung: Residuen")
 	plt.savefig("out/energyresolution_residual." + SAVETYPE)
 
-	print("Total number of events:", total_count)
-	print("Total measuring time:", total_time, "s")
-	print("Event rate:", (total_count/total_time), "1/s")
-
+	with LatexTable("out/energyresolution.tex") as table:
+		table.header("Parameter", "Wert")
+		table.row("$a$", formatQuantityLatex(fit.a, fit.error_a))
+		table.row("$b$", formatQuantityLatex(fit.b, fit.error_b, unit="\sqrt{keV}"))
 
 def plot_sca_spectrum(filename, stepsize):
 	y = np.loadtxt(filename)

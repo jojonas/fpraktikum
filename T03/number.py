@@ -27,6 +27,7 @@ def formatNumberPair(value, *errors, precision=2, separator=" +- "):
 	value = Decimal(value)
 
 	if largest_error and value.is_finite():
+		print("Quantizing", value, "to", largest_error)
 		value = value.quantize(largest_error)
 	results.append(value)
 
@@ -35,7 +36,7 @@ def formatNumberPair(value, *errors, precision=2, separator=" +- "):
 		if largest_error and error.is_finite():
 			error = error.quantize(largest_error)
 		results.append(error)
-	return tuple((str(r) for r in results))
+	return tuple((r.to_eng_string() for r in results))
 
 def formatQuantityLatex(value, stat, sys=None, unit="", parenthesis=True, math=True, suffix=True):
 	if not sys:
@@ -81,3 +82,9 @@ def formatQuantity(value, stat, sys=None, unit="", parenthesis=True):
 		print("Warning: parenthesis turned off for a formatted number with unit.\n", file=sys.stderr)
 
 	return retval
+
+def formatUFloat(ufloat, **kwargs):
+	return formatQuantity(ufloat.nominal_value, ufloat.std_dev, **kwargs)
+
+def formatUFloatLatex(ufloat, **kwargs):
+	return formatQuantityLatex(ufloat.nominal_value, ufloat.std_dev, **kwargs)

@@ -85,20 +85,14 @@ Aus theoretischen Betrachtungen, die hier nicht weiter erläutert werden, ergibt
 \]
 
 \subsection{Messgeräte und Module}
-\subsubsection{Photomultiplier}
+\subsubsection{Photomultiplier (PM)}
 Die $\gamma$-Quanten werden mit einem \emph{Szintilationsdetektor} und einem \emph{Photomultiplier} detektiert. Passiert ein $\gamma$-Quant das Szintillationsmaterial (Thalium dotiertes Natrium-Jodid), so emittiert dieses weitere Photonen. Diese werden in den Photomultiplier geleitet, wo sie mithilfe des Photoeffektes \emph{Primärelektronen} aus einem Metall lösen. Diese werden über eine Spannung beschleunigt und lösen aus einem zweiten Metallstück weitere \emph{Sekundärelektronen}. Diese Kaskade setzt sich über mehrere Stufen fort, sodass die gemessene Ladung ein vielfaches der Ladung der Primärelektronen beträgt.
 
-Der Photomultiplier (inklusive Szintilator) wird im Folgenden mit PM abgekürzt.
-
-\subsubsection{Single Channel Analyser}
+\subsubsection{Single Channel Analyser (SCA)}
 Ein Single Channel Analyser ist ein Modul, welches einen analogen Input analysiert und ein digitales Signal (Spannung 0 oder 1) aussendet, wenn dort ein Peak detektiert wurde, dessen Amplitude sich in einem zuvor eingestellten Fenster befindet.
 
-Im Folgenden wird dieses Modul mit SCA abgekürzt. 
-
-\subsubsection{Multi Channel Analyser}
+\subsubsection{Multi Channel Analyser (MCA)}
 Ein Multi Channel Analyser ordnet Peaks eines analogen Signals aufgrund ihrer Amplitude in verschiedene Kanäle ein. In diesem Versuch wird das analoge Signal der Photomultiplier analysiert. Da die im Photomultiplier gemessene Ladung proportional zur deponierten Energie ist, erstellt der Multi-Channel-Analyser Energiespektra (hier aus 16384 Kanälen), die zuerst kalibriert werden müssen. 
-
-Im Folgenden wird dieses Modul mit MCA abgekürzt. 
 
 \subsubsection{Koinzidenzeinheit}
 Eine Koinzidenzeinheit dient zur Erkennung zweier gleichzeitiger Signale. 
@@ -195,49 +189,40 @@ Es wird der oben beschriebene Grundaufbau verwendet. Der zweite Photomultiplier 
 
 \subsection{Auswertung}
 \subsubsection{Rohdaten}
-Es zeigten sich folgende Messungen für die verschiedenen Messreihen. 
+Die Rohdaten sind in Abbildung \ref{fig:Kalib} zu sehen.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\halfwidth]{EnergiespektrumNa_tka_all}
 \includegraphics[width=\halfwidth]{EnergiespektrumCo_tka_all}
 \includegraphics[width=\halfwidth]{EnergiespektrumCs_tka_all}
 \includegraphics[width=\halfwidth]{EnergiespektrumEu_tka_all}
-\caption{Rohdaten der Kalibrationsmessung (inkl. Gaußkurven)}
+\caption{Daten der Kalibrationsmessung (inkl. Gaußkurven und theoretischer Compton-Kanten)}
 \label{fig:Kalib}
 \end{figure}
-
-An die deutlichen Peaks wurde mithilfe eines Peakfinder-Algorithmus eine Gaußkurve angefittet um die exakte Lage der Peaks zu bestimmen. 
 
 \subsubsection{Peakfindung}
 Zur Peakfindung wird ein Algorithmus aus mehreren Schritten verwendet:
 Zunächst wird die ungefähre Position $x_0$ und Breite $\Delta x_0$ eines Peaks manuell aus dem Plot abgelesen und dem verarbeitenden Programm mitgeteilt. Dieses sucht um die angegebene Position nach einem Maximum $x_\textrm{max}$. 
 Die Daten werden danach auf den Bereich $(x_\textrm{max} - \Delta x, x_\textrm{max} + \Delta x)$ beschränkt.
-In den beschränkten Daten wird eine Anpassung durch die Methode der kleinsten Quadrate durchgeführt. Die anzupassende Funktion ist die Gaußkurve:
+In den beschränkten Daten wird eine Anpassung durch die Methode der kleinsten Quadrate durchgeführt. Die anzupassende Funktion ist zusammengesetzt aus einer Gaußkurve und einem linearen Untergrund:
 \[
-	f(x) = A e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
+	f(x) = A e^{-\frac{(x-\mu)^2}{2 \sigma^2}} + a_0 + a_1 x
 \]
 Danach wird $x_\textrm{max} = \mu$ und $\Delta x = \sigma$ gesetzt, die Daten werden erneut eingeschränkt (ausgehend von den Originaldaten) und gefittet.
-Dieser Vorgang wird 5 Mal wiederholt. 
-Beispiele für angepasste Gaußkurven sind in Abbildung \ref{fig:GaussFit} zu sehen, die Fitergebnisse befinden sich in Tabelle \ref{tbl:Kalibration}.
-\begin{figure}[htbp]
-%\includegraphics[width=\halfwidth]{}
-%\includegraphics[width=\halfwidth]{}
-\caption{Beispiele für den Gauß-Fit}
-\label{fig:GaussFit}
-\end{figure}
-Die Fehler auf die Ergebnisse $\sigma_{x_\textrm{max}}, \sigma_{\Delta_x}$ werden der Fitroutine entnommen, in diesem Fall der zurückgegebenen Kovarianzmatrix der Funktion \texttt{scipy.optimize.curve\_fit} aus dem Python Paket \enquote{SciPy}, welches die Fortran-Bibliothek \enquote{MINPACK} aus Python erreichbar macht.
+Dieser Vorgang wird 5 Mal wiederholt. Die Fitergebnisse befinden sich in Tabelle \ref{tbl:Kalibration}.
+
+Die Fehler auf die Ergebnisse $\sigma_{x_\textrm{max}}, \sigma_{\Delta_x}$ werden der Fitroutine entnommen. Hierfür wird der Algorithmus Migrad aus der Minuit Bibliothek verwendet.
 \begin{table}[htbp]
 \centering
 \small
-%\makebox[\textwidth][c]{\input{out/calib_peaks.tex}}
-\caption{Peak-Werte der Kalibrationsmessung}
+\makebox[\textwidth][c]{\input{out/calib_peaks.tex}}
+\caption{Peak-Werte mit statistischen Fehlern}
 \label{tbl:Kalibration}
 \end{table}
 
-\subsubsection{Erstellung der Kalibrationsgeraden}
-Die gemessenen Peaks werden nun manuell den Literaturwerten zugeordnet. Die zugehörigen Energien wurden aus QUELLE entnommen. Die angenommenen Energien sind der letzten Spalte von Tabelle \ref{tbl:Kalibration} zu entnehmen. 
-Durch das Auftragen der zugeordneten Energie gegen den Kanal des Peaks kann eine Kalibrationsgerade (Abbildung \ref{fig:Kalibrationsgerade}) gebildet werden. Dabei werden die Fehler auf die Gauß-Peaks $\sigma_{x_\textrm{max}}$ und ein Fehler von $??? \unit{keV}$ für die Energie benutzt. Letzterer ist eine manuelle Abschätzung über die Identifikationsgüte.
-Diese Fehler werden auf die Fehler der Parameter der Geraden fortgepflanzt.
+\subsubsection{Erstellung der Ausgleichsgeraden}
+Die gemessenen Peaks werden nun manuell den Literaturwerten zugeordnet. Die zugehörigen Energien wurden einer Zerfallsdatenbank der \enquote{International Atomic Energy Agency (IAEA)}\cite{xgamma} entnommen. Die angenommenen Energien sind der letzten Spalte von Tabelle \ref{tbl:Kalibration} zu entnehmen. 
+Durch das Auftragen der zugeordneten Energie gegen den Kanal des Peaks kann eine Kalibrationsgerade (Abbildung \ref{fig:Kalibrationsgerade}) gebildet werden. Dabei werden die Fehler auf die Gauß-Peaks $\sigma_{x_\textrm{max}}$ und die in der Datenbank angegebenen Fehler für die Energie benutzt. Diese Fehler werden auf die Fehler der Parameter der Geraden fortgepflanzt.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\halfwidth]{calib_fit}
@@ -246,35 +231,33 @@ Diese Fehler werden auf die Fehler der Parameter der Geraden fortgepflanzt.
 \label{fig:Kalibrationsgerade}
 \end{figure}
 
-Mithilfe bekannter Proben und Energiewerte kann eine Zuordnung zwischen Kanal und Energie hergestellt werden. Diese ist hauptsächlich abhängig vom gewählten Verstärkungsfaktor. 
-%\input{out/calib.tex}
-Diese Werte werden im Folgenden verwendet werden und ihre Fehler als systematische Fehler fortgepflanzt.
-
-
+\input{out/calib.tex}
+Diese Werte werden im Folgenden verwendet werden.
 
 \subsubsection{Energieauflösung}
-Die Breite der Peaks kann aus der begrenzten Energieauflösung des Detektors stammen. 
-Die Energieauflösung eines Detektors beschreibt man gewöhnlicherweise mit folgenden zwei Termen:
-\begin{enumerate}
-
-\item konstanter Term: dieser kommt von Fehlern mit konstanter Verteilung, wie z.B. durch elektrisches Rauschen. 
-Rauschen:
+Die Breite der Peaks könnte u.U. aus der begrenzten Energieauflösung des Detektors stammen. 
+Die Energieauflösung eines Detektors bezeichnet die Breite der möglichen Werte, die bei einem Energiepeak gemessen werden kann.
+Sie wird gewöhnlicherweise wie folgt beschrieben:
 \[
-\sigma_E = \textrm{konst} \eqdef a
+\frac{\Delta E}{E} = \sqrt{a^2 + \frac{b^2}{E}}
 \]
-
-\item Poisson-Term: Ein in den Detektor einfallendes Photon der Energie $E$ erzeugt $N$ Elektronen-Loch-Paare, wobei $N \propto E$. Diese Elektronen-Loch-Paare werden an den Elektroden gezählt, die Anzahl pro Zeitintervall ist daher poissonverteilt. Da viele Elektronen gezählt werden ($N \gg 1$) ergibt sich 
-\[ \sigma_E \propto \sigma_N = \sqrt{N} \propto \sqrt{E} \Rightarrow \sigma_E \propto \sqrt{E} \eqdef b \sqrt{E} \]
-
-%\item Proportionaler Term: Zusätzlich gibt es Fehler wie z.B. Unreinheiten des Detektors, die die Anzahl $N$ der Elektronen-Loch-Paare direkt beeinflussen und daher einen zur Energie proportionalen Term einbringen: 
-%\[ \sigma_E \propto E \eqdef c E \]
-\end{enumerate}
-
-Diese Terme werden quadratisch addiert, die Proportionalitäten werden durch die Parameter $a$ und $b$ ausgedrückt:
+Wird diese Formel für die relative Energieauflösung umgestellt, so wird deutlich, woher die beiden Parameter $a$ und $b$ stammen:
 \[
-	\sigma_E^2 \defeq \left(a\right)^2 + \left(b \sqrt{E}\right)^2 = a^2 + b^2 E
+\Delta E = a E \oplus b \sqrt{E}
 \]
-Die Schätzung der Parameter erfolgt wieder durch eine Geradenanpassung. Aufgetragen sind diesmal $\Delta_E^2$ gegen $E_\textrm{max}$, zur besseren Konvergenz der Parameter wird $a_0 = a^2$, $a_1 = b^2$ definiert. Aus dem Ergebnis werden die ursprünglichen Werte $a$ und $b$ samt ihrer Fehler mit Gaußscher Fehlerfortpflanzung berechnet (Tabelle \ref{tbl:Energieauflösung}).
+Dabei bezeichnet $\oplus$ das quadratische Addieren der Fehler.
+Der erste Term, proportional zu $E$, stammt z.B. von Kalibrationsfehlern und Inhomogenitäten des Detektors. Die Größenordnung von $a$ ist für gewöhnlich $< 1 \unit{\%}$. 
+Der zweite Term stammt aus  statistischen Schwankungen. Da im Szintillator und im Photomultiplier $N$ diskrete Events erzeugt werden, die Poisson verteilt sind ($\sigma_N \propto \sqrt{N}$) und deren Anzahl direkt proportional zur Energie ($N \propto E$) ist, gilt 
+\[
+\sigma_{E, \textrm{stat}} \propto \sigma_N \propto \sqrt{N} \propto \sqrt{E}
+\]
+Für $\frac{b}{\sqrt{E}}$ wird ebenfalls ein Wert von $\approx 1 \unit{\%}$ erwartet.
+
+Die Schätzung der Parameter erfolgt wieder durch eine Anpassung mithilfe der Methode der kleinsten Quadrate. Die anzupassende Funktion dabei lautet 
+\[
+	\Delta_E = \sqrt{\left(a E\right)^2 + b^2 E}
+\]
+Die Anpassung inklusive der Ergebnisse und ihrer Fehler sind in Abbildung \ref{fig:Energieaufloesung} und Tabelle \ref{tbl:Energieaufloesung} dargestellt.
 
 \begin{figure}[htbp]
 \includegraphics[width=\halfwidth]{energyresolution_fit}
@@ -283,18 +266,28 @@ Die Schätzung der Parameter erfolgt wieder durch eine Geradenanpassung. Aufgetr
 \label{fig:Energieaufloesung}
 \end{figure}
 
-
 \begin{table}[htbp]
 \centering
-%\input{out/energyresolution.tex}
+\input{out/energyresolution.tex}
 \caption{Anpassungsergebnisse der Energieauflösung}
 \label{tbl:Energieauflösung}
 \end{table}
 
+Das Ergebnis für den Term $a$ liegt wie erwartet bei $(0.32 \pm 0.2) \unit{\%} < 1 \unit{\%}$.
+Für die Evaluation des zweiten Terms wird beispielshaft die Energie $1 \unit{MeV}$ genutzt. Dadurch ergibt sich: $\frac{b}{\sqrt{E}} = (2.295 \pm 0.003) \unit{\%}$. Dieser Ergebnis liegt ebenfalls in der vorhergesagten Größenordnung um $\approx 1 \unit{\%}$. 
+
+Anzumerken ist bei dieser Auswertung jedoch, dass die angenommenen Fehler auf die Energie und auf die Breite viel zu gering sind und sich daher ein sehr hohes $\chi^2 / \textrm{ndf}$ von $2100$ ergibt.
+
 \subsubsection{Effizienz}
-Anhand \ref{eq:Effizienz} kann die intrinsische Effizienz des Detektors berechnet werden. Dazu werden zum einen die Werte aus \ref{tbl:Detektorwerte} benötigt. Zum anderen die aktuellen Aktivitäten der Quellen die
-\ref{tbl:activities} entnommen werden können, sowie die Zählrate m, die den Messreihen entnommen wird, benötigt. Mit Gauß'scher Fehlerfortpflanzung führt dies zu folgendem Wert für die Effizienz des Detektors: 
+Anhand von Gleichung \ref{eq:Effizienz} kann die intrinsische Effizienz des Detektors berechnet werden. Dazu werden zum einen die Werte aus \ref{tbl:Detektorwerte} benötigt. Zum anderen werden die aktuellen Aktivitäten der Quellen, die \ref{tbl:activities} entnommen werden können, sowie die Zählrate $m$, die den Messreihen entnommen wird, benötigt. Mit Gauß'scher Fehlerfortpflanzung führt dies zu folgendem Wert für die Effizienz des Detektors: 
 ERGEBNIS
+
+\begin{table}[htbp]
+\centering
+\input{out/rates.tex}
+\caption{Zählraten $m$ der einzelnen Messungen}
+\label{tbl:Zaehlraten}
+\end{table}
  
 \subsection{Ergebnis}
 
@@ -403,6 +396,19 @@ An diese Messwerte wurde folgende Funktion angefittet (siehe rote Kurve in \ref{
 \subsection{Ergebnis}
 
 \section{Zusammenfassung}
+
+\newpage
+\begin{thebibliography}{xxxx}
+\bibitem{anleitung} Praktikumsanleitung: Versuch T03, $\gamma \gamma$-Winkelkorrelation. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/T03.pdf} [Stand: 16.03.2015]
+\bibitem{xgamma} International Atomic Energy Agency: X-Ray and Gamma-ray Decay Data Standards for Detector Calibration and Other Applications. URL: \url{https://www-nds.iaea.org/xgamma_standards/genergies1.htm}
+
+\bibitem{nubase} Audi, Bersillon, Blachot, Wapstra: The \{NUBASE\} evaluation of nuclear and decay properties. Nuclear Physics A, Volume 624 (1997)
+\bibitem{amptek} Amptek: X-123 Complete X-Ray Spectrometer with Si-PIN Detector. URL: \url{http://www.amptek.com/products/x-123-complete-x-ray-spectrometer-wth-si-pin-detector} [Stand 05.03.2015]
+\bibitem{amptek-press-releases} Amptek: XR-100T Lands on Mars on the Pathfinder Mission! (7/4/97) URL: \url{http://www.amptek.com/press-release-archive/} [Stand: 06.03.2015]
+\bibitem{atomdaten} Zschornak, Günter: Atomdaten für die Röntgenspektralanalyse. Leipzig: VEB Deutscher Verlag für Grundstoffindustrie
+\bibitem{nist} National Institute of Standards and Technology (NIST): X-ray Transition Energies Database. URL: \url{http://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html} [Stand: 06.03.2015]
+\bibitem{muenzen} Europäische Zentralbank: Der Euro, Münzen. URL: \url{http://www.ecb.europa.eu/euro/coins/common/html/index.de.html} [Stand: 05.03.2015]
+\end{thebibliography}
 
 
 \end{document}
