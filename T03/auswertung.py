@@ -61,6 +61,7 @@ def plot_energy_spectra():
 	widths = []
 	energies = []
 
+	#leer = TkaFile("data/EnergiespektrumLeer.TKA")
 
 	with LatexTable("out/calib_peaks.tex") as peaktable, LatexTable("out/rates.tex") as ratetable:
 		peaktable.header("El.", "Höhe", r"Channel $x_\textrm{max}$", r"Breite $\Delta x$", r'$\chi^2/\textrm{ndf}$', "Energie / keV", lineafter=1)
@@ -71,9 +72,11 @@ def plot_energy_spectra():
 
 			tka = TkaFile("data/" + filename)
 			x = np.arange(len(tka))
+			#y = tka.data - leer.data
 			y = tka.data
 
-			errors = np.sqrt(y+1)
+			#errors = np.sqrt(tka.data + leer.data + 2)
+			errors = np.sqrt(tka.data + 1)
 
 			plt.clf()
 			plt.plot(x, y, ',', color="black")
@@ -93,16 +96,16 @@ def plot_energy_spectra():
 					plt.axvline(c_compton, color="red", linestyle="--")
 
 				peaktable.row((meta["element"], len(meta["peaks"])),
-					formatQuantityLatex(fit.A, fit.error_A, parenthesis=False, suffix=False),
-					formatQuantityLatex(fit.mu, fit.error_mu, parenthesis=False, suffix=False),
-					formatQuantityLatex(fit.sigma, fit.error_sigma, parenthesis=False, suffix=False),
+					formatQuantityLatex(fit.A, fit.error_A),
+					formatQuantityLatex(fit.mu, fit.error_mu),
+					formatQuantityLatex(fit.sigma, fit.error_sigma),
 					"%.2f" % fit.chi2ndf,
-					formatQuantityLatex(energy, sigma_energy, parenthesis=False, suffix=False)
+					formatQuantityLatex(energy, sigma_energy)
 				)
 
 				widths.append((fit.sigma, fit.error_sigma))
 				energies.append((energy, sigma_energy))
-				print(meta["element"], i, fit)
+				#print(meta["element"], i, fit)
 
 			plt.xlabel("Kanal")
 			plt.ylabel("Count")
@@ -113,13 +116,15 @@ def plot_energy_spectra():
 			N = ufloat(y.sum(), errors.sum())
 			t = ufloat(tka.real_time, 1/math.sqrt(12))
 			m = N/t # Hz/Bq
-			#r = ufloat(91.5, 0.01) # mm
-			#A = ufloat(*meta["activity"])*1000 # Bq
-			#I_g = 1
-			#d = ufloat(20, 10)
-			#F_D = r / d * ufloat(7.45, 0.05) * ufloat(80.75, 0.05) # mm^2
+			r = ufloat(91.5, 0.01) # mm
+			A = ufloat(*meta["activity"])*1000 # Bq
+			I_g = 1
+			r = ufloat(15, 5)
+			F_D = ufloat(7.45, 0.05) * ufloat(80.75, 0.05) # mm^2
 
-			#efficiency = 4*math.pi * r**2 * m / (F_D * A * I_g)
+			efficiency = 4*math.pi * r**2 * m / (F_D * A * I_g)
+			print("Efficiency:", meta["element"], efficiency)
+
 			ratetable.row(meta["element"], formatUFloatLatex(N), formatUFloatLatex(t, unit="s"), formatUFloatLatex(m, unit="1/s"))
 
 	mus, error_mus = np.array(mus).T
@@ -199,14 +204,25 @@ def plot_energy_spectra():
 		table.row("$a$", formatQuantityLatex(fit.a, fit.error_a))
 		table.row("$b$", formatQuantityLatex(fit.b, fit.error_b, unit="\sqrt{keV}"))
 
-def plot_sca_spectrum(filename, stepsize):
-	y = np.loadtxt(filename)
-	y[0] = 0
-	x = stepsize * np.arange(len(y))
-	plt.plot(x,y, 's')
-	plt.xlabel("Window Offset / V")
-	plt.ylabel("Count")
-	plt.show()
+def plot_sca_spectrum():
+	for i, filename in enumerate(("data/pm1_sca_windowsearch.txt", "data/pm2_sca_windowsearch.txt", "data/pm1_sca_windowsearch2.txt", "data/pm2_sca_windowsearch2.txt")):
+		stepsize = 0.1 if i < 2 else 0.2
+		y = np.loadtxt(filename)
+		y[0] = 0
+		x = stepsize * np.arange(len(y))
+		plt.clf()
+		plt.plot(x,y, 's', color="black")
+		plt.xlabel("Window Offset / V")
+		plt.ylabel("Count")
+		plt.title("SCA %d" % ((i%2)+1))
+		plt.savefig("out/window_%d."  % i + SAVETYPE)
+
+		if i == 2:
+			values = y[np.logical_and(x>=7.0, x<=7.8)]
+			print(i, values.sum())
+		if i == 3:
+			values = y[np.logical_and(x>=8.6, x<=9.6)]
+			print(i, values.sum())
 
 def plot_delay_spectrum():
 	x1, y1 = np.loadtxt("data/pm1_delay.txt", unpack=True)
@@ -301,8 +317,31 @@ def plot_coincidence_co():
 	plt.savefig("out/coincidence_co_residual." + SAVETYPE)
 
 
+	plt.clf()
+	plt.errorbar(angle, count, xerr=error_angle, yerr=error_count, fmt='s', color="black")
+
+	fit = Fit(CONSTANT)
+	fit.c = count.mean()
+	for i in range(5):
+		errors = fit.combine_errors(angle, error_angle, error_count)
+		fit.fit(angle, count, errors)
+	fit.plot(-90, 90, box="br", color="red")
+	plt.xlim(-90, 90)
+	plt.xlabel("Winkel / Grad")
+	plt.ylabel("Count")
+	plt.savefig("out/coincidence_co_fitc." + SAVETYPE)
+
+	plt.clf()
+	fit.plot_residual(angle, count, errors, fmt="s", box="br", color="black")
+	plt.xlabel("Winkel / Grad")
+	plt.ylabel("Count")
+	plt.savefig("out/coincidence_co_residualc." + SAVETYPE)
+
+
+
 if __name__=="__main__":
 	plot_energy_spectra()
+	plot_sca_spectrum()
 	plot_delay_spectrum()
 	plot_coincidence_na()
 	plot_coincidence_co()

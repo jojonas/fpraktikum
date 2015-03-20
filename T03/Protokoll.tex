@@ -29,8 +29,11 @@
 \author{\emph{Gruppe 20} \\  Jonas Lieb, 312136 \\ Jan-Niklas Siekmann, 320781 \\ \ \\  RWTH Aachen}
 \maketitle
 \begin{abstract}
-In diesem Versuch werden durch radioaktive Zerfälle verursachte Röntenquanten beobachtet. Im ersten Versuchsteil werden dazu die Energiespektren der Elemente Natrium, Cobalt, Cäsium und Europium im Bereich von bis zu ca. $1 \unit{MeV}$ analysiert. Mithilfe dieser Daten und externer Literaturwerte kann so ein Vielkanalanalysator kalibriert werden.
-Im zweiten Versuchsteil wird die Winkelkorrelation von emittierten Röntgenquanten der Elemente Natrium und Cobalt untersucht und Aussagen über die Winkelauflösung des verwendeten Messaufbaus getroffen.
+In diesem Versuch werden durch radioaktive Zerfälle verursachte Röntenquanten beobachtet. 
+
+Im ersten Versuchsteil werden dazu die Energiespektren der Elemente Natrium, Cobalt, Cäsium und Europium bis zu ca. $1 \unit{MeV}$ analysiert. Mithilfe dieser Daten und externer Literaturwerte wird so ein Vielkanalanalysator kalibriert und die Energieauflösung des verwendeten Detektors bestimmt.
+
+Im zweiten Versuchsteil wird die Winkelkorrelation emittierter Röntgenquanten der Elemente Natrium und Cobalt untersucht und Aussagen über die Winkelauflösung des verwendeten Messaufbaus getroffen.
 \end{abstract}
 \newpage
 
@@ -86,7 +89,7 @@ Aus theoretischen Betrachtungen, die hier nicht weiter erläutert werden, ergibt
 
 \subsection{Messgeräte und Module}
 \subsubsection{Photomultiplier (PM)}
-Die $\gamma$-Quanten werden mit einem \emph{Szintilationsdetektor} und einem \emph{Photomultiplier} detektiert. Passiert ein $\gamma$-Quant das Szintillationsmaterial (Thalium dotiertes Natrium-Jodid), so emittiert dieses weitere Photonen. Diese werden in den Photomultiplier geleitet, wo sie mithilfe des Photoeffektes \emph{Primärelektronen} aus einem Metall lösen. Diese werden über eine Spannung beschleunigt und lösen aus einem zweiten Metallstück weitere \emph{Sekundärelektronen}. Diese Kaskade setzt sich über mehrere Stufen fort, sodass die gemessene Ladung ein vielfaches der Ladung der Primärelektronen beträgt.
+Die $\gamma$-Quanten werden mit einem \emph{Szintilationsdetektor} und einem \emph{Photomultiplier} detektiert. Passiert ein $\gamma$-Quant das Szintillationsmaterial (Thalium dotiertes Natrium-Jodid), so emittiert dieses weitere Photonen. Diese werden in den Photomultiplier geleitet, wo sie mithilfe des Photoeffektes \emph{Primärelektronen} aus einem Metall lösen. Diese werden über eine Spannung beschleunigt und lösen aus einem zweiten Metallstück weitere \emph{Sekundärelektronen}. Die Kaskade setzt sich über mehrere Stufen fort, sodass die gemessene Ladung ein Vielfaches der Ladung der Primärelektronen beträgt.
 
 \subsubsection{Single Channel Analyser (SCA)}
 Ein Single Channel Analyser ist ein Modul, welches einen analogen Input analysiert und ein digitales Signal (Spannung 0 oder 1) aussendet, wenn dort ein Peak detektiert wurde, dessen Amplitude sich in einem zuvor eingestellten Fenster befindet.
@@ -127,7 +130,7 @@ Der Versuchsaufbau ist in Abbildung \ref{fig:Aufbau} dargestellt. Kernstück des
 \begin{tabular}{|c|c|c|}
 \hline
  & Photomultiplier 1 (PM1)  & Photomultiplier 2 (PM2) \\
-\hline
+\hline \hline
 Spaltbreite & $(7.45\pm0.05) \unit{mm}$ & $(6.70\pm0.05) \unit{mm}$ \\
 Höhe des Detektors & $(80.75\pm0.05) \unit{mm}$ & $(80.70\pm0.05) \unit{mm}$ \\
 Abstand zur Probe & $(91.5\pm0.1) \unit{mm}$ & $(78.5\pm0.1) \unit{mm}$ \\ 
@@ -163,7 +166,7 @@ Zunächst müssen die Verstärkungsfaktoren eingestellt werden. Dazu wird die \i
 \begin{table}[htbp]
 \centering
 \begin{tabular}{|c|c|c|} \hline Gain & PM1 & PM2 \\
-\hline
+\hline \hline
 Coarse  & 16.00 & 30 \\
 Fine & 1.50 & 6.0 \\
 \hline 
@@ -189,16 +192,20 @@ Es wird der oben beschriebene Grundaufbau verwendet. Der zweite Photomultiplier 
 
 \subsection{Auswertung}
 \subsubsection{Rohdaten}
-Die Rohdaten sind in Abbildung \ref{fig:Kalib} zu sehen.
+Die Rohdaten sind als schwarze Punkte in Abbildung \ref{fig:Kalib} zu sehen. 
+
 \begin{figure}[htbp]
-\centering
+\centerline{\begin{minipage}{1.2\textwidth}
 \includegraphics[width=\halfwidth]{EnergiespektrumNa_tka_all}
 \includegraphics[width=\halfwidth]{EnergiespektrumCo_tka_all}
 \includegraphics[width=\halfwidth]{EnergiespektrumCs_tka_all}
 \includegraphics[width=\halfwidth]{EnergiespektrumEu_tka_all}
+\end{minipage}}
 \caption{Daten der Kalibrationsmessung (inkl. Gaußkurven und theoretischer Compton-Kanten)}
 \label{fig:Kalib}
 \end{figure}
+
+Als Fehler auf die Binwerte wird im Folgenden die Näherung $\sigma_N = \sqrt{N + 1}$ verwendet, die für große Anzahlen eine gute Näherung der eigentlich unsymmetrischen Poisson-Konfidenzintervalle darstellt.
 
 \subsubsection{Peakfindung}
 Zur Peakfindung wird ein Algorithmus aus mehreren Schritten verwendet:
@@ -209,7 +216,7 @@ In den beschränkten Daten wird eine Anpassung durch die Methode der kleinsten Q
 	f(x) = A e^{-\frac{(x-\mu)^2}{2 \sigma^2}} + a_0 + a_1 x
 \]
 Danach wird $x_\textrm{max} = \mu$ und $\Delta x = \sigma$ gesetzt, die Daten werden erneut eingeschränkt (ausgehend von den Originaldaten) und gefittet.
-Dieser Vorgang wird 5 Mal wiederholt. Die Fitergebnisse befinden sich in Tabelle \ref{tbl:Kalibration}.
+Dieser Vorgang wird 5 Mal wiederholt. Die Fitergebnisse befinden sich in Tabelle \ref{tbl:Kalibration}. An den $\chi^2$-Werten ist zu erkennen, dass die Anpassung meist sinnvoll gelingt, nur im Fall des Cobalts nicht, da der lineare Untergrund aufgrund der dicht aneinander liegenden Peaks nicht erkannt werden kann.
 
 Die Fehler auf die Ergebnisse $\sigma_{x_\textrm{max}}, \sigma_{\Delta_x}$ werden der Fitroutine entnommen. Hierfür wird der Algorithmus Migrad aus der Minuit Bibliothek verwendet.
 \begin{table}[htbp]
@@ -223,10 +230,12 @@ Die Fehler auf die Ergebnisse $\sigma_{x_\textrm{max}}, \sigma_{\Delta_x}$ werde
 \subsubsection{Erstellung der Ausgleichsgeraden}
 Die gemessenen Peaks werden nun manuell den Literaturwerten zugeordnet. Die zugehörigen Energien wurden einer Zerfallsdatenbank der \enquote{International Atomic Energy Agency (IAEA)}\cite{xgamma} entnommen. Die angenommenen Energien sind der letzten Spalte von Tabelle \ref{tbl:Kalibration} zu entnehmen. 
 Durch das Auftragen der zugeordneten Energie gegen den Kanal des Peaks kann eine Kalibrationsgerade (Abbildung \ref{fig:Kalibrationsgerade}) gebildet werden. Dabei werden die Fehler auf die Gauß-Peaks $\sigma_{x_\textrm{max}}$ und die in der Datenbank angegebenen Fehler für die Energie benutzt. Diese Fehler werden auf die Fehler der Parameter der Geraden fortgepflanzt.
+
 \begin{figure}[htbp]
-\centering
+\centerline{\begin{minipage}{1.2\textwidth}
 \includegraphics[width=\halfwidth]{calib_fit}
 \includegraphics[width=\halfwidth]{calibresiduum}
+\end{minipage}}
 \caption{Kalibrationsgerade}
 \label{fig:Kalibrationsgerade}
 \end{figure}
@@ -260,8 +269,10 @@ Die Schätzung der Parameter erfolgt wieder durch eine Anpassung mithilfe der Me
 Die Anpassung inklusive der Ergebnisse und ihrer Fehler sind in Abbildung \ref{fig:Energieaufloesung} und Tabelle \ref{tbl:Energieaufloesung} dargestellt.
 
 \begin{figure}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
 \includegraphics[width=\halfwidth]{energyresolution_fit}
 \includegraphics[width=\halfwidth]{energyresolution_residual}
+\end{minipage}}
 \caption{Parameteranpassung für die Energieauflösung}
 \label{fig:Energieaufloesung}
 \end{figure}
@@ -270,17 +281,20 @@ Die Anpassung inklusive der Ergebnisse und ihrer Fehler sind in Abbildung \ref{f
 \centering
 \input{out/energyresolution.tex}
 \caption{Anpassungsergebnisse der Energieauflösung}
-\label{tbl:Energieauflösung}
+\label{tbl:Energieaufloesung}
 \end{table}
 
-Das Ergebnis für den Term $a$ liegt wie erwartet bei $(0.32 \pm 0.2) \unit{\%} < 1 \unit{\%}$.
+Das Ergebnis für den Term $a$ liegt wie erwartet bei $(0.32 \pm 0.02) \unit{\%} < 1 \unit{\%}$.
 Für die Evaluation des zweiten Terms wird beispielshaft die Energie $1 \unit{MeV}$ genutzt. Dadurch ergibt sich: $\frac{b}{\sqrt{E}} = (2.295 \pm 0.003) \unit{\%}$. Dieser Ergebnis liegt ebenfalls in der vorhergesagten Größenordnung um $\approx 1 \unit{\%}$. 
 
-Anzumerken ist bei dieser Auswertung jedoch, dass die angenommenen Fehler auf die Energie und auf die Breite viel zu gering sind und sich daher ein sehr hohes $\chi^2 / \textrm{ndf}$ von $2100$ ergibt.
+Anzumerken ist bei dieser Auswertung jedoch, dass die angenommenen Fehler auf die Energie und auf die Breite viel zu gering sind und sich daher ein sehr hohes $\chi^2 / \textrm{ndf}$ von $2100$ und niedrige Fehler auf die Ergebnisse ergeben.
 
 \subsubsection{Effizienz}
-Anhand von Gleichung \ref{eq:Effizienz} kann die intrinsische Effizienz des Detektors berechnet werden. Dazu werden zum einen die Werte aus \ref{tbl:Detektorwerte} benötigt. Zum anderen werden die aktuellen Aktivitäten der Quellen, die \ref{tbl:activities} entnommen werden können, sowie die Zählrate $m$, die den Messreihen entnommen wird, benötigt. Mit Gauß'scher Fehlerfortpflanzung führt dies zu folgendem Wert für die Effizienz des Detektors: 
-ERGEBNIS
+Anhand von Gleichung \ref{eq:Effizienz} kann die intrinsische Effizienz des Detektors berechnet werden. Dazu werden die Messungen der Detektorgeometrie aus Tabelle \ref{tbl:Detektorwerte} benötigt. Außerdem werden die aktuellen Aktivitäten der Quellen, die Tabelle \ref{tbl:activities} entnommen werden können, sowie die Zählrate $m$ (siehe Tabelle \ref{tbl:Zaehlraten}), die aus den Messreihen berechnet wird, benötigt.
+
+Als Abstand zur Quelle wird in diesem Fall jedoch \emph{nicht} der in Tabelle \ref{tbl:Detektorwerte} angegebene Wert benutzt, sondern der Radius $r = (1.5 \pm 0.5) \unit{cm}$ angenommen. Dies folgt der Überlegung, dass der Detektor effektiv alle Photonen misst, die die Bleiabschirmung passieren. Der Abstand der Metallabschirmung zur Probe wurde dabei im Nachhinein abgeschätzt.
+
+Die Ergebnisse der Effizienzberechnung befinden sich in der Tabelle \ref{tbl:Effizienzen}. Es ist zu erkennen, dass die bestimmten Werte einen sehr großen Fehler besitzen, der genauere Aussagen über den Aufbau zunichte macht. Ursache dafür ist vermutlich die ungenau abgeschätzte Distanz der Probe zur Metallblende.
 
 \begin{table}[htbp]
 \centering
@@ -288,126 +302,212 @@ ERGEBNIS
 \caption{Zählraten $m$ der einzelnen Messungen}
 \label{tbl:Zaehlraten}
 \end{table}
- 
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+El. & Effizienz  \\
+\hline\hline
+Na & $(25 \pm 16) \unit{\%}$ \\
+Co & $(8 \pm 6) \unit{\%}$ \\
+Cs & $(8 \pm 6) \unit{\%}$ \\
+Eu & $(26 \pm 18) \unit{\%}$ \\
+\hline
+\end{tabular}
+\caption{Berechnete Detektoreffizienz bei den Messungen der einzelnen Elemente.}
+\label{tbl:Effizienzen}
+\end{table}
+
 \subsection{Ergebnis}
+In diesem Versuchsteil wurden die Energiespektra von Natrium, Cobalt, Cäsium und Europium aufgenommen. Den Messwerten wurden Energien aus Literaturwerten zugewiesen, sodass sich eine Kalibrierung vn $98.8 \unit{eV/Kanal}$ mit einem Offset von $-19 \unit{keV}$ ergab.
+Die beiden Komponenten der Energieauflösung wurden bestimmt, sie führen zu einer Auflösung von $\approx 2.3 \unit{\%}$. 
+Außerdem wurde die intrinsische Detektoreffizienz bestimmt, sie beträgt zwischen $5$ und $30 \unit{\%}$.
 
 
 \section{Koinzidenzmessung}
-In diesem Versuchsabschnitt werden unterschiedliche $\gamma\gamma$-Koinzidenzen gemessen. Zum ersten der Annihilationspeak von \isotope[22]{Na}, bei dem theoretisch beide $\gamma$-Quanten unter einem Winkel von $180 \degree$ zueinander entstehen. 
-Im zweiten Teil wird die Winkelkorrelation der zwei $\gamma$-Quanten gemessen, die beim Zerfall von \isotope[60]{Co} entstehen. 
+In diesem Versuchsabschnitt werden unterschiedliche $\gamma\gamma$-Koinzidenzen gemessen. Im ersten Versuch wird der Annihilationspeak von \isotope[22]{Na} untersucht, bei dem beide $\gamma$-Quanten in einem Winkel von $180 \degree$ zueinander emittiert werden. 
+Im zweiten Teil wird die Winkelkorrelation der zwei $\gamma$-Quanten gemessen, die in der Kaskade von \isotope[60]{Co} entstehen. 
+
 \subsection{Annihilationspeak von \isotope[22]{Na}}
 \subsubsection{Theorie}
-\isotope[22]{Na} zerfällt in folgendem $\beta^{+}$-Zerfall:
-\begin{equation}
-\isotope[22][11]{Na} \rightarrow \isotope[22][10]{Ne} + e^{+} + \nu_{e}
-\end{equation}
-Das freigewordene Positron kollidiert nun zeitnah mit einem Elektron aus der umgebenden Materie. Durch Paarvernichtung werden dann zwei $\gamma$-Quanten der Energie 511 keV erzeugt, die aufgrund der Impulserhaltung, unter einem Winkel von $180 \degree$ auseinander driften. 
-Fährt man nun das Winkelspektrum mit dem zweiten PM ab, so können beide $\gamma$-Quanten gleichzeitig eingefangen werden, wodurch die Koinzidenzeinheit anschlägt. Damit kann dann schließlich eine Verteilungsfunktion, abhängig vom Winkel $\theta$ erstellt werden, anhand derer 
-bestätigt werden sollte, dass oben genannte Winkelbeziehung gilt.
+Das durch den $\beta^{+}$ Zerfall von \isotope[22]{Na} entstehende Positron annihiliert mit einem Elektron des Natriums. Die beiden dabei entstehenden Photonen der Energie $511 \unit{keV}$ werden in einem Winkel von $180 \unit{\degree}$ zueinander emittiert.
+
 \subsubsection{Durchführung}
-Dazu wird der Aufbau aus \ref{fig:Aufbau} verwendet. Es werden dieses Mal beide Photomultiplier verwendet. Dazu werden beide SCA-Module benötigt, die ihre Signale an die Koinzidenzeinheit weitergeben. Diese ist schließlich mit dem Counter verbunden. Desweiteren wird im Lauf des Versuchs das Delay-Modul benötigt. 
-Zunächst wird auf der Winkelskala ein Winkel von $0 \degree$ eingestellt um die Grundeinstellungen vorzunehmen. 
+Es wird der Aufbau aus Abbildung \ref{fig:Aufbau} verwendet. Dieses Mal werden beide Photomultiplier benutzt. Außerdem werden beide SCA-Module benötigt, deren Ausgänge mit der Koinzidenzeinheit verbunden werden. Die Koinzidenzen werden schließlich mit einem Counter am Ausgang der Koinzidenzeinheit gezählt. Desweiteren wird im Lauf des Versuchs das Delay-Modul benötigt. 
+Zunächst wird auf der Winkelskala ein Winkel von $0 \unit{\degree}$ eingestellt, um die Grundeinstellungen vorzunehmen. 
 
-Zunächst müssen beide SCA-Module eingestellt werden. Dazu wird jeder PM mit dem dazugehörigen SCA verbunden und diese nacheinander direkt mit dem Counter. Dann wird in den Einstellungen des SCA's ein festes Fenster von 0.2V eingestellt, und danach das gesamte Spektrum von 0-10V in 0.1V Schritten abgetastet. Dasselbe wird für den zweiten SCA wiederholt. 
-Aus den aufgenommenen Werten kann danach das Maximum an Counts entnommen, und damit die optimalen Einstellungen der SCA's abgelesen werden. 
-Da man nicht davon ausgehen kann, dass beide Schaltungen genau gleich schnell die Signale weiterleiten, muss danach mithilfe des Delay-Moduls die optimale Verzögerung des Systems, sowie die optimale Auflösungszeit der Koinzidenzeinheit bestimmt werden. Dazu wird das Delay-Modul hintereinander in beide Schaltzweige 
-eingefügt und dort der gesamte Bereich an möglichen Verzögerungen abgetastet. Wenn die optimalen Einstellungen bekannt sind, kann mit der eigentlichen Messung begonnen werden. Dazu wird der zweite Photomultiplier in $2 \degree$-Schritten durch das Winkelspektrum gefahren und jedes mal für 2min die Anzahl an Koinzidenzen aufgenommen. 
-\subsubsection{Einstellungen}
-Die Abtastung mithilfe der SCA's, führte zu perfekten Einstellungen für
+Im ersten Schritt werden beide SCA-Module eingestellt. Dazu wird zuerst der Verstärker des Photomultipliers 1 mit dem dazugehörigen SCA verbunden, und dieser wiederum direkt an den Counter angeschlossen. Im SCA wird ein festes Fenster von $0.2 \unit{V}$ eingestellt. In $0.1 \unit{V}$-Schritten wird das Spektrum von $0$ bis $10 \unit{V}$ abgetastet, und dabei in jedem Schritt die Anzahl der Events in $5 \unit{s}$ gezählt. Dieser gesamte Vorgang wird ebenfalls für PM 2 durchgeführt. 
 
+\begin{figure}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
+\includegraphics[width=\halfwidth]{window_0}
+\includegraphics[width=\halfwidth]{window_1}
+\end{minipage}}
+\caption{SCA-Fenstersuche für Natrium}
+\label{fig:SCA_Window_Na}
+\end{figure}
+
+Für eine möglichst hohe Zählrate werden im weiteren Verlauf des Versuches die Einstellungen aus Tabelle \ref{tbl:SCA_Window_Na} benutzt, welche nach manueller Abschätzung so gewählt wurden, dass der gesamte Photopeak im gewählten Fenster liegt.
+
+\begin{table}[htpb]
+\centering
 \begin{tabular}{|c|c|c|}
 \hline 
-\multicolumn{3}{|c|}{Einstellungen SCA}\tabularnewline
-\hline
-\hline 
- & SCA 1 & SCA 2\tabularnewline
-\hline 
-$E$(V) & 2.8 & 3.2\tabularnewline
-\hline 
-$\Delta E$(V) & 0.8 & 0.6\tabularnewline
+ & SCA 1 & SCA 2 \\
+\hline \hline
+$E$ & $2.8 \unit{V}$ & $3.2 \unit{V}$ \\
+$\Delta E$ & $0.8 \unit{V}$ & $0.6 \unit{V}$ \\
 \hline
 \end{tabular}
+\caption{Einstellungen der SCAs für die Vermessung von Natrium}
+\label{tbl:SCA_Window_Na}
+\end{table}
 
-Zur Bestimmung des optimalen Delays wurde das Delay-Modul in beide Zweige eingebaut und jeweils die Verzögerung von 0-90ns in 5ns-Schritten moduliert. Dazu wurde die Anzahl an Koinzidenzen gemessen. Es ergab sich folgende Verteilung:
+Da nicht davon ausgegangen werden kann, dass beide Schaltungen die Signale in gleicher Zeit verarbeiten, muss im folgenden Schritt die optimale Verzögerung der Verarbeitungskanäle bestimmt werden.
+Dazu wird das Delay-Modul nacheinander in je einen der Schaltzweige eingefügt und dort der gesamte Bereich der möglichen Verzögerungen abgetastet. Hierbei werden beide SCAs bereits mit der Koinzidenzeinheit verbunden. Für jede eingestellte Verzögerung wird $10 \unit{s}$ lang die Anzahl der Ereignisse an der Koinzidenzeinheit gezählt.
+Die Ergebnisse dieser Messung sind in Abbildung \ref{fig:Delay} zu sehen. Zur Bestimmung der optimalen Verzögerung wurde in der Analyse eine Gaußkurve angepasst, während des Versuches wurde diese Verzögerung jedoch manuell mit $-45 \unit{ns}$ abgeschätzt, daher wird dieser Wert im Folgenden benutzt. Der negative Wert bedeutet dabei, dass PM 1 verzögert wurde.
+
 \begin{figure}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
 \includegraphics[width=\halfwidth]{delay_fit}
 \includegraphics[width=\halfwidth]{delay_residual}
-\caption{Gaußverteilung der Verzögerung}
+\end{minipage}}
+\caption{Auswirkung der Verzögerung auf gemessene Anzahl der Koinzidenzen}
 \label{fig:Delay}
 \end{figure}
-Die optimale Verzögerung wird demnach erreicht, wenn wir den ersten Zweig um 45ns verzögern. Die Auflösungszeit der Koinzidenzeinheit wurde auf ca. 50ns gesetzt. 
-Mit diesen Einstellungen wurde danach die Winkelverteilung des Natriums aufgenommen. 
+
+Da nun die optimalen Einstellungen bekannt sind, wird mit der eigentlichen Messung der Winkelkorrelation begonnen: Der Ausgang des Single-Channel-Analysers 1, der auf die Fenstereinstellung aus Tabelle \ref{tbl:SCA_Window_Na} eingestellt ist, wird mit einem Delay von $45 \unit{ns}$ an die Koinzidenzeinheit angeschlossen. Der Ausgang von SCA 2 wird direkt mit dem zweiten Eingang der Koinzidenzeinheit verbunden.
+In $2 \unit{\degree}$-Schritten wird nun das Spektrum von $-10$ bis $10 \unit{\degree}$ vermessen. Dabei wird bei jeder Einstellung eine Messung von $120 \unit{s}$ vorgenommen, während dieser die Anzahl der Ereignisse gezählt wird. 
+
+Der Winkel wird mithilfe der Winkelskala auf ca. $0.3 \unit{\degree}$ Genauigkeit eingestellt.
 
 \subsubsection{Messdaten}
-Es wurde der Bereich von $-10 \degree$ bis $+10 \degree$ in $2 \degree$-Schritten abgefahren. Pro Winkeleinstellung wurde 2min gemessen. 
-Dies führt zu folgender Winkelverteilung
+Die Messergebnisse der Winkelkorrelation von $-10$ bis $10 \unit{\degree}$ sind in Abbildung \ref{fig:NA22} zu sehen. Angepasst ist eine Gaußverteilung ohne konstanten Offset, weil die zufällige Koinzidenz vernachlässigbar klein ist. Als Fehler auf die Anzahl der Ereignisse wurde erneut $\sigma_N = \sqrt{N+1}$ angenommen, der Fehler auf den Winkel beträgt $0.3 \unit{\degree}$.
 
 \begin{figure}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
 \includegraphics[width=\halfwidth]{coincidence_na_2_fit}
 \includegraphics[width=\halfwidth]{coincidence_na_2_residual}
+\end{minipage}}
 \caption{Annihilationspeak von \isotope[22]{Na}}
 \label{fig:NA22}
 \end{figure}
 
 \subsubsection{Ergebnis}
-Das Zentrum der Winkelverteilung liegt nicht wie erwartet bei $0 \degree$. Stattdessen scheint die Winkelskala einen Offset von $+1 \degree$ aufzuweisen. Ansonsten ist die Verteilung um diesen Mittelwert Gaußverteilt und fällt schnell zu den Seiten hin ab. 
-Die Messung bestätigt also die Theorie. CHI2 VON EINHALB, FÜR KOMMENTAR FEHLT FEHLERBETRACHTUNG
+Die Mitte des angepassten Peaks liegt nicht wie erwartet bei einem Winkel von $0 \unit{\degree}$. Stattdessen scheint die Winkelskala einen Offset von \[
+	\mu = (1.05 \pm 0.13) \unit{\degree}
+\] aufzuweisen. Um diesen Mittelwert ist die Anzahl der Ereignisse gaußverteilt, mit einer Standardabweichung von \[
+	\sigma = (10.12 \pm 0.22) \unit{\degree}
+\]Die Anpassung liegt mit $\chi^2 / \mathrm{ndf} = 0.5$ sehr gut im Rahmen der Fehler. 
+
+Da aufgrund technischer Schwierigkeiten der Messaufbau im zweiten Versuchsaufbau signifikant verändert wurde, werden diese Fehler \emph{nicht} als systematischer Fehler in die weiteren Messungen einfließen.
 
 \subsection{Winkelkorrelation von \isotope[60]{Co}}
 \subsubsection{Theorie}
-\subsubsection{Durchführung}
-Im Gegensatz zur Messung des Annihilationspeaks von \isotope[22]{Na}, werden bei der Messung der Winkelkorrelation von \isotope[60]{Co} die $\gamma$-Quanten von zwei verschiedenen Peaks aus dem Strahlungsspektrum der Cobalt-Strahlung miteinander koinzidiert. Deshalb müssen die SCA's jeweils auf eins der Strahlungsmaxima eingestellt werden. Danach wird das mögliche Winkelspektrum von 
-$-75 \degree$ bis $75 \degree$ in $10 \degree$-Schritten durchfahren. Pro Winkel werden 10min lang gemessen. 
-\subsubsection{Einstellungen}
-Das Prozedere in der Bestimmung der Einstellungen für die SCA's ist dieselbe wie im vorangegangenen Versuch, allerdings haben wir diesmal eine Schrittweite von 0.2V verwendet. Während des Abtastens zeigen sich zwei deutliche Count-Peaks. Der erste SCA wird auf den ersten Peak, der zweite dementsprechend auf den zweiten Peak eingestellt. 
+Im Gegensatz zur Messung des Annihilationspeaks von \isotope[22]{Na} werden bei der Messung der Winkelkorrelation von \isotope[60]{Co} die $\gamma$-Quanten zweier verschiedener Peaks aus dem Cobalt-Spektrum miteinander in Verbindung gebracht. Diese Peaks werden bei $1173 \unit{keV}$ und $1332 \unit{keV}$ erwartet, die gemessenen Werte sollten proportional sein zu
+\[
+	W(\theta) = 1 + \frac{1}{8} \cdot \cos^2(\theta) + \frac{1}{24} \cdot \cos^4(\theta)
+\]
 
+\subsubsection{Durchführung}
+Die Durchführung ist analog zur Durchführung des vorherigen Versuchsteils: zuerst werden die optimalen SCA-Fenster ermittelt. Dafür wird erneut das Spektrum von $0$ bis $10 \unit{V}$ untersucht, diesmal in $0.2 \unit{V}$-Schritten, bei einer Fenstergröße von ebenfalls $0.2 \unit{V}$ und einer Messdauer von je $5 \unit{s}$.
+
+Die Rohdaten der Messung finden sich in Abbildung \ref{fig:SCA_Window_Co}. Die beiden erwarteten Peaks sind deutlich zu erkennen.
+
+\begin{figure}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
+\includegraphics[width=\halfwidth]{window_2}
+\includegraphics[width=\halfwidth]{window_3}
+\end{minipage}}
+\caption{SCA-Fenstersuche für Cobalt}
+\label{fig:SCA_Window_Co}
+\end{figure}
+
+Anhand dieser Ergebnisse werden die beiden SCAs auf Energien der verschiedenen Peaks eingestellt (siehe Tabelle \ref{tbl:SCA_Window_Co}).
+
+\begin{table}[htbp]
+\centering
 \begin{tabular}{|c|c|c|}
 \hline 
-\multicolumn{3}{|c|}{Einstellungen SCA}\tabularnewline
-\hline
-\hline 
- & SCA 1 & SCA 2\tabularnewline
-\hline 
-$E$(V) & 7.0 & 8.6\tabularnewline
-\hline 
-$\Delta E$(V) & 0.8 & 1.0\tabularnewline
+ & SCA 1 & SCA 2 \\
+\hline \hline
+$E$ & $7.0 \unit{V}$ & $8.6 \unit{V}$ \\
+$\Delta E$ & $0.8 \unit{V}$ & $1.0 \unit{V}$ \\
 \hline
 \end{tabular}
+\caption{Einstellungen der SCAs für die Vermessung von Cobalt}
+\label{tbl:SCA_Window_Co}
+\end{table}
 
-Die Auflösungszeit wurde für diese Versuchsreihe auf 100ns gesetzt. Es zeigt sich, dass die Messung am sinnvollsten ist, wenn kein zusätzlicher Delay in die Schaltung eingebaut wird. 
+In diesem Versuchsteil wird kein Delay verwendet, da die Koinzidenzrate so gering ist,  dass der Vorversuch zur Einstellung des Delays zu viel Zeit in Anspruch genommen hätte.
+
+Die Auflösungszeit der Koinzidenzeinheit wurde für diese Versuchsreihe auf $100 \unit{ns}$ gesetzt. 
+
+Im Hauptteil des Versuches wird nun der Winkelbereich von $-75 \unit{\degree}$ bis $75 \unit{\degree}$ in $10 \unit{\degree}$-Schritten vermessen. Dabei beträgt der Fehler auf den eingestellten Winkel erneut $0.3 \unit{\degree}$. Die Messzeit jeder Winkeleinstellung beträgt $600 \unit{s}$.
 
 \subsubsection{Messdaten}
-Für die Messung der Koinzidenzen des Cobalt-Zerfalls zeigt sich folgende Abhängigkeit vom Auslenkwinkel des zweiten Photomultipliers
+Die Abhängigkeit der Anzahl der Ereignisse vom Auslenkwinkel ist dargestellt auf der linken Seite der Abbildung \ref{fig:Co60}.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
 \includegraphics[width=\halfwidth]{coincidence_co_fit}
 \includegraphics[width=\halfwidth]{coincidence_co_residual}
+\end{minipage}}
 \caption{Winkelkorrelation von \isotope[60]{Co}}
 \label{fig:Co60}
 \end{figure}
 
-\subsubsection{Auswertung}
+Es ist zu erkennen, dass die Werte sehr stark statistisch streuen, um einen Mittelwert von ca. 230.
 
-An diese Messwerte wurde folgende Funktion angefittet (siehe rote Kurve in \ref{fig:Co60})
+\subsubsection{Auswertung}
+An diese Messwerte wird die erwartete Funktion 
 \[
-	W(\theta) = 1 + a_{2} \cdot \cos^2(\theta) + a_{4} \cdot \cos^4(\theta)
+	W(\theta) = 1 + a_2 \cdot \cos^2(\theta) + a_4 \cdot \cos^4(\theta)
 \]
+angepasst. Dabei werden die Werte $a_2 = \frac{1}{8} = 0.1250$ und $a_4 = \frac{1}{24} = 0.0417$ erwartet.
+Die Ergebnisse sind 
+\[
+	a_2 = (-0.10 \pm 0.21) \enskip \textrm{und} \enskip a_4 = (0.12 \pm 0.20)
+\]
+Innerhalb ihrer sehr großen Fehler stimmen diese Werte zwar mit den theoretischen Voraussagen überein, und $\chi^2 / \textrm{ndf} = 16 / 14 = 1.14$ ließe vermuten, dass die Anpassung sinnvoll ist, jedoch kann an die selben Daten ebenso eine konstante Funktion 
+\[ 
+	W(\theta) = c
+\] angepasst werden, mit dem Ergebnis $c = (233.8 \pm 3.7)$, $\chi^2 / \textrm{ndf} = 17 / 16 = 1.06$. 
+Daher kann diese Messung das erwartete Ergebnis nicht bestätigen, die Messdaten weisen eher die Charakteristika einer Gleichverteilung auf. Dies spricht für eine isotrope Winkelverteilung.
 
 \subsection{Ergebnis}
+Die Messung der Korrelationsfunktion des Natrium-Isotops konnte die theoretische Vorhersage bestätigen. Es zeigte sich ein Gauß-Peak, der um ca. $0 \unit{\degree}$ zentriert ist.
+Die theoretischen Vorhersagen der Winkelkorrelationsmessung von Cobalt konnten wiederum nicht bestätigt werden. Die Messwerte streuen stark um den Mittelwert von 234 in 10 Minuten und sind nahezu gleichverteilt.
+
+\subsection{Fehlerbetrachtung}
+Vermutlich handelt es sich bei den gemessenen Ereignissen ausschließlich um zufällige Koinzidenzen. Bei diesen wird erwartet, dass sie im Winkel gleichverteilt sind. Um diese Aussage zu überprüfen, kann die Anzahl der erwarteten zufälligen Koinzidenzen berechnet werden.
+Dafür bietet sich folgende Formel an:
+\[
+	m^\mathrm{coinc}_\mathrm{rand} = T_A \cdot m_1 \cdot m_2
+\]
+Um die Raten $m_1$ und $m_2$ abzuschätzen, wird noch einmal auf Abbildung \ref{fig:SCA_Window_Co} verwiesen. Innerhalb der gewählten Fenster befinden sich für PM 1 17783 Ereignisse und für PM 2 19311 Ereignisse in je $5 \unit{s}$. Daher ist 
+\[
+m_1 = \frac{(17783 \pm 133)}{5 \unit{s}} = (3557 \pm 27) \unit{1/s} \enskip \mathrm{und} \enskip m_2 = \frac{(19311 \pm 139)}{5 \unit{s}} = (3862 \pm 28) \unit{1/s} 
+\]
+Mit einer Auflösungszeit von $T_A = 100 \unit{ns}$ und einer Messdauer von $T = 600 \unit{s}$ ergibt dies eine erwartete zufällige Koinzidenz von 
+\begin{align*}
+	N^\mathrm{coinc}_\mathrm{rand} &= T \cdot m^\mathrm{coinc}_\mathrm{rand} \\
+	&= 600 \unit{s} \cdot 100 \unit{ns} \cdot (3557 \pm 27) \unit{1/s} \cdot (3862 \pm 28) \unit{1/s} \\
+	&= 600 \unit{s} \cdot (1.374 \pm 0.014) \unit{1/s} \\
+	&= 824 \pm 9
+\end{align*}
+Diese Zahl ist bereits sehr viel größer als die ca. 233 tatsächlich gemessenen zufälligen Koinzidenzen pro Bin. Dies spricht für zusätzliche Fehler in der Koinzidenzschaltung, da (statistisch) mindestens $824$ Ereignisse pro Bin hätten gemessen werden sollen.
 
 \section{Zusammenfassung}
+In diesem Versuch wurde $\gamma$-Emission vierer Elemente (Natrium, Cobalt, Cäsium und Europium) untersucht, die Energiespektra aufgenommen und ausgewertet. Dabei ist es gelungen, eine Energiekalibration der MCA-Kanäle vorzunehmen. 
+Diese Kalibration wurde daraufhin dazu benutzt, die Energieauflösung des Detektors zu bestimmen, die sich wie erwartet im unteren Prozentbereich befand. 
+Im Hauptteil des Versuches wurden die Winkelkorrelationen der Photonen von Natrium und Cobalt betrachtet. Bei Natrium zeigte sich, wie erwartet, eine Gaußverteilung bei einer Winkeldifferenz von $180 \unit{\degree}$. Im Fall des Cobalts konnte die Messung die Erwartungen nicht bestätigen. Es wurden deutlich weniger Ereignisse gemessen als erwartet, in der Auswertung zeigte sich zudem, dass die vorhergesagte Winkelkorrelation nicht bestimmt werden konnte.
 
 \newpage
 \begin{thebibliography}{xxxx}
 \bibitem{anleitung} Praktikumsanleitung: Versuch T03, $\gamma \gamma$-Winkelkorrelation. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/T03.pdf} [Stand: 16.03.2015]
 \bibitem{xgamma} International Atomic Energy Agency: X-Ray and Gamma-ray Decay Data Standards for Detector Calibration and Other Applications. URL: \url{https://www-nds.iaea.org/xgamma_standards/genergies1.htm}
-
-\bibitem{nubase} Audi, Bersillon, Blachot, Wapstra: The \{NUBASE\} evaluation of nuclear and decay properties. Nuclear Physics A, Volume 624 (1997)
-\bibitem{amptek} Amptek: X-123 Complete X-Ray Spectrometer with Si-PIN Detector. URL: \url{http://www.amptek.com/products/x-123-complete-x-ray-spectrometer-wth-si-pin-detector} [Stand 05.03.2015]
-\bibitem{amptek-press-releases} Amptek: XR-100T Lands on Mars on the Pathfinder Mission! (7/4/97) URL: \url{http://www.amptek.com/press-release-archive/} [Stand: 06.03.2015]
-\bibitem{atomdaten} Zschornak, Günter: Atomdaten für die Röntgenspektralanalyse. Leipzig: VEB Deutscher Verlag für Grundstoffindustrie
-\bibitem{nist} National Institute of Standards and Technology (NIST): X-ray Transition Energies Database. URL: \url{http://physics.nist.gov/PhysRefData/XrayTrans/Html/search.html} [Stand: 06.03.2015]
-\bibitem{muenzen} Europäische Zentralbank: Der Euro, Münzen. URL: \url{http://www.ecb.europa.eu/euro/coins/common/html/index.de.html} [Stand: 05.03.2015]
 \end{thebibliography}
 
 

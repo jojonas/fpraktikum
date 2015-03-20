@@ -4,6 +4,16 @@ energy_spectra = OrderedDict()
 
 # energy sources: https://www-nds.iaea.org/xgamma_standards/genergies1.htm
 
+energy_spectra["EnergiespektrumNa.tka"] = {
+	"title": "Natrium (Na)",
+	"element": "Na",
+	"activity": (106.5, 0.8),
+	"peaks": [
+		(5400, 220, 510.998910, 0.000001),
+		(13060, 400, 1274.537, 0.003),
+	]
+}
+
 energy_spectra["EnergiespektrumCo.tka"] = {
 	"title": "Cobalt (Co)",
 	"element": "Co",
@@ -40,15 +50,5 @@ energy_spectra["EnergiespektrumEu.tka"] = {
 		(9950, 200, 964.072, 0.018),
 		#(11300, 400, 1089.737, 0.005),
 		(14360, 320, 1408.013, 0.003),
-	]
-}
-
-energy_spectra["EnergiespektrumNa.tka"] = {
-	"title": "Natrium (Na)",
-	"element": "Na",
-	"activity": (106.5, 0.8),
-	"peaks": [
-		(5400, 220, 510.998910, 0.000001),
-		(13060, 400, 1274.537, 0.003),
 	]
 }
