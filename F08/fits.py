@@ -91,58 +91,78 @@ def info_box(text, location='tl', margin=15, **custom):
 			horizontalalignment='left', verticalalignment='top', **options)
 
 class Fit:
-	ERROR_PREFIX = "error_"
-
 	def __init__(self, func):
 		assert callable(func), "Parameter 'func' must be a callable object."
 
 		self._func = func
-		self._params = OrderedDict()
-		self._errors = OrderedDict()
-		for i, (name, param) in enumerate(inspect.signature(func).parameters.items()):
-			if i > 0:
-				if param.default != inspect.Parameter.empty:
-					self._params[name] = param.default
-				else:
-					self._params[name] = 0
-				self._errors[self.ERROR_PREFIX + name] = 0
+		self._param_values = OrderedDict()
+		self._param_errors = OrderedDict()
+
+		self._load_from_signature(func)
 
 		self._x = None
 		self._y = None
 		self._xerrors = None
 		self._yerrors = None
+
 		self._xlabel = None
 		self._ylabel = None
+
 		self._fitted = False
 
 	def __call__(self, x):
 		return self.eval(x)
 
-	def __setattr__(self, name, value):
-		if name.startswith("_"):
-			self.__dict__[name] = value
-		elif name.startswith(self.ERROR_PREFIX) and name in self._errors:
-			self._errors[name] = value
-		elif name in self._params:
-			self._params[name] = value
+	def __len__(self):
+		return len(self._x)
 
-	def __getattr__(self, name):
-		if name.startswith("_"):
-			return self.__dict__[name]
-		elif name.startswith(self.ERROR_PREFIX) and name in self._errors:
-			return self._errors[name]
-		elif name in self._params:
-			return self._params[name]
-		else:
-			raise AttributeError
+	def _load_from_signature(self, func):
+		self._param_values.clear()
+		self._param_errors.clear()
+
+		for i, (name, param) in enumerate(inspect.signature(func).parameters.items()):
+			if i > 0:
+				if param.default != inspect.Parameter.empty:
+					self._param_values[name] = param.default
+				else:
+					self._param_values[name] = 0
+				self._param_errors[name] = 0
+
+	def _check_solver_value(self, value):
+		if value is None:
+			warn("Solver returned no value.")
+		elif not isinstance(value, (int, float, complex)):
+			warn("Solver returned unknon value type.")
+		elif math.isnan(value):
+			warn("Solver returned 'not a number'-value.")
+		elif math.isinf(value):
+			warn("Solver returned infinite value.")
+
+	def _assert_data_sanity(self):
+		assert callable(self._func), "No function specified."
+		assert len(self._param_values) == len(self._param_errors), "Parameter count {:d} and error count {:d} are not equal.".format(len(self._param_values), len(self._param_errors))
+		assert self._xlabel is None or isinstance(self._xlabel, str), "X label must be a string."
+		assert self._ylabel is None or isinstance(self._ylabel, str), "Y label must be a string."
+		if self._x is not None or self._y is not None:
+			assert self._x is not None and self._y is not None, "If X is set, Y must be set too (and vice-versa)."
+			assert isinstance(self._x, np.ndarray), "X data must be a numpy array."
+			assert isinstance(self._y, np.ndarray), "Y data must be a numpy array."
+			assert self._x.shape == self._y.shape, "X and Y must have the same dimensions."
+			assert len(self._x) >= len(self._param_values), "Must have more data than free parameters."
+		if self._xerrors is not None:
+			assert isinstance(self._xerrors, np.ndarray), "X errors must be a numpy array."
+			assert self._xerrors.shape == self._x.shape, "Errors and X data must have the same dimensions."
+		if self._yerrors is not None:
+			assert isinstance(self._yerrors, np.ndarray), "Y errors must be a numpy array."
+			assert self._yerrors.shape == self._yerrors.shape, "Errors and Y data must have the same dimensions."
 
 	def __getitem__(self, value):
 		return self.filtered(where=value)
 
 	def filtered(self, where):
 		new = self.__class__(self._func)
-		new._params = copy.deepcopy(self._params)
-		new._errors = copy.deepcopy(self._errors)
+		new._param_values = copy.deepcopy(self._param_values)
+		new._param_errors = copy.deepcopy(self._param_errors)
 		new._xlabel = self._xlabel
 		new._ylabel = self._ylabel
 
@@ -160,11 +180,31 @@ class Fit:
 	def eval(self, x):
 		return self._func(x, *self.param_values())
 
+	def ueval(self, x):
+		return self._func(x, *self.param_uvalues())
+
 	def param_values(self):
-		return tuple(self._params.values())
+		return tuple(self._param_values.values())
+
+	def param_errors(self):
+		return tuple(self._param_errors.values())
 
 	def param_names(self):
-		return tuple(self._params.keys())
+		return tuple(self._param_values.keys())
+
+	def param_uvalues(self):
+		from uncertainties import ufloat
+		return tuple((ufloat(v,e) for v,e in zip(self.param_values(), self.param_errors())))
+
+	def value(self, name):
+		return self._param_values[name]
+
+	def error(self, name):
+		return self._param_errors[name]
+
+	def uvalue(self, name):
+		from uncertainties import ufloat
+		return ufloat(self._param_values[name], self._param_errors[name])
 
 	@property
 	def chi2(self):
@@ -184,7 +224,7 @@ class Fit:
 		if self._x is None:
 			return 0
 		else:
-			return max(0, len(self._x) - len(self._params))
+			return max(0, len(self._x) - len(self._param_values))
 
 	@property
 	def chi2ndf(self):
@@ -194,40 +234,10 @@ class Fit:
 	def usetex(self):
 		return plt.rcParams["text.usetex"]
 
-	def ufloat(self, name):
-		from uncertainties import ufloat
-		return ufloat(self._params[name], self._errors[self.ERROR_PREFIX + name])
-
-	def _check_solver_value(self, value):
-		if value is None:
-			warn("Solver returned no value.")
-		elif not isinstance(value, (int, float, complex)):
-			warn("Solver returned unknon value type.")
-		elif math.isnan(value):
-			warn("Solver returned 'not a number'-value.")
-		elif math.isinf(value):
-			warn("Solver returned infinite value.")
-
-	def _assert_data_sanity(self):
-		assert callable(self._func), "No function specified."
-		assert len(self._params) == len(self._errors), "Parameter count {:d} and error count {:d} are not equal.".format(len(self._params), len(self._errors))
-		assert self._xlabel is None or isinstance(self._xlabel, str), "X label must be a string."
-		assert self._ylabel is None or isinstance(self._ylabel, str), "Y label must be a string."
-		if self._x is not None or self._y is not None:
-			assert self._x is not None and self._y is not None, "If X is set, Y must be set too (and vice-versa)."
-			assert isinstance(self._x, np.ndarray), "X data must be a numpy array."
-			assert isinstance(self._y, np.ndarray), "Y data must be a numpy array."
-			assert self._x.shape == self._y.shape, "X and Y must have the same dimensions."
-			assert len(self._x) >= len(self._params), "Must have more data than free parameters."
-		if self._xerrors is not None:
-			assert isinstance(self._xerrors, np.ndarray), "X errors must be a numpy array."
-			assert self._xerrors.shape == self._x.shape, "Errors and X data must have the same dimensions."
-		if self._yerrors is not None:
-			assert isinstance(self._yerrors, np.ndarray), "Y errors must be a numpy array."
-			assert self._yerrors.shape == self._yerrors.shape, "Errors and Y data must have the same dimensions."
 
 	def set_data(self, xdata=None, ydata=None, *, xerrors=None, yerrors=None):
 		ARRAY_TYPE = (np.ndarray, list, tuple)
+		NUMBER_TYPE = (float, int)
 
 		if isinstance(xdata, ARRAY_TYPE):
 			self._x = np.array(xdata)
@@ -239,19 +249,20 @@ class Fit:
 		else:
 			self._y = None
 
-		if isinstance(xerrors, float):
+		if isinstance(xerrors, NUMBER_TYPE):
 			self._xerrors = np.ones_like(xdata) * xerrors
 		elif isinstance(xerrors, ARRAY_TYPE):
 			self._xerrors = np.array(xerrors)
 		else:
 			self._xerrors = None
 
-		if isinstance(yerrors, float):
+		if isinstance(yerrors, NUMBER_TYPE):
 			self._yerrors = np.ones_like(ydata) * yerrors
 		elif isinstance(yerrors, ARRAY_TYPE):
 			self._yerrors = np.array(yerrors)
 		else:
 			self._yerrors = None
+
 
 	def set_labels(self, xlabel='', ylabel=''):
 		assert isinstance(xlabel, str) and isinstance(ylabel, str), "Labels must be strings!"
@@ -261,12 +272,12 @@ class Fit:
 
 	def set_params(self, **kwargs):
 		for name, value in kwargs.items():
-			assert name in self._params, "Unknown parameter '{:s}'".format(name)
-			self._params[name] = value
+			assert name in self._param_values, "Unknown parameter '{:s}'".format(name)
+			self._param_values[name] = value
 
 	def set_errors(self, **kwargs):
 		for name, value in kwargs.items():
-			self._errors[self.ERROR_PREFIX + name] = value
+			self._param_errors[name] = value
 
 	def iterative_fit(self, N, **kwargs):
 		for _ in range(N):
@@ -287,8 +298,8 @@ class Fit:
 				self._check_solver_value(value)
 				self._check_solver_value(error)
 
-				self._params[name] = value
-				self._errors[self.ERROR_PREFIX + name] = error
+				self._param_values[name] = value
+				self._param_errors[name] = error
 
 		elif solver=="minuit":
 			import minuit
@@ -297,8 +308,8 @@ class Fit:
 
 			initial = {}
 			for name, minuit_name in zip(self.param_names(), minuit_names):
-				initial[minuit_name] = self._params[name]
-				initial["error_" + minuit_name] = self._errors[self.ERROR_PREFIX + name]
+				initial[minuit_name] = self._param_values[name]
+				initial["error_" + minuit_name] = self._param_errors[name]
 
 			minuit = minuit.Minuit(costs, **initial)
 
@@ -325,8 +336,8 @@ class Fit:
 				self._check_solver_value(value)
 				self._check_solver_value(error)
 
-				self._params[name] = value
-				self._errors[self.ERROR_PREFIX + name] = error
+				self._param_values[name] = value
+				self._param_errors[name] = error
 
 		elif solver=="minimize":
 			from scipy.optimize import minimize, OptimizeWarning
@@ -340,8 +351,8 @@ class Fit:
 			cov = np.linalg.inv(np.dot(result.jac.T, result.jac))
 
 			for name, value, error in zip(self.param_names(), result.itervalues(), np.sqrt(np.diag(cov))):
-				self._params[name] = value
-				self._errors[self.ERROR_PREFIX + name] = error
+				self._param_values[name] = value
+				self._param_errors[name] = error
 
 		elif solver=="lmfit":
 			from lmfit import minimize, fit_report, Parameters
@@ -349,7 +360,7 @@ class Fit:
 			costs = _lmfit_costs(self._func, self._x, self._y, errors)
 
 			parameters = Parameters()
-			for name, value in self._params.items():
+			for name, value in self._param_values.items():
 				parameters.add(name, value=value, vary=True)
 
 			result = minimize(costs, parameters, method=method)
@@ -361,8 +372,8 @@ class Fit:
 				self._check_solver_value(parameters[name].value)
 				self._check_solver_value(parameters[name].stderr)
 
-				self._params[name] = parameters[name].value
-				self._errors[self.ERROR_PREFIX + name] = parameters[name].stderr
+				self._param_values[name] = parameters[name].value
+				self._param_errors[name] = parameters[name].stderr
 
 		else:
 			raise ValueError("Invalid solver.")
@@ -395,7 +406,14 @@ class Fit:
 
 		y = self._y - self.eval(self._x)
 		errors = self.combined_errors(allow_zero=True)
-		plt.errorbar(self._x, y, yerr=errors, **plotopts)
+
+		options = {
+			"color": "black",
+			"fmt": ".",
+		}
+		options.update(plotopts)
+
+		plt.errorbar(self._x, y, yerr=errors, **options)
 		plt.axhline(0, color="gray")
 		if self._xlabel:
 			plt.xlabel(self._xlabel)
@@ -441,8 +459,8 @@ class Fit:
 
 			if box:
 				lines = []
-				for name, value in self._params.items():
-					error = self._errors[self.ERROR_PREFIX + name]
+				for name, value in self._param_values.items():
+					error = self._param_errors[name]
 					unit = units.get(name, "")
 					factor = factors.get(name, 1)
 
@@ -462,9 +480,9 @@ class Fit:
 
 	def __str__(self):
 		lines = []
-		for name in self._params:
-			value = self._params[name]
-			error = self._errors[self.ERROR_PREFIX + name]
+		for name in self._param_values:
+			value = self._param_values[name]
+			error = self._param_errors[name]
 			lines.append(name + " = " + number.formatQuantity(value, error))
 		return "<Fit '" + self._func.__name__ + "':: " + ", ".join(lines) + " >"
 

@@ -58,8 +58,9 @@
 490		256
 500		264
 510		273
-520		282
-530		291
+#520		282
+#530		291
+
 # Daten rausnehmen weil Messbereich überschritten
 #540		301
 #550		310
