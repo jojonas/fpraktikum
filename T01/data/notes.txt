@@ -1,0 +1,30 @@
+Radium mit Halbleiterdetektor
+=============================
+
+Lower Level Discriminator auf 0
+Gain voreingestellt
+Messzeit 120s
+
+Fehler auf Abstand: 0,1cm
+
+Nächster Abstand: 34,95cm
+Leermessung: 48cm
+
+
+Peaks
+-----
+
+Einschätzung über "Peak weg": 0,3cm
+
+Weitester/Hochenergetischster Peak (Peak 4): (39,0+-0,05)cm als Center (2. Messung), Differenz nach unten/oben +-(0,1+-0,002)cm (wg. Mikrometerschraube)
+Dateinamen: RadiumPeak4Hinter (am Weitesten), -Drauf, -Vor (am Nächsten)
+
+Peak3: (36,9+-0,05)cm, Differenz s.o.
+Dateinamen: RadiumPeak3Hinter (am Weitesten), -Drauf, -Vor (am Nächsten)
+
+Peak2: (36,2+-0,05)cm, Differenz und Dateinamen s.o.
+Peak3: (35,3+-0,05)cm, Differenz und Dateinamen s.o.
+
+Abstände
+--------
+34,9cm - 35cm - 35,5cm - 36cm - 36,5m - 37cm - 37,5cm - 38cm - 38,5cm - 39cm - 39,5cm
