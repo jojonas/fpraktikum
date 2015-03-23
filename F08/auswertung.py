@@ -58,8 +58,8 @@ def plot_temperature():
 	plt.errorbar(temperature, voltage, xerr=error_temperature, yerr=error_voltage, fmt='-')
 	plt.xlabel("Temperatur / Grad")
 	plt.ylabel("Spannung / V")
-	plt.title("Temperaturabhängigkeit des Diodenlasers")
-	plt.show()
+	plt.savefig("out/temperatur." + SAVETYPE)
+
 
 def plot_diode_kennlinie():
 	current, power = np.loadtxt("data/kennlinie_diode.txt", unpack=True)
@@ -89,7 +89,7 @@ def plot_diode_kennlinie():
 	fit.set_data(xdata=current, ydata=power, xerrors=error_current, yerrors=error_power)
 	fit.set_labels(xlabel="Strom / mA", ylabel="Leistung / mW")
 
-	for fit_indices in fit_indices_list:
+	for i, fit_indices in enumerate(fit_indices_list):
 		subfit = fit.filtered(fit_indices)
 
 		plt.clf()
@@ -104,11 +104,12 @@ def plot_diode_kennlinie():
 		print("Threshold:", formatUFloat(i_threshold, unit="mA"))
 
 		subfit.plot(range=(i_threshold.n, current.max()), box="tl", color="red", plot_data=False)
-		plt.show()
+		plt.savefig("out/kennlinie_diode_%d_fit." % i + SAVETYPE)
 
 		plt.clf()
 		subfit.plot_residual(box="br", color="black", fmt="s")
-		plt.show()
+		plt.savefig("out/kennlinie_diode_%d_residual." % i + SAVETYPE)
+
 
 def plot_yag_lifetime():
 	time, voltage = _load_oscilloscope_csv("data/ALL0010/F0010CH2.CSV")
@@ -120,11 +121,10 @@ def plot_yag_lifetime():
 	fit = fit.filtered(np.logical_and(time>0, time<0.003))
 	fit.set_params(A=0.1, offset=0.20, T=0.0003)
 	fit.iterative_fit(5)
-	fit.plot()
-	print(fit)
 
-	#plt.plot(time, voltage)
-	plt.show()
+	plt.clf()
+	fit.plot()
+	plt.savefig("out/yag_lifetime." + SAVETYPE)
 
 def plot_yag_kennlinie():
 	current, power, error_power = np.loadtxt("data/kennlinie_yag2.txt", unpack=True)
@@ -138,7 +138,7 @@ def plot_yag_kennlinie():
 	fit.set_data(xdata=current, ydata=power, xerrors=error_current, yerrors=error_power)
 	fit.set_labels(xlabel="Strom / mA", ylabel="Leistung / mW")
 
-	for fit_indices in fit_indices_list:
+	for i, fit_indices in enumerate(fit_indices_list):
 		plt.clf()
 		fit.plot(plot_fit=False)
 		subfit = fit[fit_indices]
@@ -153,11 +153,11 @@ def plot_yag_kennlinie():
 		print("Threshold:", formatUFloat(i_threshold, unit="mA"))
 
 		subfit.plot(plot_data=False, box="tl")
-		plt.show()
+		plt.savefig("out/kennlinie_yag_%d_fit." % i + SAVETYPE)
 
 		plt.clf()
 		subfit.plot_residual(box="br", color="black", fmt="s")
-		plt.show()
+		plt.savefig("out/kennlinie_yag_%d_residual." % i + SAVETYPE)
 
 
 def plot_spiking():
@@ -165,10 +165,11 @@ def plot_spiking():
 	time *= 1E6
 	time -= time[0]
 
+	plt.clf()
 	plt.plot(time, voltage, ".", color="black")
 	plt.xlabel("Zeit / us")
 	plt.ylabel("Spannung / V")
-	plt.show()
+	plt.savefig("out/spiking." + SAVETYPE)
 
 def plot_qswitch():
 	frequency, error_frequency, power = np.loadtxt("data/frequenz_qswitch.txt", unpack=True)
@@ -182,13 +183,15 @@ def plot_qswitch():
 	subfit = fit.filtered(np.logical_and(frequency < 20e3, frequency > 1e3))
 	subfit.iterative_fit(5)
 
+	plt.clf()
 	subfit.plot() #box="br")
-	plt.show()
+	plt.savefig("out/qswitch_power_fit." + SAVETYPE)
 
 	plt.clf()
 	subfit.plot_residual(box="tr")
-	plt.show()
+	plt.savefig("out/qswitch_power_residual." + SAVETYPE)
 
+	plt.clf()
 	time, voltage = _load_oscilloscope_csv("data/ALL0023/F0023CH2.CSV")
 	time *= 1E6
 	time -= time[0]
@@ -211,13 +214,14 @@ def plot_qswitch():
 
 	plt.xlabel("Zeit / us")
 	plt.ylabel("Spannung / V")
-	plt.show()
+
+	plt.savefig("out/qswitch_osci." + SAVETYPE)
 
 
 if __name__=="__main__":
-	#plot_temperature()
-	#plot_diode_kennlinie()
-	plot_yag_lifetime()
-	#plot_yag_kennlinie()
-	#plot_spiking()
-	#plot_qswitch()
+	plot_temperature()
+	plot_diode_kennlinie()
+	#plot_yag_lifetime()
+	plot_yag_kennlinie()
+	plot_spiking()
+	plot_qswitch()
