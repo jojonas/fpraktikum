@@ -19,7 +19,10 @@ def formatQuantity(value, stat, sys=None, unit=""):
 	return formatUFloat(uvalue, unit)
 
 def formatUFloat(uvalue, unit=""):
-	return '{:P}'.format(uvalue)
+	retval = '{:P}'.format(uvalue)
+	if unit:
+		retval = "(" + retval + ") " + unit
+	return retval
 
 def formatUFloatLatex(uvalue, unit="", math=True):
 	retval = '{:L}'.format(uvalue)

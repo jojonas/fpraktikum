@@ -4,7 +4,9 @@
 \usepackage{isotope}
 \usepackage[autostyle=true,german=quotes]{csquotes}
 \usepackage{mathtools}
-\usepackage[superscript,biblabel]{cite}
+\usepackage[biblabel]{cite}
+\usepackage[font=small,labelfont=bf]{caption}
+
 
 \usepackage{feynmp}
 \DeclareGraphicsRule{.1}{mps}{*}{}
@@ -29,29 +31,157 @@
 \author{Jonas Lieb, 312136 \\ \emph{Gruppe 20} \\ \\  RWTH Aachen}
 \maketitle
 
-\begin{abstract}
-...
-\end{abstract}
+%\begin{abstract}
+%\end{abstract}
 \newpage
 
 \tableofcontents
 \newpage
 
 \section{Einleitung}
-In diesem Versuch wird ein Neodym-YAG-Laser zusammengesetzt und charakterisiert. Nd-YAG-Laser haben eine Wellenlänge von $\lambda = 1064 \unit{nm}$, diese liegt im für das menschliche Auge unsichtbaren Infrarotbereich. 
-Gepumpt wird dieser Laser mit einer Halbleiter-Laserdiode. Auch diese wird zunächst auf ihre Temperaturabhängigkeit und Ausgangsleistung untersucht.
-Im Anschluss wird ein KTP-Kristall in den Resonator des Nd-YAG-Lasers eingebaut, sodass eine Frequenzverdopplung auf $532 \unit{nm}$ stattfindet. Das resultierende Licht ist für das menschliche Auge grün sichtbar.
-Im letzten Versuchsteil wird der Laser in den Pulsbetrieb versetzt. Dafür wird statt des KTP-Kristalls eine Pockelszelle in den Resonator verbaut, die von einem Frequenzgenerator getrieben wird und zur aktiven Gütemodulation dient. Die Peakleistung dieser Pockelszelle wird mithilfe eines Photosensors bestimmt.
+In diesem Versuch wird ein Nd-YAG-Laser zusammengesetzt und charakterisiert. Dieser Festkörperlaser besteht aus Neodym-dotiertem Yttrium-Aluminium-Granat und ist ein 4-Niveau-Laser mit einer Laser-Wellenlänge von $\lambda = 1064 \unit{nm}$. Er besitzt mehrere Absorptionslinien bei $804,4 \unit{nm}$, $808,4 \unit{nm}$, $812,9 \unit{nm}$ und $817,3 \unit{nm}$, die als Pump-Wellenlängen genutzt werden können.
+Das Pumpen erfolgt durch einen Halbleiter-Diodenlaser. Durch Variation der Temperatur dehnt sich der Kristall aus und kann so auf verschiedene Wellenlängen um ca. $810 \unit{nm}$ eingestellt werden. Dieses Verhalten, die Ausgangsleistung und Laserschwelle werden zunächst charakterisiert.
 
-\subsection{Theorie}
-\subsubsection{Laser-Grundlagen}
-Das Wort \enquote{Laser} bedeutet \emph{Light Amplification by Stimulated Emission Radiation}, also \enquote{Lichtverstärkung durch stimulierte Emission von Strahlung}. Stimulierte Emission ist die wichtigste Wechselwirkung von Photonen mit Materie in einem Laser. Dabei wechselwirkt ein einfallendes Photon mit einem Elektron auf einem höheren Energieniveau $E_2$, sodass dieses auf ein niedrigeres Energieniveau $E_1$ herabfällt und ein weiteres Photon aussendet, das dieselbe Wellenlänge und Richtung, sowie eine feste Phasenbeziehung zu dem einfallenden Photon besitzt. So existieren nach diesem Prozess zwei statt einem Photon. Die Frequenz $\nu$ des einfallenden und emittierten Photons ist dabei durch die Energiedifferenz der beiden Niveaus festgelegt: $h \nu = \Delta E = E_2 - E_1$.
+Im Anschluss wird ein KTP-Kristall in den Resonator des Nd-YAG-Lasers eingebaut, sodass durch nichtlineare Effekte eine Frequenzverdopplung auf $532 \unit{nm}$ (grünes Licht) stattfindet.
 
-Neben stimulierter Emission existieren außerdem zwei weitere Prozesse: Spontane Emission und Absorption. Bei spontaner Emission wird der Übergang des Elektrons vom höheren ins niedrigere Energieniveau nicht durch Strahlung verursacht, sondern geschieht spontan. Dabei wird ebenfalls ein Photon emittiert, jedoch in eine beliebige Richtung und mit beliebiger Phase. Absorption bezeichnet den Wechselwirkungsprozess, in dem ein Photon von einem Elektron auf einem niedrigeren Niveau eingefangen wird und so das Elektron auf ein hohes Niveau bringt. Dabei wird das Photon vollständig absorbiert.
+Im letzten Versuchsteil wird der Laser in den Pulsbetrieb versetzt. Dafür wird anstelle des KTP-Kristalls eine Pockelszelle in den Resonator verbaut, die von einem Frequenzgenerator getrieben wird und zur aktiven Gütemodulation dient. Durch die Modulation werden deutlich höhere Peakleistungen erzielt. Diese werden mithilfe eines Photosensors vermessen.
 
 \section{Charakterisierung des Diodenlasers}
 
+\subsection{Messung des Absorptionsspektrums durch Variation der Temperatur}
+\subsubsection{Durchführung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{aufbau_diodenlaser}
+\caption{Versuchsaufbau zur Diodenlasers. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D) und Photodetektor (G). Zusätzlich ist der Diodenlaser mit einem Diodentreiber, auf dem sich die Diodentemperatur einstellen lässt, und der Photodetektor mit einem Oszilloskop verbunden. Bildquelle: \cite[S. 33]{anleitung1}}
+\label{fig:aufbau_diodenlaser}
+\end{figure}
+
+
+Während der gesamten Versuchsreihe wird \emph{Versuchsaufbau 3} verwendet. 
+
+Zuerst wird der Diodenlaser charakterisiert. Dazu wird im ersten Versuchsteil die Abhängigkeit zwischen geregelter Temperatur und der emittierten Wellenlänge betrachtet. Der Aufbau ist in Abbildung \ref{fig:aufbau_diodenlaser} gezeigt.
+Die Temperatur kann in $0,1 \unit{\degree C}$ Schritten am Diodentreiber eingestellt werden. Zur Vermessung der Wellenlänge wird das bekannte Absorptionsspektrum von YAG verwendet. Die Intensität wird am Ende der optischen Bank mit einem Photodetektor vermessen, der mit einem Oszilloskop verbunden wird. Die Messwerte werden manuell vom Oszilloskop abgelesen und ihr Fehler aufgrund des Rauschens ebenfalls manuell abgeschätzt.
+
+Bei der Veränderung der Temperatur und damit der Wellenlänge werden mehrere Absorptionspeaks erwartet, die sich als Intensitätsminima messen lassen. 
+
+\subsubsection{Messdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{temperatur}
+\caption{Transmissionsspektrum von YAG. Die auf dem Oszilloskop abgelesene Spannung ist proportional zur Intensität und auf der vertikalen Achse aufgetragen, auf der horizontalen Achse befindet sich die Temperatur des Diodenlasers.}
+\label{fig:temperatur}
+\end{figure}
+
+Die Messdaten sind in Abbildung \ref{fig:temperatur} zu sehen. Auf der vertikalen Achse wurde die auf dem Oszilloskop abgelesene Spannung mit den geschätzten Fehlern aufgetragen. Der Fehler auf die Temperatur beträgt $0.1 \unit{\degree C} / \sqrt{12} = 0.03 \unit{\degree C}$, da innerhalb eines Messwertes der Digitalanzeige eine Gleichverteilung angenommen wird.
+
+\subsubsection{Analyse}
+Deutlich zu erkennen sind mehrere Intensitätsminima. Diese liegen bei ca. $25,5 \unit{\degree C}$, $29,0 \unit{\degree C}$, $32,3 \unit{\degree C}$, $34,8 \unit{\degree C}$, $37,5 \unit{\degree C}$ und $40,6 \unit{\degree C}$. Eine genaue Zuordnung zu den erwarteten Absorptionswellenlängen ist nicht nötig und möglich, da kein Model für den Zusammenhang bekannt ist, und da in den folgenden Versuchsteilen lediglich ein Absorptionsmaximum genutzt werden muss, welches in Form der Diodentemperatur angegeben wird.
+
+\subsection{Bestimmung der Ausgangsleistung in Abhängigkeit des Diodenstroms}
+
+\subsubsection{Durchführung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{aufbau_diodenlaser2}
+\caption{Versuchsaufbau Bestimmung der Ausgangsleistung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C) und Leistungsdetektor (I) mit 1000:1 Dämpfer. Bildquelle: \cite[S. 35]{anleitung1}}
+\label{fig:aufbau_diodenlaser2}
+\end{figure}
+
+Der Versuchsaufbau ist in Abbildung \ref{fig:aufbau_diodenlaser2} abgebildet. Diesmal wird eine feste Temperatur von $38.6 \unit{\degree C}$ eingestellt, da sich nach Erwärmung des Lasers das fünfte Minimum bei dieser Temperatur befindet. Die gemessenen Intensitäten werden auf einem Leistungsmessgerät abgelesen, der eingestellte Messbereich beträgt zuerst $300 \unit{\upmu W}$, bis dieser überschritten ist und auf $1 \unit{mW}$ gewechselt wird. Aufgrund des 1000:1 Dämpfers müssen diese Werte jedoch mit dem Faktor 1000 multipliziert werden, um die Ausgangsleistung zu bestimmen.
+
+\subsubsection{Messdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{kennlinie_diode_raw}
+\caption{Rohdaten zur Leistungsmessung des Diodenlasers. Auf der horizontalen Achse ist der am Treiber eingestellte Strom aufgetragen, die vertikale Achse zeigt die gemessene Leistung, die bereits mit dem Faktor 1000 multipliziert wurde.}
+\label{fig:kennlinie_diode_raw}
+\end{figure}
+
+Abbildung \ref{fig:kennlinie_diode_raw} zeigt die Messdaten, dabei ist der eingestellte Strom auf der horizontalen Achse und die gemessene Leistung auf der vertikalen aufgetragen. Die Leistung ist bereits mit dem Faktor 1000 multipliziert, um für den 1000:1 Dämpfer zu kompensieren. Der Fehler auf die Stromeinstellung beträgt $1 \unit{mA} / \sqrt{12} = 0.3 \unit{mA}$, da der Diodentreiber über eine Digitalanzeige verfügt, auf der sich nur Milliampere einstellen lassen. Der Fehler auf die gemessene Leistung beträgt analog $0.3 \unit{mW}$, da auch hier eine Digitalanzeige verwendet wurde. Da die Fehlerbalken in dieser Auftragung sehr klein sind, werden sie auf dem Plot als Kreuze abgebildet.
+
+\subsubsection{Analyse}
+Das Kernstück der Analyse ist eine Geradenanpassung. Dafür muss zuerst eine Offsetkorrektur durchgeführt werden und ein valider Bereich für den Fit ausgewählt werden. 
+
+
+Für die Bestimmung des Offsets wird der Mittelwert aller gemessenen Leistungen mit $I < 150 \unit{mA}$ gebildet. Dieser beträgt $-1.64 \unit{mW}$ und wird nun von der Leistung subtrahiert, sodass diese im unteren Bereich $0 \unit{mW}$ beträgt.
+
+Der valide Anpassungsbereich wird manuell geschätzt. Es werden zur Anpassung ausschließlich Werte $I > 200 \unit{mA}$ genutzt, da die Laserschwelle augenscheinlich darunter liegt.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{kennlinie_diode_0_fit}
+\includegraphics[width=\halfwidth]{kennlinie_diode_0_residual}
+\caption{Geradenanpassung im Bereich $I > 200 \unit{mA}$. Der resultierende Threshold liegt bei $(188.10 \pm 0.15) \unit{mA}$. Im rechten Teil sind die Residuen gezeigt, $\chi^2 / \textrm{ndf} = 40$, außerdem zeigt sich eine deutliche Systematik.}
+\label{fig:kennlinie_diode_0_fit}
+\end{figure}
+
+Zur Anpassung wird der Migrad-Algorithmus verwendet. Das Ergebnis der Anpassung ist in Abbildung \ref{fig:kennlinie_diode_0_fit} gezeigt. Der Threshold beträgt demnach $(188.10 \pm 0.15) \unit{mA}$, und die Leistungssteigerung $(0.8530 \pm 0.0005) \unit{W/A}$. Allerdings lässt der Residuenplot (rechte Seite der Abbildung \ref{fig:kennlinie_diode_0_fit}) erkennen, dass ein systematischer Fehler vorliegt und das Model separat an die Daten von $200 \unit{mA}$ bis $410 \unit{mA}$ und über $410 \unit{mA}$ angepasst werden muss.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{kennlinie_diode_1_fit}
+\includegraphics[width=\halfwidth]{kennlinie_diode_1_residual}
+\includegraphics[width=\halfwidth]{kennlinie_diode_2_fit}
+\includegraphics[width=\halfwidth]{kennlinie_diode_2_residual}
+\caption{Geradenanpassung im Bereich von 200 bis 410 $\unit{mA}$ (oben), sowie im Bereich $> 410 \unit{mA}$ (unten). Die Residuengraphen zeigen eine deutlich bessere Anpassung, es sind nur noch Systematiken durch Binning zu erkennen.}
+\label{fig:kennlinie_diode_12_fit}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c||c|c|c|}
+\hline
+Strombereich & Threshold & Slope & $\chi^2 / \textrm{ndf}$ \\ \hline \hline
+alles $ > 200 \unit{mA}$ & $(188.10 \pm 0.15) \unit{mA}$ & $(0.8530 \pm 0.0005) \unit{W/A}$ & $40.0$ \\
+200 bis 410 $\unit{mA}$ & $(182.10 \pm 0.23) \unit{mA}$ & $(0.8139 \pm 0.0013) \unit{W/A}$ & $2.1$ \\
+$ > 410 \unit{mA}$ & $(201.6 \pm 0.5) \unit{mA}$ & $(0.8892 \pm 0.0014) \unit{W/A}$ & $2.2$ \\
+\hline
+\end{tabular}
+\caption{Ergebnisse von Anpassungen für verschiedene Bereiche}
+\label{tbl:diode}
+\end{table}
+
+Das Ergebnis dieser eingeschränkten Anpassung ist in Abbildung \ref{fig:kennlinie_diode_12_fit} und Tabelle \ref{tbl:diode} gezeigt. Die Anpassungen sind deutlich besser gelungen und weisen nur noch eine Binning-Systematik auf. 
+
+Möglicher Grund für die Separation der Daten in zwei Bereiche ist eine Veränderung des Messaufbaus, sowie das Umschalten des Messbereiches des Leistungsmessers. 
+
+Da der untere Bereich aufgrund seiner Nähe zum Laserthreshold den geringeren Fehler aufweist, wird dieses Ergebnis als finales Ergebnis genutzt:
+Der Laserthreshold der Laserdiode beträgt 
+\[ (182.10 \pm 0.23) \unit{mA} \]
+Darüber hinaus beträgt die Leistungssteigerung bei Stromänderung
+\[ (0.8139 \pm 0.0013) \unit{W/A} \]
+
+
 \section{Charakterisierung des Nd-YAG-Lasers}
+
+\subsection{Lebensdauer des $^4F_{3/2}$-Niveaus}
+\subsubsection{Durchführung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{aufbau_lebensdauer}
+\caption{Versuchsaufbau Bestimmung der Lebensdauer des $^4F_{3/2}$-Niveaus. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D), Filter RG 1000 (Transmission nur $\lambda > 1000 \unit{nm}$, F) und Photodetektor (G). Letzterer ist an ein Oszilloskop angeschlossen. Bildquelle: \cite[S. 35]{anleitung1}}
+\label{fig:aufbau_lebensdauer}
+\end{figure}
+
+Der Versuchsaufbau befindet sich in Abbilung \ref{fig:aufbau_lebensdauer}. Für die Bestimmung der Lebensdauer wird die Laserdiode mit $197 \unit{mA}$, also knapp über dem Threshold, betrieben. Erneut beträgt die eingestellte Temperatur $38.6 \unit{\degree C}$.
+
+Die Daten werden am Oszilloskop abgelesen und zusätzlich auf einem USB-Stick als \texttt{csv}-Datei gespeichert, sodass sie separat analysiert werden können. Ein manuelles Ablesen der Lebensdauer mithilfe der Oszilloskopzeiger ergibt $240 \unit{\mu s}$. 
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\halfwidth]{F0010TEK}
+\caption{Rohdaten auf dem Oszilloskop. Eine Schnelleinschätzung von $\tau = 240 \unit{\upmu s}$ ist zu sehen.}
+\label{fig:lebensdauer_oszi}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\halfwidth]{yag_lifetime}
+\caption{Ausgewertete Kurve des Oszilloskops. Auf die Spannungswerte wird ein Fehler von $2.75 \unit{mV}$ angenommen, die Qualität der Anpassung ist $\chi^2 / \textrm{ndf} = 1.00$}
+\label{fig:lebensdauer_fit}
+\end{figure}
+
 
 \section{Frequenzverdopplung mit KTP}
 
@@ -61,8 +191,10 @@ Neben stimulierter Emission existieren außerdem zwei weitere Prozesse: Spontane
 
 \newpage
 \begin{thebibliography}{xxxx}
-\bibitem{anleitung} Praktikumsanleitung:
-Versuch F08, Neodym-YAG-Laser. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/B_FK08-Nd-YAG_Teil1_12-03-2012.pdf}, \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/B_FK08-Nd-YAG-Teil2_18-01-2012.pdf} [Stand: 20.03.2015]
+\bibitem{anleitung1} Praktikumsanleitung:
+Versuch F08, Neodym-YAG-Laser, Teil 1. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/B_FK08-Nd-YAG_Teil1_12-03-2012.pdf} [Stand: 20.03.2015]
+\bibitem{anleitung2} Praktikumsanleitung:
+Versuch F08, Neodym-YAG-Laser, Teil 2. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/B_FK08-Nd-YAG-Teil2_18-01-2012.pdf} [Stand: 20.03.2015]
 \end{thebibliography}
 
 

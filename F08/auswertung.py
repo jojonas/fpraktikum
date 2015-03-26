@@ -55,7 +55,13 @@ def plot_temperature():
 	error_temperature = 0.1 / math.sqrt(12)
 
 	plt.clf()
-	plt.errorbar(temperature, voltage, xerr=error_temperature, yerr=error_voltage, fmt='-')
+	plt.errorbar(temperature, voltage, xerr=error_temperature, yerr=error_voltage, fmt=',', color="black")
+	# plt.axvline(25.5, color="gray")
+	# plt.axvline(29.0, color="gray")
+	# plt.axvline(32.3, color="gray")
+	# plt.axvline(34.8, color="gray")
+	# plt.axvline(37.5, color="gray")
+	# plt.axvline(40.6, color="gray")
 	plt.xlabel("Temperatur / Grad")
 	plt.ylabel("Spannung / V")
 	plt.savefig("out/temperatur." + SAVETYPE)
@@ -66,26 +72,30 @@ def plot_diode_kennlinie():
 	error_current = 1 / math.sqrt(12)
 	error_power = 1 / math.sqrt(12)
 
-	fit_indices_list = []
-	fit_indices_list.append(power > 10)
+	plt.clf()
+	plt.errorbar(current, power, xerr=error_current, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Strom / mA")
+	plt.ylabel("Leistung / mW")
+	plt.savefig("out/kennlinie_diode_raw." + SAVETYPE)
 
-	valid = power > 10
+	fit_indices_list = []
+	fit_indices_list.append(current > 200)
+
+	valid = current > 200
 	valid[current > 410] = False
-	# power[current == 220]+=1
-	# power[current == 230]+=1
-	# power[current == 250]+=1
-	# power[current == 260]+=1
-	# power[current == 360]-=1
-	# power[current == 370]-=1
-	# power[current == 380]-=2
-	# power[current == 390]-=2
-	# power[current == 400]-=2
-	# power[current == 410]-=2
 	fit_indices_list.append(valid)
 
+	valid = current > 410
+	fit_indices_list.append(valid)
 
-	fit = Fit(LINEAR)
-	fit.set_params(slope=0.85, offset=-160)
+	zero_power = power[current < 150]
+	background = zero_power.mean()
+	print("Background:", background, "mW")
+	power -= background
+
+	func = lambda x, slope, threshold: (x - threshold) * slope
+	fit = Fit(func)
+	fit.set_params(slope=0.85, threshold=190)
 	fit.set_data(xdata=current, ydata=power, xerrors=error_current, yerrors=error_power)
 	fit.set_labels(xlabel="Strom / mA", ylabel="Leistung / mW")
 
@@ -96,14 +106,15 @@ def plot_diode_kennlinie():
 		plt.errorbar(current, power, xerr=error_current, yerr=error_power, fmt=',', color="black")
 		subfit.iterative_fit(5)
 
-		zero_power = power[power < 1]
-		zero = umean(zero_power)
-		plt.axhline(zero.n, color="blue")
-		i_threshold = (zero-subfit.uvalue("offset"))/subfit.uvalue("slope")
-		plt.axvline(i_threshold.n, color="blue")
-		print("Threshold:", formatUFloat(i_threshold, unit="mA"))
+		#plt.axhline(background, color="blue")
+		#plt.axvline(subfit.value("threshold"), color="blue")
+		print("Threshold:", formatUFloat(subfit.uvalue("threshold"), unit="mA"))
+		print("Slope:", formatUFloat(subfit.uvalue("slope"), unit="W/A"))
+		print("Chi^2/ndf:", subfit.chi2ndf)
+		print("===")
 
-		subfit.plot(range=(i_threshold.n, current.max()), box="tl", color="red", plot_data=False)
+		subfit.plot(range=(subfit.value("threshold"), current.max()), color="black", plot_fit=False, plot_data=True, fmt="s")
+		subfit.plot(range=(subfit.value("threshold"), current.max()), box="tl", color="red", plot_data=False, units={"threshold": "mA", "slope": "W/A"})
 		plt.savefig("out/kennlinie_diode_%d_fit." % i + SAVETYPE)
 
 		plt.clf()
@@ -113,17 +124,23 @@ def plot_diode_kennlinie():
 
 def plot_yag_lifetime():
 	time, voltage = _load_oscilloscope_csv("data/ALL0010/F0010CH2.CSV")
+	time *= 1E6 # us
+	voltage *= 1000 # mV
 
 	error_voltage = voltage[time<0].std()
+	print("Fehler:", error_voltage, "mV")
 
 	fit = Fit(EXPONENTIAL_DECAY)
 	fit.set_data(xdata=time, ydata=voltage, yerrors=error_voltage)
-	fit = fit.filtered(np.logical_and(time>0, time<0.003))
-	fit.set_params(A=0.1, offset=0.20, T=0.0003)
-	fit.iterative_fit(5)
+	fit.set_labels(xlabel="Zeit / us", ylabel="Spannung / mV")
+	fit = fit.filtered(np.logical_and(time>0, time<1500))
+	fit.set_params(A=0.1, offset=0.20, T=250)
+	fit.iterative_fit(1)
+
+	print("Lebensdauer:", formatUFloat(fit.uvalue("T"), "us"), "- Chi^2:", fit.chi2, "- ndf:", fit.ndf, "- Chi^2/ndf:", fit.chi2ndf)
 
 	plt.clf()
-	fit.plot()
+	fit.plot(box="tr", units={"T": "us", "A": "mV", "offset": "mV"})
 	plt.savefig("out/yag_lifetime." + SAVETYPE)
 
 def plot_yag_kennlinie():
@@ -219,9 +236,9 @@ def plot_qswitch():
 
 
 if __name__=="__main__":
-	plot_temperature()
-	plot_diode_kennlinie()
-	#plot_yag_lifetime()
-	plot_yag_kennlinie()
-	plot_spiking()
-	plot_qswitch()
+	#plot_temperature()
+	#plot_diode_kennlinie()
+	plot_yag_lifetime()
+	#plot_yag_kennlinie()
+	#plot_spiking()
+	#plot_qswitch()
