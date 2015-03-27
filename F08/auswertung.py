@@ -6,7 +6,7 @@ rcParams['savefig.dpi'] = 200
 #rcParams['text.usetex'] = True
 rcParams['text.latex.unicode'] = True
 #rcParams['text.latex.preamble']=[r'\usepackage{lmodern}']
-rcParams['font.family'] = 'serif'
+#rcParams['font.family'] = 'serif'
 rcParams['font.serif'] = 'Computer Modern'
 rcParams['font.size'] = 18
 rcParams['savefig.bbox'] = 'tight'
@@ -19,7 +19,7 @@ from uncertainties import wrap as uwrap
 from uncertainties import ufloat
 
 from funcs import *
-from fits import Fit
+from fits import Fit, info_box
 from number import *
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
@@ -147,13 +147,59 @@ def plot_yag_kennlinie():
 	current, power, error_power = np.loadtxt("data/kennlinie_yag2.txt", unpack=True)
 	error_current = 1 / math.sqrt(12)
 
+	plt.clf()
+	plt.errorbar(current, power, xerr=error_current, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Strom / mA")
+	plt.ylabel("Leistung / mW")
+	plt.xlim(0,700)
+	plt.savefig("out/kennlinie_yag_raw." + SAVETYPE)
+
+	lower = np.logical_and(current > 182.10, current < 410)
+	upper = current >= 410
+
 	fit_indices_list = []
 	fit_indices_list.append(power > 0.10)
-	fit_indices_list.append(np.logical_and(power > 0.10, current < 480))
+	fit_indices_list.append(np.logical_and(power > 0.10, lower))
+	fit_indices_list.append(np.logical_and(power > 0.10, upper))
+
+	diode_power = np.zeros_like(current)
+	diode_power[lower] = (current[lower] - 182.10) * 0.8139
+	diode_power[upper] = (current[upper] - 201.6) * 0.8892
+
+	error_diode_power = np.zeros_like(diode_power)
+	error_diode_power[lower] = np.sqrt(np.power(error_current*0.8139,2) + np.power((current[lower]-182.10)*0.0013,2) + np.power(0.8139*0.23,2))
+	error_diode_power[upper] = np.sqrt(np.power(error_current*0.8892,2) + np.power((current[upper]-201.6)*0.0014,2) + np.power(0.8892*0.5,2))
+
+	zero_power = power[current < 150]
+	background = zero_power.mean()
+	print("Background:", background, "mW")
+	power -= background
+
+
+	plt.clf()
+	plt.errorbar(diode_power, power, xerr=error_diode_power, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Diodenleistung / mW")
+	plt.ylabel("laserleistung / mW")
+	plt.savefig("out/kennlinie_yag_raw2." + SAVETYPE)
+
+	func = lambda x, slope, threshold: (x - threshold) * slope
+	fit = Fit(func)
+	fit.set_params(slope=0.016, threshold=16)
+	fit.set_data(xdata=diode_power, ydata=power, xerrors=error_diode_power, yerrors=error_power)
+	fit.set_labels(xlabel="Diodenleistung / mW", ylabel="Laserleistung / mW")
+	fit.iterative_fit(1)
+
+	plt.clf()
+	fit.plot(plot_data=True, plot_fit=True, box="tr")
+	plt.savefig("out/kennlinie_yag_linear_fit." + SAVETYPE)
+	plt.clf()
+	fit.plot_residual(box="br", fmt="s")
+	plt.savefig("out/kennlinie_yag_linear_residual." + SAVETYPE)
 
 	fit = Fit(POLY2)
-	fit.set_data(xdata=current, ydata=power, xerrors=error_current, yerrors=error_power)
-	fit.set_labels(xlabel="Strom / mA", ylabel="Leistung / mW")
+	fit.set_data(xdata=diode_power, ydata=power, xerrors=error_diode_power, yerrors=error_power)
+	fit.set_labels(xlabel="Diodenleistung / mW", ylabel="Laserleistung / mW")
+	fit.iterative_fit(5)
 
 	for i, fit_indices in enumerate(fit_indices_list):
 		plt.clf()
@@ -161,31 +207,50 @@ def plot_yag_kennlinie():
 		subfit = fit[fit_indices]
 		subfit.iterative_fit(5)
 
-		zero_power = power[power < 0.03]
-		zero = umean(zero_power)
-		plt.axhline(zero.n, color="blue")
+		#zero_power = power[power < 0.03]
+		#zero = umean(zero_power)
+		#plt.axhline(zero.n, color="blue")
 
-		i_threshold = solve_quadratic(subfit.uvalue("a0")-zero, subfit.uvalue("a1"), subfit.uvalue("a2"))
-		plt.axvline(i_threshold.n, color="blue")
-		print("Threshold:", formatUFloat(i_threshold, unit="mA"))
+		x = 200
+		try:
+			i_threshold = solve_quadratic(subfit.uvalue("a0"), subfit.uvalue("a1"), subfit.uvalue("a2"))
+			i_slope = 2*x*subfit.uvalue("a2") + subfit.uvalue("a1")
+		except ValueError:
+			print("no solution", i)
+		else:
+			print("Threshold:", formatUFloat(i_threshold, unit="mW"))
+			print("Efficiency:", formatUFloat(i_slope*100, unit="%"))
+			lines = "threshold = " + formatUFloat(i_threshold, unit="mW") + "\n" + "efficiency at %d mW = " % x + formatUFloat(i_slope*100, unit="%")
+			info_box(lines, location="tl")
 
-		subfit.plot(plot_data=False, box="tl")
+		subfit.plot(plot_data=False)
 		plt.savefig("out/kennlinie_yag_%d_fit." % i + SAVETYPE)
 
 		plt.clf()
 		subfit.plot_residual(box="br", color="black", fmt="s")
 		plt.savefig("out/kennlinie_yag_%d_residual." % i + SAVETYPE)
 
+		plt.clf()
+		x = diode_power[diode_power > i_threshold.n]
+		plt.plot(x, 100*(2*x*subfit.value("a2") + subfit.value("a1")), color="black")
+		#x_new = diode_power - i_threshold.n
+		#plt.plot(diode_power, 100*(x_new*subfit.value("a2") + subfit.value("a1") + subfit.value("a0")/x_new), color="red")
+		plt.xlabel("Diodenleistung / mW")
+		plt.ylabel("Effizienz / %")
+		plt.savefig("out/kennlinie_yag_%d_efficiency." % i + SAVETYPE)
 
 def plot_spiking():
 	time, voltage = _load_oscilloscope_csv("data/ALL0015/F0015CH2.CSV")
+	time -= 0.003297480000
 	time *= 1E6
-	time -= time[0]
+
+	voltage -= voltage[time < 0].mean()
 
 	plt.clf()
 	plt.plot(time, voltage, ".", color="black")
 	plt.xlabel("Zeit / us")
 	plt.ylabel("Spannung / V")
+	plt.xlim(-10, 80)
 	plt.savefig("out/spiking." + SAVETYPE)
 
 def plot_qswitch():
@@ -238,7 +303,7 @@ def plot_qswitch():
 if __name__=="__main__":
 	#plot_temperature()
 	#plot_diode_kennlinie()
-	plot_yag_lifetime()
+	#plot_yag_lifetime()
 	#plot_yag_kennlinie()
-	#plot_spiking()
+	plot_spiking()
 	#plot_qswitch()

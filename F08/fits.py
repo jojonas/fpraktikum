@@ -17,8 +17,8 @@ from funcs import *
 
 _epsilon = math.sqrt(np.finfo(float).eps)
 
-def derivative(func, x, dx):
-	return (func(x+dx/2) - func(x-dx/2)) / dx
+def derivative(f, x, h):
+	return (-f(x+2*h) + 8*f(x+h) - 8*f(x-h) + f(x-2*h)) / (12*h)
 
 def chi2(value, y=0, err=1):
 	return np.abs((value - y)/err)
@@ -182,6 +182,12 @@ class Fit:
 
 	def ueval(self, x):
 		return self._func(x, *self.param_uvalues())
+
+	def diff(self, x, dx=_epsilon):
+		return derivative(self.eval, x, dx)
+
+	def udiff(self, x, dx=_epsilon):
+		return derivative(self.ueval, x, dx)
 
 	def param_values(self):
 		return tuple(self._param_values.values())
