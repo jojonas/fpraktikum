@@ -5,7 +5,7 @@
 
 # Spalten: Strom (mA), Leistung (muW)
 # Fehler: 1/sqrt(12) mA,
-# 10mA Schritte, Messbereich 300muW
+# 10mA Schritte, Messbereich 300uW
 
 10		-2
 20		-2
