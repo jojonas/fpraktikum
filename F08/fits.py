@@ -487,9 +487,7 @@ class Fit:
 	def __str__(self):
 		lines = []
 		for name in self._param_values:
-			value = self._param_values[name]
-			error = self._param_errors[name]
-			lines.append(name + " = " + number.formatQuantity(value, error))
+			lines.append(name + " = " + str(self.uvalue(name)))
 		return "<Fit '" + self._func.__name__ + "':: " + ", ".join(lines) + " >"
 
 

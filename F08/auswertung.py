@@ -3,10 +3,10 @@ import math
 
 from pylab import rcParams
 rcParams['savefig.dpi'] = 200
-#rcParams['text.usetex'] = True
+rcParams['text.usetex'] = True
 rcParams['text.latex.unicode'] = True
 #rcParams['text.latex.preamble']=[r'\usepackage{lmodern}']
-#rcParams['font.family'] = 'serif'
+rcParams['font.family'] = 'serif'
 rcParams['font.serif'] = 'Computer Modern'
 rcParams['font.size'] = 18
 rcParams['savefig.bbox'] = 'tight'
@@ -143,6 +143,29 @@ def plot_yag_lifetime():
 	fit.plot(box="tr", units={"T": "us", "A": "mV", "offset": "mV"})
 	plt.savefig("out/yag_lifetime." + SAVETYPE)
 
+def current2diode_power(current, error_current):
+	lower_threshold = 182.10
+	error_lower_threshold = 0.23
+	upper_threshold = 201.6
+	error_upper_threshold = 0.5
+	lower_slope = 0.8139
+	error_lower_slope = 0.0013
+	upper_slope = 0.8892
+	error_upper_slope = 0.0014
+
+	lower = np.logical_and(current > lower_threshold, current < 410)
+	upper = current >= 410
+
+	diode_power = np.zeros_like(current)
+	diode_power[lower] = (current[lower] - lower_threshold) * lower_slope
+	diode_power[upper] = (current[upper] - upper_threshold) * upper_slope
+
+	error_diode_power = np.zeros_like(diode_power)
+	error_diode_power[lower] = np.sqrt(np.power(error_current*lower_slope,2) + np.power((current[lower]-lower_threshold)*error_lower_slope,2) + np.power(lower_slope*error_lower_threshold,2))
+	error_diode_power[upper] = np.sqrt(np.power(error_current*upper_slope,2) + np.power((current[upper]-upper_threshold)*error_upper_slope,2) + np.power(upper_slope*error_upper_threshold,2))
+
+	return diode_power, error_diode_power
+
 def plot_yag_kennlinie():
 	current, power, error_power = np.loadtxt("data/kennlinie_yag2.txt", unpack=True)
 	error_current = 1 / math.sqrt(12)
@@ -159,27 +182,20 @@ def plot_yag_kennlinie():
 
 	fit_indices_list = []
 	fit_indices_list.append(power > 0.10)
-	fit_indices_list.append(np.logical_and(power > 0.10, lower))
-	fit_indices_list.append(np.logical_and(power > 0.10, upper))
+	#fit_indices_list.append(np.logical_and(power > 0.10, lower))
+	#fit_indices_list.append(np.logical_and(power > 0.10, upper))
 
-	diode_power = np.zeros_like(current)
-	diode_power[lower] = (current[lower] - 182.10) * 0.8139
-	diode_power[upper] = (current[upper] - 201.6) * 0.8892
-
-	error_diode_power = np.zeros_like(diode_power)
-	error_diode_power[lower] = np.sqrt(np.power(error_current*0.8139,2) + np.power((current[lower]-182.10)*0.0013,2) + np.power(0.8139*0.23,2))
-	error_diode_power[upper] = np.sqrt(np.power(error_current*0.8892,2) + np.power((current[upper]-201.6)*0.0014,2) + np.power(0.8892*0.5,2))
+	diode_power, error_diode_power = current2diode_power(current, error_current)
 
 	zero_power = power[current < 150]
 	background = zero_power.mean()
 	print("Background:", background, "mW")
 	power -= background
 
-
 	plt.clf()
 	plt.errorbar(diode_power, power, xerr=error_diode_power, yerr=error_power, fmt=',', color="black")
 	plt.xlabel("Diodenleistung / mW")
-	plt.ylabel("laserleistung / mW")
+	plt.ylabel("Laserleistung / mW")
 	plt.savefig("out/kennlinie_yag_raw2." + SAVETYPE)
 
 	func = lambda x, slope, threshold: (x - threshold) * slope
@@ -210,6 +226,9 @@ def plot_yag_kennlinie():
 		#zero_power = power[power < 0.03]
 		#zero = umean(zero_power)
 		#plt.axhline(zero.n, color="blue")
+
+
+		print(subfit)
 
 		x = 200
 		try:
@@ -253,20 +272,99 @@ def plot_spiking():
 	plt.xlim(-10, 80)
 	plt.savefig("out/spiking." + SAVETYPE)
 
+def diode_power2yag_power(diode_power, error_diode_power):
+	a0 = -0.272
+	error_a0 = 0.005
+	a1 = 0.01605
+	error_a1 = 0.00010
+	a2 = 1.69e-5
+	error_a2 = 0.04e-5
+
+	threshold = 16.68
+
+	yag_power = np.power(diode_power, 2)*a2 + diode_power*a1 + a0
+	yag_power[diode_power < threshold] = 0
+	error_yag_power = np.sqrt(np.power((2*diode_power*a2+a1)*error_diode_power, 2) + np.power(np.power(diode_power,2)*error_a2, 2) + np.power(diode_power*error_a1, 2) + np.power(error_a0, 2))
+	error_yag_power[diode_power < threshold] = 0
+
+	return yag_power, error_yag_power
+
+def plot_ktp():
+	current, power, error_power = np.loadtxt("data/ktp_kristall.txt", unpack=True)
+	error_current = 1 / math.sqrt(12)
+
+	# uW -> mW
+	power /= 1000
+	error_power /= 1000
+
+	plt.clf()
+	plt.errorbar(current, power, xerr=error_current, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Strom / mA")
+	plt.ylabel("Leistung mit KTP / mW")
+	plt.xlim(0,700)
+	plt.savefig("out/ktp_raw." + SAVETYPE)
+
+	lower = np.logical_and(current > 182.10, current < 410)
+	upper = current >= 410
+
+	diode_power, error_diode_power = current2diode_power(current, error_current)
+
+	plt.clf()
+	plt.errorbar(diode_power, power, xerr=error_diode_power, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Diodenleistung / mW")
+	plt.ylabel("Laserleistung mit KTP / mW")
+	plt.savefig("out/ktp_raw2." + SAVETYPE)
+
+	yag_power, error_yag_power = diode_power2yag_power(diode_power, error_diode_power)
+
+	plt.clf()
+	plt.errorbar(yag_power, power, xerr=error_yag_power, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Laserleistung ohne KTP / mW")
+	plt.ylabel("Laserleistung mit KTP / mW")
+	plt.xlim(0,10)
+	plt.savefig("out/ktp_raw3." + SAVETYPE)
+
+	plt.clf()
+	fit = Fit(POLY2)
+	fit.set_data(xdata=yag_power, ydata=power, xerrors=error_yag_power, yerrors=error_power)
+	fit.set_labels(xlabel="Laserleistung ohne KTP / mW", ylabel="Laserleistung mit KTP / mW")
+
+	fit = fit.filtered(yag_power > 2)
+
+	fit.iterative_fit(5)
+
+	fit.plot(box="tl", units={"a2": "1/mW", "a0": "mW"})
+	plt.savefig("out/ktp_fit." + SAVETYPE)
+
+	plt.clf()
+	fit.plot_residual(box="tl")
+	plt.savefig("out/ktp_residual." + SAVETYPE)
+
 def plot_qswitch():
 	frequency, error_frequency, power = np.loadtxt("data/frequenz_qswitch.txt", unpack=True)
-	error_power = 1
+	error_power = 1 / math.sqrt(12)
 
-	fit = Fit(POLY2)
+	power /= 1000
+	error_power /= 1000
+
+	plt.clf()
+	plt.errorbar(frequency, power, xerr=error_frequency, yerr=error_power, fmt=',', color="black")
+	plt.xlabel("Frequenz / Hz")
+	plt.ylabel("Leistung / mW")
+	plt.savefig("out/qswitch_raw." + SAVETYPE)
+
+	#power -= power[0]
+
+	fit = Fit(POLY3)
 	fit.set_data(xdata=frequency, ydata=power, xerrors=error_frequency, yerrors=error_power)
 	fit.set_params(a0=380, a1=0.005, a2=-7e-8)
-	fit.set_labels(xlabel="Frequenz / Hz", ylabel="Leistung / uW")
+	fit.set_labels(xlabel="Frequenz / Hz", ylabel="Leistung / mW")
 
 	subfit = fit.filtered(np.logical_and(frequency < 20e3, frequency > 1e3))
 	subfit.iterative_fit(5)
 
 	plt.clf()
-	subfit.plot() #box="br")
+	subfit.plot(box="br", units={"a3": "mW/Hz^3", "a2": "mW/Hz^2", "a1": "mW/Hz", "a0": "mW"})
 	plt.savefig("out/qswitch_power_fit." + SAVETYPE)
 
 	plt.clf()
@@ -276,20 +374,28 @@ def plot_qswitch():
 	plt.clf()
 	time, voltage = _load_oscilloscope_csv("data/ALL0023/F0023CH2.CSV")
 	time *= 1E6
-	time -= time[0]
+	time -= -935
 
 	plt.plot(time, voltage, ".", color="black")
 
-	voltage_noise = voltage[np.logical_and(time > 500, time < 1000)].std()
+	pause = np.logical_and(time > 300, time < 900)
+	one_period = np.logical_and(time > 0, time < 1000)
+	print(one_period, one_period.sum())
 
-	mean_voltage = ufloat(voltage.mean(), voltage_noise)
-	peak_voltage = ufloat(voltage.max(), voltage_noise)
+	mean_voltage = ufloat(voltage[one_period].mean(), voltage[pause].std() / math.sqrt(one_period.sum()))
+	peak_voltage = ufloat(voltage[one_period].max(), voltage[pause].std())
+
+	print("ErrorL:", voltage[pause].std())
+
+	print("Mean voltage:", mean_voltage, "V")
+	print("Peak voltage:", peak_voltage, "V")
 
 	frequency = 1.01798e3 # Hz
 	mean_power = subfit.ueval(frequency)
+	print("Mean power:", mean_power*1000, "uW")
 
 	peak_power = mean_power * peak_voltage / mean_voltage
-	print("Peak power:", formatUFloat(peak_power), "uW")
+	print("Peak power:", peak_power*1000, "uW")
 
 	plt.axhline(mean_voltage.n, color="red", linewidth=2)
 	plt.axhline(peak_voltage.n, color="red", linewidth=2)
@@ -305,5 +411,6 @@ if __name__=="__main__":
 	#plot_diode_kennlinie()
 	#plot_yag_lifetime()
 	#plot_yag_kennlinie()
-	plot_spiking()
-	#plot_qswitch()
+	#plot_spiking()
+	#plot_ktp()
+	plot_qswitch()

@@ -10,7 +10,7 @@
 \usepackage{feynmp}
 \DeclareGraphicsRule{.1}{mps}{*}{}
 
-
+\newcommand{\e}[1]{\ensuremath{\times 10^{#1}}}
 \newcommand{\defeq}{\vcentcolon=}
 \newcommand{\eqdef}{=\vcentcolon}
 
@@ -26,12 +26,13 @@
 \setlength{\parskip}\medskipamount
 \begin{document}
 
-\title{Fortgeschrittenenpraktikum \\ \quad \\ Protokoll zu den Versuchen des Neodym-YAG-Lasers}
+\title{Fortgeschrittenenpraktikum \\ \quad \\ Protokoll zu Versuchen mit dem Neodym-YAG-Laser}
 \author{Jonas Lieb, 312136 \\ \emph{Gruppe 20} \\ \\  RWTH Aachen}
 \maketitle
 
-%\begin{abstract}
-%\end{abstract}
+\begin{abstract}
+In diesem Versuch wird ein diodengepumpter Nd-YAG-Festkörperlaser zusammengesetzt und charakterisiert. Dabei sind besonders die Laserschwelle und die Lasereffizienz von Interesse. Nach der Charakterisierung wird der Laser mit einem KTP-Kristall modifiziert, sodass statt des infraroten Lichts ($1064 \unit{nm}$) frequenzverdoppeltes grünes Licht zu beobachten ist. Im letzten Versuchsteil wird der Laser mithilfe von aktiver Gütemodulation in den Pulsbetrieb versetzt und die Höhe der Pulse vermessen.
+\end{abstract}
 \newpage
 
 \setcounter{tocdepth}{2}
@@ -39,10 +40,10 @@
 \newpage
 
 \section{Einleitung}
-In diesem Versuch wird ein Nd-YAG-Laser zusammengesetzt und charakterisiert. Dieser Festkörperlaser besteht aus Neodym-dotiertem Yttrium-Aluminium-Granat und ist ein 4-Niveau-Laser mit einer Laser-Wellenlänge von $\lambda = 1064 \unit{nm}$. Er besitzt mehrere Absorptionslinien bei $804.4 \unit{nm}$, $808.4 \unit{nm}$, $812.9 \unit{nm}$ und $817.3 \unit{nm}$, die als Pump-Wellenlängen genutzt werden können.
-Das Pumpen erfolgt durch einen Halbleiter-Diodenlaser. Durch Variation der Temperatur dehnt sich der Kristall aus und kann so auf verschiedene Wellenlängen um ca. $810 \unit{nm}$ eingestellt werden. Dieses Verhalten, die Ausgangsleistung und Laserschwelle werden zunächst charakterisiert.
+Der in diesem Versuch genutzte Festkörperlaser besteht aus Neodym-dotiertem Yttrium-Aluminium-Granat und ist ein 4-Niveau-Laser mit einer Laser-Wellenlänge von $\lambda = 1064 \unit{nm}$. Er besitzt mehrere Absorptionslinien bei $804.4 \unit{nm}$, $808.4 \unit{nm}$, $812.9 \unit{nm}$ und $817.3 \unit{nm}$, die als Pump-Wellenlängen genutzt werden können.
+Das Pumpen erfolgt durch einen Halbleiter-Diodenlaser. Durch Variation der Temperatur dehnt sich der Halbleiter aus und kann so auf verschiedene Wellenlängen um ca. $810 \unit{nm}$ eingestellt werden. Dieses Verhalten, die Ausgangsleistung und Laserschwelle werden zunächst bestimmt.
 
-Im Anschluss wird ein KTP-Kristall in den Resonator des Nd-YAG-Lasers eingebaut, sodass durch nichtlineare Effekte eine Frequenzverdopplung auf $532 \unit{nm}$ (grünes Licht) stattfindet.
+Im Anschluss wird ein KTP-Kristall in den Resonator des Nd-YAG-Lasers eingebaut, sodass durch nichtlineare Effekte eine Frequenzverdopplung auf $532 \unit{nm}$ (grünes Licht) stattfindet. Die Effizienz dieses Prozesses wir betrachtet.
 
 Im letzten Versuchsteil wird der Laser in den Pulsbetrieb versetzt. Dafür wird anstelle des KTP-Kristalls eine Pockelszelle in den Resonator verbaut, die von einem Frequenzgenerator getrieben wird und zur aktiven Gütemodulation dient. Durch die Modulation werden deutlich höhere Peakleistungen erzielt. Diese werden mithilfe eines Photosensors vermessen.
 
@@ -53,19 +54,19 @@ Im letzten Versuchsteil wird der Laser in den Pulsbetrieb versetzt. Dafür wird 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\fullwidth]{aufbau_diodenlaser}
-\caption{Versuchsaufbau zur Diodenlasers. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D) und Photodetektor (G). Zusätzlich ist der Diodenlaser mit einem Diodentreiber, auf dem sich die Diodentemperatur einstellen lässt, und der Photodetektor über einen Verstärker mit einem Oszilloskop verbunden. Bildquelle: \cite[S. 33]{anleitung1}}
+\caption{Versuchsaufbau zur Charakterisierung des Diodenlasers. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D) und Photodetektor (G). Zusätzlich ist der Diodenlaser mit einem Diodentreiber, auf dem sich die Diodentemperatur einstellen lässt, und der Photodetektor über einen Verstärker mit einem Oszilloskop verbunden. Bildquelle: \cite[S. 33]{anleitung1}}
 \label{fig:aufbau_diodenlaser}
 \end{figure}
 
 
 Während der gesamten Versuchsreihe wird \emph{Versuchsaufbau 3} verwendet. 
 
-Zuerst wird der Diodenlaser charakterisiert. Dazu wird im ersten Versuchsteil die Abhängigkeit zwischen geregelter Temperatur und der emittierten Wellenlänge betrachtet. Der Aufbau ist in Abbildung \ref{fig:aufbau_diodenlaser} gezeigt und besteht im wesentlichen aus dem Diodenlaser, dem Nd-YAG Stab und einem Photodetektor.
-Die Temperatur kann in $0.1 \unit{\degree C}$ Schritten am Diodentreiber eingestellt werden. Zur Vermessung der Wellenlänge wird das bekannte Absorptionsspektrum von YAG verwendet. Die Intensität wird am Ende der optischen Bank mit einem Photodetektor vermessen, der mit einem Oszilloskop verbunden wird. Die Messwerte werden manuell vom Oszilloskop abgelesen und ihr Fehler aufgrund des Rauschens ebenfalls manuell abgeschätzt. Die Temperaturschritte sind arbiträr gewählt ca. $0.5 \unit{\degree C}$ zwischen den Minima und bis zu $0.1 \unit{\degree C}$ um die Minima.
+Zuerst wird der Diodenlaser charakterisiert. Dazu wird im ersten Versuchsteil die Abhängigkeit zwischen geregelter Temperatur und der emittierten Wellenlänge betrachtet. Der Aufbau ist in Abbildung \ref{fig:aufbau_diodenlaser} gezeigt und besteht im Wesentlichen aus dem Diodenlaser, dem Nd-YAG Stab und einem Photodetektor.
+Die Temperatur kann in $0.1 \unit{\degree C}$ Schritten am Diodentreiber eingestellt werden. Zur Vermessung der Wellenlänge wird das bekannte Absorptionsspektrum von YAG verwendet. Die Intensität wird am Ende der optischen Bank mit einem Photodetektor vermessen, der mit einem Oszilloskop verbunden wird. Die Messwerte werden manuell vom Oszilloskop abgelesen und ihr Fehler aufgrund des Rauschens ebenfalls manuell abgeschätzt. Die Temperaturschritte sind arbiträr gewählt, sie betragen ca. $0.5 \unit{\degree C}$ zwischen den Minima und bis zu $0.1 \unit{\degree C}$ um die Minima.
 
 Bei der Veränderung der Temperatur und damit der Wellenlänge werden mehrere Absorptionspeaks erwartet, die sich als Intensitätsminima messen lassen. 
 
-\subsubsection{Messdaten}
+\subsubsection{Rohdaten}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\halfwidth]{temperatur}
@@ -73,7 +74,7 @@ Bei der Veränderung der Temperatur und damit der Wellenlänge werden mehrere Ab
 \label{fig:temperatur}
 \end{figure}
 
-Die Messdaten sind in Abbildung \ref{fig:temperatur} zu sehen. Auf der vertikalen Achse wurde die auf dem Oszilloskop abgelesene Spannung mit den geschätzten Fehlern aufgetragen. Der Fehler auf die Temperatur beträgt $0.1 \unit{\degree C} / \sqrt{12} = 0.03 \unit{\degree C}$, da innerhalb eines Messwertes der Digitalanzeige eine Gleichverteilung angenommen wird.
+Die Messdaten sind in Abbildung \ref{fig:temperatur} zu sehen. Auf der vertikalen Achse wurde die auf dem Oszilloskop abgelesene Spannung mit den geschätzten Fehlern aufgetragen. Der Fehler auf die Temperatur beträgt $0.1 \unit{\degree C} / \sqrt{12} = 0.03 \unit{\degree C}$, da die Schwankungen geringer sind als die Digitalanzeige des Diodentreibers, die eine Einstellung auf $0.1 \unit{\degree C}$ erlaubt.
 
 \subsubsection{Auswertung}
 Deutlich zu erkennen sind mehrere Intensitätsminima. Diese liegen bei ca. $25.5 \unit{\degree C}$, $29.0 \unit{\degree C}$, $32.3 \unit{\degree C}$, $34.8 \unit{\degree C}$, $37.5 \unit{\degree C}$ und $40.6 \unit{\degree C}$. Eine genaue Zuordnung zu den erwarteten Absorptionswellenlängen ist nicht nötig und möglich, da kein Model für den Zusammenhang bekannt ist, und da in den folgenden Versuchsteilen lediglich ein Absorptionsmaximum genutzt werden muss, welches in Form der Diodentemperatur angegeben wird.
@@ -84,7 +85,7 @@ Deutlich zu erkennen sind mehrere Intensitätsminima. Diese liegen bei ca. $25.5
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\fullwidth]{aufbau_diodenlaser2}
-\caption{Versuchsaufbau Bestimmung der Ausgangsleistung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C) und Leistungsmesser (I) mit 1000:1 Dämpfer. Bildquelle: \cite[S. 35]{anleitung1}}
+\caption{Versuchsaufbau Bestimmung der Ausgangsleistung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C) und Leistungsmesser \enquote{LaserMate-Q} (I) mit 1000:1 Dämpfer. Bildquelle: \cite[S. 35]{anleitung1}}
 \label{fig:aufbau_diodenlaser2}
 \end{figure}
 
@@ -92,7 +93,7 @@ In diesem Versuchsteil wird die Ausgangsleistung in Abhängigkeit des Diodenstro
 
 Der Versuchsaufbau ist in Abbildung \ref{fig:aufbau_diodenlaser2} abgebildet. Diesmal wird eine Temperatur von $38.6 \unit{\degree C}$ eingestellt, da sich nach Erwärmung des Lasers das fünfte Minimum bei dieser Temperatur befindet. Die gemessenen Intensitäten werden auf einem Leistungsmessgerät abgelesen, der eingestellte Messbereich beträgt zuerst $300 \unit{\upmu W}$, bis dieser überschritten ist und auf $1 \unit{mW}$ gewechselt wird. Aufgrund des 1000:1 Dämpfers müssen diese Werte jedoch mit dem Faktor 1000 multipliziert werden, um die Ausgangsleistung zu bestimmen. Die Stromstärke wird im Bereich von 0 bis 620 $\unit{mA}$ in $10 \unit{mA}$-Schritten eingestellt und je ein Leistungsmesswert notiert.
 
-\subsubsection{Messdaten}
+\subsubsection{Rohdaten}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\halfwidth]{kennlinie_diode_raw}
@@ -171,7 +172,7 @@ Der Versuchsaufbau befindet sich in Abbilung \ref{fig:aufbau_lebensdauer}. Die L
 
 Die Daten werden am Oszilloskop abgelesen und zusätzlich auf einem USB-Stick als \texttt{csv}-Datei gespeichert, sodass sie separat analysiert werden können. Ein manuelles Ablesen der Lebensdauer mithilfe der Oszilloskopcursor ergibt $240 \unit{\mu s}$. 
 
-\subsubsection{Messdaten}
+\subsubsection{Rohdaten}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\halfwidth]{F0010TEK}
@@ -207,18 +208,18 @@ Dieser Wert ist $4 \sigma$ von der Grobabschätzung mit den Oszilloskopcursorn (
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\fullwidth]{aufbau_ndyag}
-\caption{Versuchsaufbau zur Messung der Ausgansleistung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D), Spiegel $100-2 \unit{\%}$ (E), Filter RG 1000 (Transmission nur $\lambda > 1000 \unit{nm}$, F) und Leistungsmesser (I) mit 1000:1 Dämpfer. Bildquelle: \cite[S. 36]{anleitung1}}
+\caption{Versuchsaufbau zur Messung der Ausgansleistung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D), Spiegel $100-2 \unit{\%}$ (E), Filter RG 1000 (Transmission nur $\lambda > 1000 \unit{nm}$, F) und Leistungsmesser \enquote{LaserMate-Q} (I) mit 1000:1 Dämpfer. Bildquelle: \cite[S. 36]{anleitung1}}
 \label{fig:aufbau_ndyag}
 \end{figure}
 
-In diesem Versuchsteil wird zum ersten mal der Resonator des Nd-YAG-Festkörperlasers aufgebaut (siehe Abbildung \ref{fig:aufbau_ndyag}). Dieser besteht aus einem auf den YAG-Stab aufgedampften Spiegel und einem einzelnen $100 - 2 \unit{\%}$ Spiegel. Aus letzterem wird die infrarote Laserstrahlung der Wellenlänge $\lambda = 1064 \unit{nm}$ emittiert. Da dort ebenfalls Anteile des Pumplichtes austreten, werden diese vor dem Photodetektor durch einen RG 1000 Filter absorbiert.
+In diesem Versuchsteil wird zum ersten Mal der Resonator des Nd-YAG-Festkörperlasers aufgebaut (siehe Abbildung \ref{fig:aufbau_ndyag}). Dieser besteht aus einem auf den YAG-Stab aufgedampften Spiegel und einem einzelnen $100 - 2 \unit{\%}$ Spiegel. Aus letzterem wird die infrarote Laserstrahlung der Wellenlänge $\lambda = 1064 \unit{nm}$ emittiert. Da dort ebenfalls Anteile des Pumplichtes austreten, werden diese vor dem Photodetektor durch einen RG 1000 Filter absorbiert.
 
 Die Leistung dieses Lasers wird in Abhängigkeit des Diodenstromes gemessen, mithilfe der vorherigen Charakterisierung der Diode kann so die Lasereffizienz berechnet werden.
 
 Der Diodenstrom wird in $10 \unit{mA}$-Schritten von 0 bis 620 $\unit{mA}$ variiert. Als Diodentemperatur werden $38.5 \unit{\degree C}$ eingestellt.
 Die Intensität wird am Leistungsmesser auf einer Digitalanzeige abgelesen, ihr Fehler wird über die Schwankungen manuell geschätzt und beträgt je nach Messwert zwischen $3 \unit{\upmu W}$ und $100 \unit{\upmu W}$.
 
-\subsubsection{Messdaten}
+\subsubsection{Rohdaten}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\halfwidth]{kennlinie_yag_raw}
@@ -259,7 +260,19 @@ In Abbildung \ref{fig:kennlinie_yag_linear} ist eine lineare Anpassung an die Le
 \label{fig:kennlinie_yag_0}
 \end{figure}
 
-Eine solche Anpassung ist in Abbildung \ref{fig:kennlinie_yag_0} zu sehen. Aus den Vorfaktoren im Polynom kann nun die Nullstelle berechnet werden, die die Laserschwelle darstellt. Daraus ergibt sich eine Schwellleistung von
+\begin{table}
+\centering
+\begin{tabular}{|c|c|}
+\hline
+$a_2$ & $(1.69 \pm 0.04) \e{-5} \unit{1/mW} $ \\
+$a_1$ & $(0.01605 \pm 0.00010) $ \\
+$a_0$ & $(-0.272 \pm 0.005) \unit{mW}$ \\ \hline
+\end{tabular}
+\caption{Fitergebnisse der Anpassung $P(x) = a_2 x^2 + a_1 x + a_0$}
+\label{tbl:polynom}
+\end{table}
+
+Eine solche Anpassung ist in Abbildung \ref{fig:kennlinie_yag_0} zu sehen. Aus den Vorfaktoren im Polynom (Tabelle \ref{tbl:polynom}) kann nun die Nullstelle berechnet werden, die die Laserschwelle darstellt. Daraus ergibt sich eine Schwellleistung von
 \[
 	(16.68 \pm 0.34) \unit{mW}
 \]
@@ -279,7 +292,7 @@ In diesem Versuchsteil wird Spiking betrachtet. Beim Einschalten des Pumplasers 
 Der Versuchsaufbau ist analog zum letzten Versuchsteil (Abbildung \ref{fig:aufbau_ndyag}), außer dass anstelle des Leistungsmessers erneut der Photodetektor verwendet wird, der an ein Oszilloskop angeschlossen ist. Der Diodenlaser wird moduliert mit ca $4.75 \unit{kHz}$. 
 Ebenfalls an das Oszilloskop angeschlossen ist ein Signal, dass proportional zum Pumpstrom ist, sodass auf das modulierte Signal getriggert werden kann.
 
-\subsubsection{Messdaten}
+\subsubsection{Rohdaten}
 \begin{figure}
 \centering
 \includegraphics[width=\halfwidth]{F0015TEK}
@@ -299,18 +312,171 @@ Es ist deutlich zu erkennen, dass die Spannung zuerst auf ca. $4.0 \unit{V}$ spr
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\fullwidth]{aufbau_ktp}
-\caption{Versuchsaufbau zur Frequenzverdopplung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D), KTP-Kristall (H), Spiegel $100-2 \unit{\%}$ (E), Filter BG 39 (Transmission nur $\lambda \approx 532 \unit{nm}$, F) und Leistungsmesser (I) (\emph{ohne} 1000:1 Dämpfer). Bildquelle: \cite[S. 38]{anleitung1}}
+\caption{Versuchsaufbau zur Frequenzverdopplung. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D), KTP-Kristall (H), Spiegel $100-2 \unit{\%}$ (E), Filter BG 39 (Transmission nur $\lambda \approx 532 \unit{nm}$, F) und Leistungsmesser \enquote{LaserMate-Q} (I) (\emph{ohne} 1000:1 Dämpfer). Bildquelle: \cite[S. 38]{anleitung1}}
 \label{fig:aufbau_ktp}
 \end{figure}
 
 In diesem Versuchsteil wird ein KTP-Kristall in den Laserresonator eingebaut. Aufgrund nichtlinearer optischer Effekte wird die Frequenz der Laserstrahlung verdoppelt, die Wellenlänge halbiert sich dadurch von $1064 \unit{nm}$ auf $532 \unit{nm}$. Das emittierte Licht ist damit für das menschliche Auge sichtbar und erscheint grün.
 
-Der Versuchsaufbau ist in Abbildung \ref{fig:aufbau_ktp} zu sehen. Wie im vorherigen Versuch ist der Festkörperlaser vollständig aufgebaut, jedoch ist in den Resonator ein KTP-Kristall eingebaut. Die Position der Laserspiegel ist dementsprechend korrigiert, sodass nun grünliches Licht am Austrittsspiegel emittiert wird und den Filter passiert. Die Leistung wird erneut mit dem Leistungsmessgerät vermessen, diesmal ohne 1000:1 Dämpfer.
+Der Versuchsaufbau ist in Abbildung \ref{fig:aufbau_ktp} zu sehen. Wie im vorherigen Versuch ist der Festkörperlaser vollständig aufgebaut, jedoch ist in den Resonator ein KTP-Kristall eingebaut. Die Position der Laserspiegel ist dementsprechend korrigiert, sodass nun grünliches Licht am Austrittsspiegel emittiert wird und den Filter passiert. Die Leistung wird erneut mit dem Leistungsmessgerät vermessen, diesmal ohne 1000:1 Dämpfer. 
 
+Die eingestellte Diodentemperatur beträgt $34.9 \unit{\degree C}$. Die Stromstärke wird von 0 bis 650 $\unit{mA}$ variiert, zu jedem Messpunkt wird ein Leistungsmesspunkt mit dem Leistungsmesser LaserMate-Q aufgenommen. Der Messbereich wird entsprechend angepasst (zuerst bis $100 \unit{nW}$, dann $1 \unit{\upmu W}$, $10 \unit{\upmu W}$, $300 \unit{\upmu W}$.
+Die Fehler auf den Messwert werden aufgrund der Schwankungen der Leistungsmessung geschätzt. Sie betragen in den Messbereichen $0.2 \unit{nW}$, $0.02 \unit{\upmu W}$, $0.03 \unit{\upmu W}$ und $1 \unit{\upmu W}$.
+
+\subsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{ktp_raw}
+\caption{Rohdaten der Vermessung des Nd-YAG-Lasers mit eingebautem KTP-Kristall. Auf der horizontalen Achse befindet sich die am Diodentreiber eingestellte Stromstärke, auf der vertikalen Achse ist die gemessene Ausgangsleistung aufgetragen.}
+\label{fig:ktp_raw}
+\end{figure}
+
+Die rohen Messdaten sind in Abbildung \ref{fig:ktp_raw} zu finden. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{ktp_raw2}
+\includegraphics[width=\halfwidth]{ktp_raw3}
+\caption{Verarbeitete Rohdaten der Messung mit KTP. Links: auf der horizontalen Achse wurde der Diodenstrom durch die Diodenleistung ersetzt. Rechts: auf der horizontalen Achse wurde die Diodenleistung durch die Laserleistung ohne KTP ersetzt.}
+\label{fig:ktp_raw23}
+\end{figure}
+
+Aus ihnen kann nun, analog zum letzten Versuch, zuerst eine Auftragung von Leistung gegen Diodenleistung und dann Laserleistung mit KTP gegen Laserleistung ohne KTP erstellt werden.
+Für letztere wird das folgende Polynom zweiten Grades verwendet:
+\[
+P_\textrm{Laser}(P_\textrm{Diode}) = \left\{ \begin{array}{ll} 0 & P_\textrm{Diode} < 16.68 \unit{mW} \\
+(16.69 \pm 0.04) \e{-5} \unit{1/mW} \cdot P_\textrm{Diode}^2 & \textrm{sonst}  \\
++ (0.01605 \pm 0.00010) \cdot P_\textrm{Diode} & \\
++ (-0.272 \pm 0.005) \unit{mW} & \end{array} \right.
+\]
+Die Vorfaktoren stammen dabei aus der Anpassung im letzten Versuchsteil (Tabelle \ref{tbl:polynom}).
+
+\subsection{Auswertung}
+Schon in den verarbeiteten Rohdaten lässt sich eine nichtlineare Abhängigkeit erkennen. Laut Praktikumsskript wird ein \enquote{quadratischer Zusammenhang}\cite{anleitung1} erwartet. Um diese Theorie zu überprüfen, wird erneut ein Polynom zweiten Grades angepasst. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{ktp_fit}
+\includegraphics[width=\halfwidth]{ktp_residual}
+\caption{Quadratische Anpassung der Messergebnisse der Leistungmessung mit KTP. Es wurden ausschließlich Daten mit einer Eingangsleistung von über $2 \unit{mW}$ berücksichtigt.}
+\label{fig:ktp_fit}
+\end{figure}
+
+Dafür werden die Daten zunächst eingeschränkt. Da die gemessene Leistung von 0 einen sehr geringen Fehler besitzt, beeinflusst sie die Anpassung negativ. Deshalb ist es vorteilhaft, nur die Daten ab einer Eingangsleistung von $2 \unit{mW}$ aufwärts zu berücksichtigen.
+
+Die Anpassung des Polynoms zweiten Grades gelingt, $\chi^2 / \textrm{ndf} = 1.37$, siehe Abbildung \ref{fig:ktp_fit}. 
+Eine Interpretation dieses Ergebnisses ist aufgrund von Mängeln der Herleitung es theoretischen Models jedoch nicht möglich.
+
+Es lässt sich lediglich bemerken, dass auf höchster Leistung bei einer Eingangsleistung von fast $8.7 \unit{mW}$ eine frequenzverdoppelte Leistung von $0.15 \unit{mW}$ gemessen werden kann. Dies entspricht einer Effizienz von nur $1.72 \unit{\%}$.
 
 \section{Aktive Gütemodulation}
+\subsection{Abhängigkeit der Leistung von der Frequenz}
+\subsubsection{Aufbau und Durchführung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{aufbau_qswitching}
+\caption{Versuchsaufbau zum Q-Switching. Montiert sind Diodenlaser (A), Kollimator ($f = 6 \unit{mm}$, B), Fokussiereinheit ($f = 50 \unit{mm}$, C), Nd-YAG Stab (D), Pockelszelle (J), Spiegel $100-2 \unit{\%}$ (E), Filter RG 1000 (Transmission nur $\lambda > 1000 \unit{nm}$, F) und Leistungsmesser \enquote{LaserMate-Q} (I) (\emph{ohne} 1000:1 Dämpfer). Bildquelle: \cite[S. 38]{anleitung1}}
+\label{fig:aufbau_qswitching}
+\end{figure}
+
+In diesem Versuch wird das Verhalten des Lasers unter aktiver Gütemodulation untersucht. Wie im Versuchsaufbau (Abbildung \ref{fig:aufbau_qswitching}) zu sehen, ist diesmal in den Resonator eine getriebene Pockelszelle eingebaut. Während an dieser eine Spannung anliegt, ist die Güte des Resonators gering, d.h. dass kein Laservorgang stattfindet. Erst wenn die Spannung abfällt, beginnt der Laserprozess. Aufgrund der höheren davor aufgebauten Inversion entsteht eine Leistungsspitze, bevor der Laser sich wieder gedämpft und anharmonisch auf die niedrigere Leistung einschwingt. 
+
+An die Pockelszelle wird ein Rechtecksignal eines Signalgenerators angelegt. Die Frequenz des Signals wird in $100 \unit{Hz}$-Schritten variiert, die Leistung wird im ersten Versuchsteil mit dem Leistungsmesser \enquote{LaserMate-Q} gemessen. Aufgrund der Einstellungsgenauigkeit beträgt die Schwankung auf die Frequenz dabei zuerst $2 \unit{Hz}$, ab $4000 \unit{Hz}$ wurde diese nur noch auf $100 \unit{Hz}$ Genauigkeit eingestellt. Der Fehler auf die Leistungsmessung ist durch das Binning der Digitalanzeige gegeben und beträgt $1 \unit{\upmu W} / \sqrt{12} = 0.3 \unit{\upmu W}$.
+Die Laserdiode wird mit $653 \unit{mA}$ bei einer Temperatur von $34.9 \unit{\degree C}$ betrieben.
+
+Es wird erwartet, dass die Durchschnittsleistung des Lasers zuerst linear mit der Frequenz ansteigt, da die Anzahl der Peaks pro Zeitinterval proportional zur Frequenz ist. Außerdem wird erwartet, dass dieser Effekt in eine Sättigung geht, sobald die Sperrzeit der Pockelszelle zu gering wird, sodass keine Besetzungsinversion mehr auftritt. Für hohe Frequenzen wird erwartet, dass die Leistung wieder absinkt, da die Pockelszelle nicht beliebig schnell schalten kann.
+
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{qswitch_raw}
+\caption{Rohdaten der Leistungmessung mit aktiver Gütemodulation. Auf der horizontalen Achse befindet sich die eingestellte Frequenz, auf der vertikalen Achse die gemessene Leistung. Wie erwartet steigt die Leistung zuerst mit der Frequenz, erreicht ein Sättigungsniveau und fällt letztendlich steil ab.}
+\label{fig:qswitch_raw}
+\end{figure}
+
+Die Rohdaten (Abbildung \ref{fig:qswitch_raw}) zeigen den erwarteten Verlauf. Zuerst steigt die Durchschnittsleistung mit der Frequenz an, wird gesättigt und fällt bei ca. $23 \unit{kHz}$ auf das Ausgangsniveau ab.
+
+\subsubsection{Auswertung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{qswitch_power_fit}
+\includegraphics[width=\halfwidth]{qswitch_power_residual}
+\caption{Anpassung eines Polynoms zweiten Grades an die bereinigten Daten. Die Residuen streuen statistisch, $\chi^2 / \textrm{ndf} = 5.00$}
+\label{fig:qswitch_fit}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+$a_3$ & $(-6.5 \pm 0.6) \e{-15} \unit{mW/Hz^3}$ \\
+$a_2$ & $(4.0 \pm 1.7) \e{-11} \unit{mW/Hz^2}$ \\
+$a_1$ & $(4.9 \pm 0.14) \e{-6} \unit{mW/Hz}$ \\
+$a_0$ & $(0.31958 \pm 0.00024) \unit{mW}$ \\
+\hline
+\end{tabular}
+\caption{Anpassungsergebnisse an eine Funktion der Form $P(f) = a_3 f^3 + a_2 f^2 + a_1 f + a_0$}
+\label{tbl:qswitch_fit}
+\end{table}
+
+Um an diese Daten ein Modell anzupassen, werden zunächst die Ausreißer bei niedrigen Frequenzen sowie die beiden Punkte bei $23 - 24 \unit{kHz}$ entfernt.
+
+Nun kann ein Polynom angepasst werden. Da kein analytisches Modell bekannt ist, welches dieses Verhalten beschreibt, wird der Grad des Polynoms arbiträr gewählt, sodass die Residuen statistisch streuen. Dies ist bereits bei einem Polynom dritten Grades der Fall. 
+Eine Anpassung an ein Polynom dritten Grades ist in Abbildung \ref{fig:qswitch_fit} zu sehen.
+Die Ergebnisse (Tabelle \ref{tbl:qswitch_fit}) werden in nächsten Versuchsteil zur Bestimmung der Peakleistung verwendet. 
+
+\subsection{Bestimmung der Peakleistung}
+\subsubsection{Aufbau und Durchführung}
+
+Der Aufbau ist dem des letzten Versuchsteils sehr ähnlich. Die einzige Änderung ist ein Photodetektor am Ende der optischen Bank, der anstelle des Leistungsmessers eingesetzt wird und über einen Verstärker mit dem Oszilloskop verbunden ist. Die Frequenz wird auf $1018 \unit{Hz}$ fest eingestellt.
+
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{F0023TEK}
+\includegraphics[width=\halfwidth]{qswitch_osci}
+\caption{Links: Bildschirmfoto des Oszilloskops bei aktiver Gütemodulation. Kanal 1 (obere Linie) ist an den Pockelszellentreiber angeschlossen und invertiert, dadurch entspricht eine höhere Spannung einer höheren Güte. Kanal 2 zeigt die Messwerte des Photodetektors. Rechts: aufgearbeitetes Signal mit verschobener Zeitskala. Die horizontalen roten Linien bezeichnet Durchschnitts- und Peakspannung.}
+\label{fig:qswitch_osci}
+\end{figure}
+
+Die Rohdaten sind in Abbildung \ref{fig:qswitch_osci} gezeigt. Es ist deutlich zu erkennen, dass ein Leistungspeak entsteht, sobald die Güte durch die Pockelszelle erhöht wird. Interessanterweise fällt die gemessene Spannung zwischen den Peaks (während die Güte gering ist) nicht auf $0 V$, sondern bleibt bei ca. $6.8 V$.
+
+\subsubsection{Auswertung}
+Anhand des vorherigen Versuches kann ausgesagt werden, dass die Durchschnittsleistung des Lasers bei $1018 \unit{Hz}$ 
+\[
+	P_\textrm{avg} = (324.60 \pm 0.28) \unit{\upmu W}
+\]
+beträgt. 
+Die Durchschnittsspannung und Maximalspannung innerhalb einer Periode können aus den Oszilloskopdaten berechnet werden. Zur Fehlerabschätzung wird der Strichprobenfehler des Rauschens berechnet, dass zwischen 300 und 900 $\unit{\upmu s}$ auftritt:
+\[
+	\sigma = 35.8 \unit{mV}
+\]
+Dieser Stichprobenfehler ist der Fehler auf den Maximalwert. Für den Fehler auf den Mittelwert wird der Stichprobenfehler durch die Wurzel der Anzahl der Datenpunkte in einer Periode dividiert. Daraus folgt
+\begin{align*}
+	U_\textrm{avg} &= (6.9171 \pm 0.0011) V \\
+	U_\textrm{peak} &= (12.64 \pm 0.04) V
+\end{align*}
+
+Die Peakleistung kann nun bestimmt werden und beträgt:
+\[
+P_\textrm{peak} = P_\textrm{avg} \frac{U_\textrm{peak}}{U_\textrm{avg}} = (593.2 \pm 1.8) \unit{\upmu W}
+\]
+
+Dass sowohl Durchschnitts- als auch Peakleistung so gering ausfallen, kann den Verlusten in der Pockelszelle zugesprochen werden, da diese auch ohne angelegte Spannung nicht vollkommen transmittiert.
 
 \section{Zusammenfassung}
+In mehreren Versuchsteilen wurden in diesem Versuch Eigenschaften des Neodym-YAG-Lasers untersucht. 
+Nach der Suche nach einer geeigneten Diodentemperatur wurde diese charakterisiert und ihr Schwellstrom ($(182.10 \pm 0.23) \unit{mA}$) und ihre Effizienz ($0.8139 \pm 0.0013) \unit{W/A}$. bestimmt. 
+
+Mit diesen Daten konnte nun der Festkörperlaser aufgebaut und beobachtet werden. 
+
+Die Lebensdauer des $^4 F_{3/2}$-Niveaus wurde bestimmt ($(250.7 \pm 2.5) \unit{\upmu s}$) und die Ausgangsleistung des Lasers wurde untersucht. Die Schwellleistung liegt bei $(16.68 \pm 0.34) \unit{mW}$ und der Laser hat eine geringe Effizienz von 1.5 bis 3 $\unit{\%}$.
+
+Das Spiking des Lasers wurde mit dem Oszilloskop beobachtet und qualitativ ausgewertet. 
+
+Die Frequenzverdopplung mit KTP wurde erfolgreich beobachtet, bis zu $1.7 \unit{\%}$ der Grundwellenleistung wurde in der höherfrequenten Welle beobachtet.
+
+Mit der aktiven Gütemodulation konnten bei einer Durchschnittsleistung von $(324.60 \pm 0.28) \unit{\upmu W}$ Peakleistungen von $(593.2 \pm 1.8) \unit{\upmu W}$ gemessen werden.
 
 \newpage
 \begin{thebibliography}{xxxx}

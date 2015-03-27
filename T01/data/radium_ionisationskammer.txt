@@ -2,8 +2,10 @@
 
 # Verstärker Faktor 10nA = 10mV
 # Messzeit 1s
-#Zeilen
-#Abstand [cm]	Spannung	Fehler
+
+# Zeilen
+# Abstand [cm]	Spannung [mV]	Fehler [mV]
+
 48.0			-5.0		3
 47.5			-3.0		1
 47.0			3.3			1

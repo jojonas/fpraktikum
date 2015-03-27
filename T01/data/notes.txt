@@ -28,3 +28,22 @@ Peak3: (35,3+-0,05)cm, Differenz und Dateinamen s.o.
 Abstände
 --------
 34,9cm - 35cm - 35,5cm - 36cm - 36,5m - 37cm - 37,5cm - 38cm - 38,5cm - 39cm - 39,5cm
+
+
+
+
+Caesium-Messung, Anorganischer Sz.
+==================================
+Einstellungen:
+Gain x16
+Differentiation "DC"
+Integration 1 us
+Polarity negative
+PM Voltage: 1051 V
+
+Cs-Messung, Organischer Sz.
+===========================
+Einstellungen:
+Gain x128
+Diff. "DC", Int 1 us, Pol neg
+PM Voltage: 1050 V
