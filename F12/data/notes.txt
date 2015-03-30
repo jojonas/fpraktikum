@@ -10,3 +10,5 @@ Channel 3 (lila): multipliziertes Signal vom Lock-In-Verstärker
 1. Bild, ALL0031: kein Filter
 2. Bild, ALL0032: Hochpass @ 1000 Hz
 3. Bild, ALL0033: Tiefpass @ 1000 Hz
+
+Verstärkungen: 500mV (werden auf 10V skaliert) ==> x20
