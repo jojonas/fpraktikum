@@ -1,0 +1,16 @@
+# bei 10Hz: 1.000V
+# gemessen mit Multimeter
+
+# Spalten: Frequenz (eingestellt/gemessen), Multimeter, Oszi
+# Fehler: 40mV Oszi, 1mV/sqrt(12) Multi, Frequenz wird gemessen
+
+16			1.022		1.50
+32			1.024		1.50
+64			1.023		1.50
+128 		1.016		1.48
+256			0.997		1.46
+512			0.918		1.36
+1024		0.726		1.10
+2028		0.451		0.72
+4096		0.219		0.42
+8192		0.078		0.24

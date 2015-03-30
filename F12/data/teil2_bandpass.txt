@@ -1,0 +1,44 @@
+# Messung mit Lock-In-Verstärker
+# 300ms Integrationszeit
+# Referenzsignal: Amplitude 104mV-102mV (niedriger bei höherer Frequenz)
+# Güte Q: 1
+# Phase: 0
+# Ausgangssignal auf Multimeter & Oszilloskop
+
+# Bandpass, f = 1000 Hz
+# Messbereich Multimeter: 1mV / sqrt(12)
+
+# Spannung ohne: 1.394V eff, 1.44V max (Multi, Oszi)
+
+# Spalten: Frequenz Hz (via Oszi), Fehler Freq (via Oszi), Multimeter V, Oszilloskop V
+
+100		1	0.014	0.04
+150		1	0.036	0.06
+225		1	0.087	0.12
+337		1	0.208	0.24
+506		1	0.507	0.54
+760		1	1.117	1.16
+1140	5	1.312	1.36
+1708	5	0.671	0.70
+2560	5	0.273	0.30
+3845	10	0.109	0.14
+5760	10	0.044	0.08
+8650	10	0.015	0.04
+
+500		1	0.491	0.52
+600		1	0.723	0.76
+700		1	0.974	1.02
+750		1	1.092	1.14
+800		2	1.196	1.24
+850		2	1.282	1.34
+900		2	1.344	1.40
+950		2	1.379	1.42
+1000	3	1.393	1.44
+1050	3	1.377	1.42
+1100	3	1.344	1.40
+1150	3	1.300	1.34
+1200	3	1.241	1.28
+1250	3	1.186	1.24
+1300	3	1.113	1.16
+1400	3	0.986	1.02
+1500	3	0.867	0.90

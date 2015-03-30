@@ -1,0 +1,12 @@
+R = 1.487 kOhm +- 0.001/sqrt(12)
+C = 94.5 nF
+
+Versuch mit Oszi:
+
+Channel 1 (gelb): hochfrequentes Refernzsignal (3500 Hz)
+Channel 2 (blau): niedrigfrequentes Signal vom Funktionsgenerator (200 Hz)
+Channel 3 (lila): multipliziertes Signal vom Lock-In-Verstärker
+
+1. Bild, ALL0031: kein Filter
+2. Bild, ALL0032: Hochpass @ 1000 Hz
+3. Bild, ALL0033: Tiefpass @ 1000 Hz
