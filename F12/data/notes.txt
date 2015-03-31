@@ -12,3 +12,18 @@ Channel 3 (lila): multipliziertes Signal vom Lock-In-Verstärker
 3. Bild, ALL0033: Tiefpass @ 1000 Hz
 
 Verstärkungen: 500mV (werden auf 10V skaliert) ==> x20
+
+
+
+
+
+
+5.
+kurze Seite: 2.55 mm
+lange Seite: 3.00 mm
+Durchmesser: 2.9 mm
+
+==> Volumen: 18.33mm^3
+
+
+bei abhkuehlen_supra, ..._supra2: realteil Chi' gemessen
