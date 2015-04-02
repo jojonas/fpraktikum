@@ -1,0 +1,94 @@
+\documentclass{../Misc/MontavonLaTeX/Montavon}
+\usepackage{wasysym}
+\usepackage{multirow}
+\usepackage{isotope}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage{mathtools}
+\usepackage[biblabel]{cite}
+\usepackage[font=small,labelfont=bf]{caption}
+
+\usepackage{feynmp}
+\DeclareGraphicsRule{.1}{mps}{*}{}
+
+\newcommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\eqdef}{=\vcentcolon}
+
+\graphicspath {{out/}{bilder/}{data/}}
+\heads{RWTH Aachen \\ F.-Praktikum}{T01 \\ Teilchendetektoren und Strahlenschutz}{Jonas Lieb (Gruppe 20)\\ 23. März 2015} 
+\date{23. März 2015}
+
+\newcommand{\thirdwidth}{0.32\textwidth}
+\newcommand{\halfwidth}{0.48\textwidth}
+\newcommand{\fullwidth}{1.0\textwidth}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}\medskipamount
+\begin{document}
+
+\title{Fortgeschrittenenpraktikum \\ \quad \\ Protokoll zu den Versuchen über Teilchendetektoren und Strahlenschutz}
+\author{Jonas Lieb, 312136 \\ \emph{Gruppe 20} \\ \\  RWTH Aachen}
+\maketitle
+
+%\begin{abstract}
+%\end{abstract}
+\newpage
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+\newpage
+
+\section{Einleitung}
+\subsection{Theorie}
+\subsubsection{Strahlung und Strahlenschutz}
+In diesem Versuch werden die drei bekannten Arten von Strahlung untersucht: $\alpha$, $\beta$ und $\gamma$-Strahlung. Es wird die Absorption der Strahlung zwischen Quelle und Detektor gemessen und mit dem Literaturwert verglichen.
+
+Für Absorption von $\alpha$-Teilchen in Luft ($76 \unit{\%}$ Stickstoff, $23 \unit{\%}$ Sauerstoff, $\approx 1 \unit{\%}$ Argon) wird beschrieben durch
+\begin{align*}
+- \diff{E}{x} &= \kappa \rho \frac{Z}{A} \frac{z^2}{\beta^2} \left[\ln\left(\frac{2 m_e c^2 \gamma^2 \beta^2}{I}\right) \right] 
+\end{align*}
+Dabei ist $\kappa = 0.154 \unit{MeV cm^2 / g}$, $\rho = 1.293 \unit{kg/m^3}$ (Dichte von Luft)
+Für die Berechnung des mittleren $Z/A$ werden zuerst die Massenanteile von Stickstoff, Sauerstoff und Argon betrachtet. 
+Da bei diesen Elementen das Verhältnis zwischen Atommasse und Kernzahl in erster Näherung gleich ist (wegen $Z/A \approx 0.5$), kann für das Anzahlverhältnis das Massenverhältnis genutzt werden. 
+\[
+Z = 0.76 \cdot 7 + 0.23 \cot 8 + 0.01 \cdot 18 = 7.34
+\]
+
+
+\subsubsection{Verwendete Detektortypen}
+
+\section{Versuche}
+\subsection{Absorptionsschichtdicke des Halbleiterdetektors}
+\subsubsection{Aufbau und Durchführung}
+\subsubsection{Auswertung}
+\subsubsection{Ergebnis}
+
+\subsection{Absorptionsschichtdicke der Ionisationskammer}
+\subsubsection{Aufbau und Durchführung}
+\subsubsection{Auswertung}
+\subsubsection{Ergebnis}
+
+\subsection{$\beta$-Absorption mit dem Szintillationszähler}
+\subsubsection{Aufbau und Durchführung}
+\subsubsection{Auswertung}
+\subsubsection{Ergebnis}
+
+\subsection{$\gamma$-Absorption mit dem Szintillationszähler}
+\subsubsection{Aufbau und Durchführung}
+\subsubsection{Auswertung}
+\subsubsection{Ergebnis}
+
+\subsection{Strahlenschutz}
+\subsubsection{Aufbau und Durchführung}
+\subsubsection{Auswertung}
+\subsubsection{Ergebnis}
+
+\section{Zusammenfassung}
+
+\newpage
+\begin{thebibliography}{xxxx}
+\bibitem{anleitung} Praktikumsanleitung: Fortgeschrittenenpraktikum fur Bachelorstudenten der Physik, Versuch T1, Teilchendetektoren und Strahlenschutz. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/Anleitung_WS13-14.pdf} [Stand: 01.04.2015]
+\end{thebibliography}
+
+
+\end{document}
