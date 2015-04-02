@@ -1,0 +1,27 @@
+# Aluminium
+# Strontium-Quelle
+# Messzeit 10s 		mittlere Schiene für Aluscheiben
+# Leermessung 9 auf 10s
+# treshhold 8,9 Gain 32
+
+#Alu-Scheibennr		Counts
+0					150386		152479		152925		152840		153299		153493
+5					146631
+6					144385
+7					141057
+8					134514
+9					131735
+10					121824
+11					111040
+12					97784
+13					86438
+14					75555
+15					56277
+16					51075
+17					38954
+18					30708
+19					24397
+20					15027
+21					6833
+22					2048
+23					253
