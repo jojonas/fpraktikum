@@ -23,7 +23,7 @@ Peak3: (36,9+-0,05)cm, Differenz s.o.
 Dateinamen: RadiumPeak3Hinter (am Weitesten), -Drauf, -Vor (am Nächsten)
 
 Peak2: (36,2+-0,05)cm, Differenz und Dateinamen s.o.
-Peak3: (35,3+-0,05)cm, Differenz und Dateinamen s.o.
+Peak1: (35,3+-0,05)cm, Differenz und Dateinamen s.o.
 
 Abstände
 --------
