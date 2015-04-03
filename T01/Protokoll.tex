@@ -62,12 +62,12 @@ Im Versuch werden drei verschiedene Detektortypen eingesetzt:
 \subsubsection{Aufbau und Durchführung}
 In diesem Versuch wird das \isotope[226]{Ra}-Präparat mit dem Halbleiterdetektor untersucht. Das Präparat ist auf einem Verschiebetisch vor dem Halbleiterdetektor montiert. Die Distanz des Verschiebetisches zum Detektor wird mit einer Mikrometerschraube eingestellt und auf einem Maßband abgelesen, wobei nur die relative Änderung festgestellt werden kann, da der Nullpunkt arbiträr gewählt ist. Der Halbleiterdetektor ist mit einem Multichannelanalyzer verbunden, welcher die Messdaten über USB zum Programm \enquote{Genie 2000} überträgt, wo sie im \texttt{tka}-Format abgespeichert werden.
 
-Im ersten Versuchsteil wird das Radium-Spektrum aufgezeichnet. Dafür wird das Präparat auf die Distanz $34.95 \unit{cm}$ eingestellt, welches den nächstmöglichen Abstand zum Detektor darstellt. 
+Im ersten Versuchsteil wird das Radium-Spektrum aufgezeichnet. Dafür wird das Präparat auf die Distanz $35.0 \unit{cm}$ eingestellt, welches den nächstmöglichen Abstand zum Detektor darstellt. 
 Der Lower-Level-Diskriminator bleibt ausgeschaltet ($0$) und die Messzeit beträgt $120 \unit{s}$. Die Verstärkungseinstellungen (Gain) bleiben auf den voreingestellten Werten.
 
 Im zweiten Teil wird die Distanz des Präparates zum Detektor schrittweise erhöht und genau dann eine Aufnahme gemacht, wenn ein Peak nach manueller Begutachtung gerade aus dem Spektrum nach links herausgefahren ist, außerdem $(1.00 \pm 0.02) \unit{mm}$ davor und dahinter (Genauigkeit aufgrund der Mikrometerschraube). Da die gemessene Energie der Restenergie der Teilchen nach Passieren der Luft entspricht, werden die Peak-Energien mit Vergrößerung der Distanz geringer und sind daher in niedrigeren Kanälen des MCAs zu finden.
 
-Im letzten Versuchsteil wird erneut die gesamt mögliche Distanz vermessen und alle $0.5 \unit{cm}$ ein Spektrum aufgenommen.
+Im letzten Versuchsteil wird erneut die gesamt mögliche Distanz vermessen und alle $0.5 \unit{cm}$ ein Spektrum aufgenommen. Die Distanz wird dabei auf dem Maßband abgelesen, ihr Fehler beträgt nach manueller Inspektion $0.05 \unit{cm}$.
 
 \subsubsection{Rohdaten}
 
@@ -75,7 +75,7 @@ Im letzten Versuchsteil wird erneut die gesamt mögliche Distanz vermessen und a
 \centering
 \includegraphics[width=\fullwidth]{radium_close}
 \includegraphics[width=\fullwidth]{radium_close2}
-\caption{Rohdaten des ersten Versuchsteils, aufgenommen bei der Distanz $34.95 \unit{cm}$. Da auf der oberen Abbildung ein hoher Peak das Spektrum stark dominiert und zusätzlich durch den Verstärker nur die unteren Kanäle genutzt werden können, zeigt das untere Spektrum einen passenden Ausschnitt.}
+\caption{Rohdaten des ersten Versuchsteils, aufgenommen bei der Distanz $35.0 \unit{cm}$. Da auf der oberen Abbildung ein hoher Peak das Spektrum stark dominiert und zusätzlich durch den Verstärker nur die unteren Kanäle genutzt werden können, zeigt das untere Spektrum einen passenden Ausschnitt.}
 \label{fig:radium_close}
 \end{figure}
 
@@ -141,7 +141,7 @@ $7.69 \unit{MeV}$ & \isotope[214]{Po} $\rightarrow$ \isotope[210]{Pb} & $7.18 \u
 \end{figure}
 
 \paragraph{1. Diskussion des Spektrums.} 
-Die erwarten Peakenergien und Reichweiten sind in Tabelle \ref{tbl:radium_theo} dargestellt. In Abbildung \ref{fig:radium_theo} findet sich zudem ein Vergleich zwischen einer theoretischen Vorhersage. Dabei ist die geplottete Funktion eine Summe mehrerer Gaußkurven ($f(x) = A \exp\left(-(x-\mu)^2 / 2 \sigma^2 \right)$), deren Mittelwerte $\mu$ den bekannten Energien entsprechen und deren Breite mit $\sigma = 0.07 \sqrt{E}$ geschätzt ist. Die Amplitude der Gaußkurven ist für alle Peaks gleich ($A = 1$) angenommen. Es lässt sich erkennen, dass sich bei endlicher Peakbreite die Peaks bei $5.307 \unit{MeV}$ und $5.590 \unit{MeV}$  zu einem einzelnen Peak addieren. Vermutlich ist dies auch in der Messung bei Kanal $\approx 550$ der Fall. 
+Die erwarten Peakenergien und Reichweiten (nach NIST \cite{nist_alpha}, \emph{Projected Range}) sind in Tabelle \ref{tbl:radium_theo} dargestellt. In Abbildung \ref{fig:radium_theo} findet sich zudem ein Vergleich zwischen einer theoretischen Vorhersage. Dabei ist die geplottete Funktion eine Summe mehrerer Gaußkurven ($f(x) = A \exp\left(-(x-\mu)^2 / 2 \sigma^2 \right)$), deren Mittelwerte $\mu$ den bekannten Energien entsprechen und deren Breite mit $\sigma = 0.07 \sqrt{E}$ geschätzt ist. Die Amplitude der Gaußkurven ist für alle Peaks gleich ($A = 1$) angenommen. Es lässt sich erkennen, dass sich bei endlicher Peakbreite die Peaks bei $5.307 \unit{MeV}$ und $5.590 \unit{MeV}$  zu einem einzelnen Peak addieren. Vermutlich ist dies auch in der Messung bei Kanal $\approx 550$ der Fall. 
 Außerdem lässt sich in der Messung ein starker Hintergrund feststellen, der einen Peak bei $E \rightarrow 0$ erzeugt. Dieser Hintergrundpeak dominiert das Spektrum und musste daher vor der Darstellung entfernt werden.
 
 Insgesamt lassen sich mit dieser Interpretation alle erwarteten Peaks erkennen. Da diese Feststellung allerdings nicht während der Versuchsdurchführung getroffen wurde, sondern erst in der Auswertung, wird er bei der Abschätzung der Reichweite ausgelassen.
@@ -168,12 +168,12 @@ $7.69 \unit{MeV}$ & $7.18 \unit{cm}$ & $(4.0 \pm 0.3) \unit{cm}$ & $(3.2 \pm 0.3
 
 Daraus ergibt sich ein fehlergewichteter Mittelwert für das Luftäquivalent der Dicke des zusätzlich zum gemessenen Abstand vorhandenen absorbierenden Materials zwischen Quelle und Detektor:
 \[
-	x = (3.17 \pm 0.17) \unit{cm}
+	x_0 = (3.17 \pm 0.17) \unit{cm}
 \]
 
 
 \paragraph{3. Erstellung einer Kalibrationskurve.}
-Tabelle \ref{tbl:radium_kalibration} zeigt die angenommene Peakenergien der drei vermessenen Peaks. Die Kanalnummern und ihre Fehler werden per Hand abgeschätzt. Für die Berechnung der Energie am Detektor wurden die Werte der NIST Datenbank \cite{nist_alpha} und die Näherung $\Delta E = \diff{E}{x} \cdot x$ benutzt, wobei $x = (3.17 \pm 0.17) \unit{cm}$ das im vorherigen Versuchsteil bestimmte Luftäquivalent ist.
+Tabelle \ref{tbl:radium_kalibration} zeigt die angenommene Peakenergien der drei vermessenen Peaks. Die Kanalnummern und ihre Fehler werden per Hand abgeschätzt. Für die Berechnung der Energie am Detektor wurden die Werte der NIST Datenbank \cite{nist_alpha} und die Näherung $\Delta E = \diff{E}{x} \cdot x$ benutzt, wobei $x_0 = (3.17 \pm 0.17) \unit{cm}$ das im vorherigen Versuchsteil bestimmte Luftäquivalent ist.
 
 \begin{table}[htbp]
 \centering
@@ -202,32 +202,45 @@ Eine Geradenanpassung durch die drei Werte ist in Abbildung \ref{fig:radium_kali
 \[
 	E(n) = (2.447 \pm 0.025) \e{-3} \unit{MeV} \cdot n + (3.356 \pm 0.027) \unit{MeV}
 \]
+Hierbei fällt schon auf, dass ein recht großer Offset von $(3.356 \pm 0.027) \unit{MeV}$ ermittelt wurde, obwohl für MCAs üblicherweise ein Offset von $\approx 0$ erwartet wird. 
 
-\paragraph{4. Alternative Methode zu Erstellung einer Kalibrationskurve. }
+\paragraph{4. Alternative Methode zu Erstellung einer Kalibrationskurve.}
 
 \begin{table}[htbp]
 \centerline{\begin{minipage}{1.2\textwidth}
+\centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 Reichweite & Messdistanz & Distanz mit Setup & Restreichw. & Restenergie \\
 \hline
-$(3.520 \pm 0.010) \unit{cm}$ & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) \unit{cm}$ & $(0.35 \pm 0.18) \unit{cm}$ & $(0.6 \pm 0.4) \unit{MeV}$ \\
-$(4.990 \pm 0.010) \unit{cm}$ & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) \unit{cm}$ & $(1.82 \pm 0.18) \unit{cm}$ & $(3.08 \pm 0.23) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) \unit{cm}$ & $(4.01 \pm 0.18) \unit{cm}$ & $(5.31 \pm 0.16) \unit{MeV}$ \\
-$(4.990 \pm 0.010) \unit{cm}$ & $(35.50 \pm 0.05) \unit{cm}$ & $(3.67 \pm 0.18) \unit{cm}$ & $(1.32 \pm 0.18) \unit{cm}$ & $(2.41 \pm 0.27) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(35.50 \pm 0.05) \unit{cm}$ & $(3.67 \pm 0.18) \unit{cm}$ & $(3.51 \pm 0.18) \unit{cm}$ & $(4.87 \pm 0.17) \unit{MeV}$ \\
-$(4.990 \pm 0.010) \unit{cm}$ & $(36.00 \pm 0.05) \unit{cm}$ & $(4.17 \pm 0.18) \unit{cm}$ & $(0.82 \pm 0.18) \unit{cm}$ & $(1.58 \pm 0.35) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(36.00 \pm 0.05) \unit{cm}$ & $(4.17 \pm 0.18) \unit{cm}$ & $(3.01 \pm 0.18) \unit{cm}$ & $(4.39 \pm 0.18) \unit{MeV}$ \\
-$(4.990 \pm 0.010) \unit{cm}$ & $(36.50 \pm 0.05) \unit{cm}$ & $(4.67 \pm 0.18) \unit{cm}$ & $(0.32 \pm 0.18) \unit{cm}$ & $(0.5 \pm 0.4) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(36.50 \pm 0.05) \unit{cm}$ & $(4.67 \pm 0.18) \unit{cm}$ & $(2.51 \pm 0.18) \unit{cm}$ & $(3.88 \pm 0.19) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(37.00 \pm 0.05) \unit{cm}$ & $(5.17 \pm 0.18) \unit{cm}$ & $(2.01 \pm 0.18) \unit{cm}$ & $(3.31 \pm 0.22) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(37.50 \pm 0.05) \unit{cm}$ & $(5.67 \pm 0.18) \unit{cm}$ & $(1.51 \pm 0.18) \unit{cm}$ & $(2.67 \pm 0.25) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(38.00 \pm 0.05) \unit{cm}$ & $(6.17 \pm 0.18) \unit{cm}$ & $(1.01 \pm 0.18) \unit{cm}$ & $(1.92 \pm 0.31) \unit{MeV}$ \\
-$(7.180 \pm 0.010) \unit{cm}$ & $(38.50 \pm 0.05) \unit{cm}$ & $(6.67 \pm 0.18) \unit{cm}$ & $(0.51 \pm 0.18) \unit{cm}$ & $(0.9 \pm 0.4) \unit{MeV}$ \\
+$(3.520 \pm 0.010) \unit{cm}$ & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) \unit{cm}$ & $(0.35 \pm 0.18) \unit{cm}$ & $(0.6 \pm 0.4) \unit{MeV}$ \\ \hline
+\multirow{4}{*}{$(4.990 \pm 0.010) \unit{cm}$} & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) \unit{cm}$ & $(1.82 \pm 0.18) \unit{cm}$ & $(3.08 \pm 0.23) \unit{MeV}$ \\
+ & $(35.50 \pm 0.05) \unit{cm}$ & $(3.67 \pm 0.18) \unit{cm}$ & $(1.32 \pm 0.18) \unit{cm}$ & $(2.41 \pm 0.27) \unit{MeV}$ \\
+ & $(36.00 \pm 0.05) \unit{cm}$ & $(4.17 \pm 0.18) \unit{cm}$ & $(0.82 \pm 0.18) \unit{cm}$ & $(1.58 \pm 0.35) \unit{MeV}$ \\
+ & $(36.50 \pm 0.05) \unit{cm}$ & $(4.67 \pm 0.18) \unit{cm}$ & $(0.32 \pm 0.18) \unit{cm}$ & $(0.5 \pm 0.4) \unit{MeV}$ \\ \hline
+\multirow{8}{*}{$(7.180 \pm 0.010) \unit{cm}$} & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) \unit{cm}$ & $(4.01 \pm 0.18) \unit{cm}$ & $(5.31 \pm 0.16) \unit{MeV}$ \\
+ & $(35.50 \pm 0.05) \unit{cm}$ & $(3.67 \pm 0.18) \unit{cm}$ & $(3.51 \pm 0.18) \unit{cm}$ & $(4.87 \pm 0.17) \unit{MeV}$ \\
+ & $(36.00 \pm 0.05) \unit{cm}$ & $(4.17 \pm 0.18) \unit{cm}$ & $(3.01 \pm 0.18) \unit{cm}$ & $(4.39 \pm 0.18) \unit{MeV}$ \\
+ & $(36.50 \pm 0.05) \unit{cm}$ & $(4.67 \pm 0.18) \unit{cm}$ & $(2.51 \pm 0.18) \unit{cm}$ & $(3.88 \pm 0.19) \unit{MeV}$ \\
+ & $(37.00 \pm 0.05) \unit{cm}$ & $(5.17 \pm 0.18) \unit{cm}$ & $(2.01 \pm 0.18) \unit{cm}$ & $(3.31 \pm 0.22) \unit{MeV}$ \\
+ & $(37.50 \pm 0.05) \unit{cm}$ & $(5.67 \pm 0.18) \unit{cm}$ & $(1.51 \pm 0.18) \unit{cm}$ & $(2.67 \pm 0.25) \unit{MeV}$ \\
+ & $(38.00 \pm 0.05) \unit{cm}$ & $(6.17 \pm 0.18) \unit{cm}$ & $(1.01 \pm 0.18) \unit{cm}$ & $(1.92 \pm 0.31) \unit{MeV}$ \\
+ & $(38.50 \pm 0.05) \unit{cm}$ & $(6.67 \pm 0.18) \unit{cm}$ & $(0.51 \pm 0.18) \unit{cm}$ & $(0.9 \pm 0.4) \unit{MeV}$ \\
 \hline
 \end{tabular}
 \end{minipage}}
+\caption{Restreichweiten und -Energien der Alphateilchen nach passieren der Messdistanz. Für die Fehlerabschätzung auf die Energie wird $\sigma_E = \max\left(|E(x) - E(x-\sigma_x)|,|E(x) - E(x+\sigma_x)|\right)$ verwendet.}
+\label{tbl:radium_restreichweiten}
 \end{table}
+
+In diesem Versuchsteil werden die Restenergien der $\alpha$-Teilchen nach passieren verschiedener Distanzen mit den Kanalwerten der Peaks verglichen. 
+Zur Berechnung der Restreichweite wird die auf der Skala abgelesene Messdistanz zuerst mit dem Ergebnis aus Versuchsteil 2 umgerechnet, sodass z.B. $(35.00 \pm 0.05) \unit{cm}$ auf $(3.17 \pm 0.18) \unit{cm}$ abgebildet wird. Danach wird dieser Wert von der erwarteten Reichweite subtrahiert, sodass die Restreichweite feststeht. Über die Tabellen des \emph{National Institute of Standards and Technology} für Luft \cite{nist_alpha} wird nun einer Restreichweite $x$ einer Energie $E(x)$ zugeordnet. Dabei wird die Energie eines Teilchens gesucht, das genau die Restreichweite als Reichweite besitzt. Um zwischen Werten zu interpolieren, wird kubische Interpolation benutzt. 
+
+Die größten Fehlerquellen in diesem Versuchsteil sind die Vermessung der Distanz ($\sigma = 0.05 \unit{cm}$) und der systematische Fehler des Ergebnis des 2. Versuchsteils ($\sigma = 0.17 \unit{cm}$). Zur Berechnung des Fehlers auf die Restreichweite $\sigma_x$ wird Gaußsche Fehlerfortpflanzung verwendet. Um diesen Fehler nun auf die Restenergie fortzupflanzen, werden in der NIST Datenbank ebenfalls die Werte für $E(x+\sigma_x)$ und $E(x-\sigma_x)$ berechnet und das Maximum ihrer Abweichung zu $E(x)$ als angegebener Fehler benutzt:
+\[
+	\sigma_E = \max\left(|E(x)-E(x+\sigma_x)|, |E(x)-E(x-\sigma_x)|\right)
+\]
+
 
 \begin{table}[htbp]
 \centering
@@ -235,34 +248,209 @@ $(7.180 \pm 0.010) \unit{cm}$ & $(38.50 \pm 0.05) \unit{cm}$ & $(6.67 \pm 0.18) 
 \hline
 Restenergie & Kanal \\
 \hline
-$(0.6 \pm 0.4) \unit{MeV}$ & $220 \pm 20$ \\
-$(3.08 \pm 0.23) \unit{MeV}$ & $780 \pm 20$ \\
-$(5.31 \pm 0.16) \unit{MeV}$ & $1460 \pm 20$ \\
-$(2.41 \pm 0.27) \unit{MeV}$ & $620 \pm 20$ \\
-$(4.87 \pm 0.17) \unit{MeV}$ & $1340 \pm 20$ \\
-$(1.58 \pm 0.35) \unit{MeV}$ & $450 \pm 20$ \\
-$(4.39 \pm 0.18) \unit{MeV}$ & $1260 \pm 20$ \\
 $(0.5 \pm 0.4) \unit{MeV}$ & $150 \pm 10$ \\
-$(3.88 \pm 0.19) \unit{MeV}$ & $1170 \pm 20$ \\
-$(3.31 \pm 0.22) \unit{MeV}$ & $990 \pm 20$ \\
-$(2.67 \pm 0.25) \unit{MeV}$ & $820 \pm 20$ \\
-$(1.92 \pm 0.31) \unit{MeV}$ & $620 \pm 20$ \\
+$(0.6 \pm 0.4) \unit{MeV}$ & $220 \pm 20$ \\
 $(0.9 \pm 0.4) \unit{MeV}$ & $390 \pm 30$ \\
+$(1.58 \pm 0.35) \unit{MeV}$ & $450 \pm 20$ \\
+$(3.08 \pm 0.23) \unit{MeV}$ & $780 \pm 20$ \\
+$(1.92 \pm 0.31) \unit{MeV}$ & $620 \pm 20$ \\
+$(2.41 \pm 0.27) \unit{MeV}$ & $620 \pm 20$ \\
+$(2.67 \pm 0.25) \unit{MeV}$ & $820 \pm 20$ \\
+$(3.31 \pm 0.22) \unit{MeV}$ & $990 \pm 20$ \\
+$(3.88 \pm 0.19) \unit{MeV}$ & $1170 \pm 20$ \\
+$(4.39 \pm 0.18) \unit{MeV}$ & $1260 \pm 20$ \\
+$(4.87 \pm 0.17) \unit{MeV}$ & $1340 \pm 20$ \\
+$(5.31 \pm 0.16) \unit{MeV}$ & $1460 \pm 20$ \\
 \hline
 \end{tabular}
+\caption{Restenergien aus \ref{tbl:radium_restreichweiten}, zusammen mit abgelesenen Kanalnummern. Die Fehler der Kanäle wurden manuell geschätzt. Die Tabelle ist sortiert nach der Kanalnummer.}
+\label{tbl:radium_restreichweiten_fit}
 \end{table}
 
 \begin{figure}[htbp]
 \includegraphics[width=\halfwidth]{radium_calib2_fit}
 \includegraphics[width=\halfwidth]{radium_calib2_residual}
+\caption{Lineare Anpassung zu den Daten aus Tabelle \ref{tbl:radium_restreichweiten_fit}. Auf der rechten Seite befindet sich der Residuenplot, $\chi^2 / \textrm{ndf} = 0.74$.}
+\label{fig:radium_restreichweiten_fit}
 \end{figure}
 
+Den Restenergien werden nun die abgelesenen Peak-Kanäle mit ihren Fehlern zugeordnet (Tabelle \ref{tbl:radium_restreichweiten_fit}) und eine lineare Regression durchgeführt (Abbildung \ref{fig:radium_restreichweiten_fit}). Die Fehler der Parameter werden dem Regressionsalgorithmus entnommen.
+Daraus ergibt sich folgende Beziehung zwischen Energie und Kanal:
+\[
+	E(n) = (3.69 \pm 0.19) \e{-3} \unit{MeV} \cdot n + (-0.18 \pm 0.21) \unit{MeV}
+\]
+
+Dieses Ergebnis unterscheidet sich von dem aus Versuchsteil 3 (Steigung $(2.447 \pm 0.025) \e{-3} \unit{MeV}$, Offset $(3.356 \pm 0.027) \unit{MeV}$) deutlich. Wie ursprünglich erwartet, ergibt sich in diesem Versuchsteil ein Offset von $\approx 0$. Aufgrund der größeren Statistik (13 statt nur 3 Messpunkte) liegt diese Kalibrationskurve vermutlich näher an der realen Kalibration des MCAs.
+
+Ein möglicher Grund für die Fehleinschätzung in Versuchsteil 3 ist die Näherung $\Delta E = \diff{E}{x} \cdot x$. Wird anstelle der linearen Näherung integriert, so ergibt sich eine größere Energiedifferenz, was zu einer geringeren Energie am Detektor führt. Dies ist plausibel, da in Versuchsteil 3 offensichtlich zu hohe Energien angesetzt wurden.
+
+\paragraph{5. Bestimmung der mittleren Reichweite.}
+Da ausschließlich die Grenzen des höchstenergetischsten Peaks (\isotope[214]{Po}) eindeutig erkennbar sind, wird im Folgenden nur dieser betrachtet.
+
+Das Integral dieses Peaks wird durch die Summe der Binwerte gebildet. Die Grenzen dieser Summe $\textrm{lower}$ und $\textrm{upper}$ sind dabei manuell gewählt. Als Fehler auf jeden einzelnen Binwert $x_n$ wird die Näherung $\sigma_n = \sqrt{x_n+1}$ gewählt, sodass der Fehler auf das Integral ist
+\[
+	\sigma = \sqrt{\sum_{n=\textrm{lower}}^\textrm{upper} \sigma_n^2} = \sqrt{\sum_{n=\textrm{lower}}^\textrm{upper} \sqrt{x_n+1}^2} = \sqrt{\sum_{n=\textrm{lower}}^\textrm{upper} x_n+1} 
+\]
+
+\begin{table}[htbp]
+\centerline{\begin{minipage}{1.2\textwidth}
+\centering
+\begin{tabular}{|c|c|c||c|c|}
+\hline
+Distanz & $\textrm{lower}$ & $\textrm{upper}$ & Summe $I$ & korrigiert $n$ \\
+\hline
+$(3.17 \pm 0.18) \unit{cm}$ & 1100 & 1800 &  $\left(2.632 \pm 0.005\right) \times 10^{5}$ &  $\left(2.64 \pm 0.30\right) \times 10^{6} \unit{cm^2}$ \\
+$(3.67 \pm 0.18) \unit{cm}$ & 1000 & 1700 &  $\left(2.095 \pm 0.005\right) \times 10^{5}$ &  $\left(2.82 \pm 0.27\right) \times 10^{6} \unit{cm^2}$ \\
+$(4.17 \pm 0.18) \unit{cm}$ & 900 & 1600 &  $\left(1.506 \pm 0.004\right) \times 10^{5}$ &  $\left(2.62 \pm 0.22\right) \times 10^{6} \unit{cm^2}$ \\
+$(4.67 \pm 0.18) \unit{cm}$ & 800 & 1500 &  $\left(1.0578 \pm 0.0033\right) \times 10^{5}$ &  $\left(2.31 \pm 0.18\right) \times 10^{6} \unit{cm^2}$ \\
+$(5.17 \pm 0.18) \unit{cm}$ & 600 & 1400 &  $\left(7.842 \pm 0.028\right) \times 10^{4}$ &  $\left(2.10 \pm 0.14\right) \times 10^{6} \unit{cm^2}$ \\
+$(5.67 \pm 0.18) \unit{cm}$ & 500 & 1200 &  $\left(5.902 \pm 0.024\right) \times 10^{4}$ &  $\left(1.90 \pm 0.12\right) \times 10^{6} \unit{cm^2}$ \\
+$(6.17 \pm 0.18) \unit{cm}$ & 300 & 1000 &  $\left(4.568 \pm 0.022\right) \times 10^{4}$ &  $\left(1.74 \pm 0.10\right) \times 10^{6} \unit{cm^2}$ \\
+$(6.67 \pm 0.18) \unit{cm}$ & 100 & 700 &  $\left(3.497 \pm 0.019\right) \times 10^{4}$ &  $\left(1.56 \pm 0.08\right) \times 10^{6} \unit{cm^2}$ \\
+\hline
+\end{tabular}
+\end{minipage}}
+\caption{Integrale über den höchstenergetischen Peak bei verschiedenen Distanzen.}
+\label{tbl:radium_integrale}
+\end{table}
+
+Weil die Quelle isotrop abstrahlt, fällt die Anzahl der Ereignisse pro Fläche quadratisch ab. Dies ist eine Näherung, die aus der Kleinwinkelnäherung folgt.
+Um diesem Verlust gerecht zu werden, ist eine Raumwinkelkorrektur erforderlich:
+\[
+	I \propto \frac{n}{r^2} \Rightarrow n \propto I r^2
+\]
+Dabei ist $I$ die gemessene Intensität (die Summe der Ereignisse) und $n$ die Anzahl der Werte bei dieser Distanz, wenn der Detektor den gesamten Raumwinkel abdecken würde.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{radium_range}
+\caption{Plot der Reichweite der Alpha-Teilchen gegen die korrigierte Anzahl.}
+\label{fig:radium_range}
+\end{figure}
+
+Eine Auftragung der korrigierten Daten aus Tabelle \ref{tbl:radium_integrale} befindet sich in Abbildung \ref{fig:radium_range}. Um die mittlere Reichweite zu bestimmen, werden die Daten zuerst mithilfe der ersten drei Messpunkte normiert, indem der Mittelwert der drei Messpunkte als Intensität $1$ festgelegt wird. Dann wird eine Geradenanpassung durchgeführt (Abbildung \ref{fig:radium_range_fit}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{radium_range_fit}
+\includegraphics[width=\halfwidth]{radium_range_residual}
+\caption{Plot der Reichweite der Alpha-Teilchen gegen die korrigierte Anzahl.}
+\label{fig:radium_range_fit}
+\end{figure}
+
+Über die Steigung $m$, den Offset $b$ und deren Fehler kann nun die mittlere Reichweite berechnet werden:
+\[
+	x = \frac{0.5-b}{a} = \frac{0.5 - (1.60 \pm 0.15)}{(-0.153 \pm 0.025) \unit{1/cm}} = (7.1 \pm the 1.5) \unit{cm}
+\]
+Dieses Ergebnis stimmt sehr gut mit dem Literaturwert (Tabelle \ref{tbl:radium_theo}) von $7.18 \unit{cm}$ überein.
+
 \subsubsection{Ergebnis}
+
+In diesem ersten Versuchsteil wurde ein Radium-Spektrum diskutiert. Mithilfe der vermessenen Reichweite wurde das Luftäquivalent des zusätzlich vorhandenen absorbierenden Materials mit $(3.17 \pm 0.17) \unit{cm}$ bestimmt. Es wurden zwei verschiedene Verfahren zur Kalibrierung des MCAs vorgestellt. Das erste Verfahren, was nur ein Spektrum betrachtet, ergab eine Kalibrierungsfunktion mit einem zu großen positiven Offset. Das zweite Verfahren nutzte mehrere Distanzen, so war es möglich eine sehr genaue Kalibrierung durchzuführen. Im letzten Versuchsteil wurde die Reichweite der $\alpha$-Teilchen des \isotope[214]{Po} Peaks mit $7.69 \unit{MeV}$ auf $(7.1 \pm 1.5) \unit{cm}$ bestimmt.
 
 \subsection{Absorptionsschichtdicke der Ionisationskammer}
 \subsubsection{Aufbau und Durchführung}
+In diesem Versuchsteil wird die \isotope[226]{Ra}-Probe mit einer Ionisationskammer untersucht. Dafür wird statt des Halbleiterdetektors die Ionisationskammer auf der Messbank montiert. Erneut ist der Abstand zwischen Präparat und Detektor über eine Mikrometerschraube einstellbar und die relative Änderung kann auf einem Maßband abgelesen werden.
+
+Die Ionisationskammer wird über eine Hochspannungsquelle mit $1.0 \unit{kV}$ angeschlossen. Der Ausgang ist mit einem Verstärker verbunden. Dieser wandelt neben der Verstärkung die gemessenen Ströme in Spannungen um und ist so eingestellt, dass $10 \unit{nA}$ auf $10 \unit{mV}$ verstärkt werden. Die verstärkte Spannung wird mit einem Multimeter abgelesen. Über die Schwankungen auf dem Digitaldisplay des Multimeters werden die Fehler der Spannungsmessung bestimmt.
+
+Schrittweise wird nun die Messdistanz von $39.0 \unit{cm}$ (nächstmögliche Distanz) auf $48 \unit{cm}$ in $0.5 \unit{cm}$-Schritten erhöht. 
+
+\subsubsection{Rohdaten}
+\begin{table}[htbp]
+\begin{minipage}{\halfwidth}
+\begin{tabular}{|c|c|}
+\hline
+Distanz & Spannung \\
+\hline
+$(48.00 \pm 0.05) \unit{cm}$ & $(-5.0 \pm 3.0) \unit{mV}$ \\
+$(47.50 \pm 0.05) \unit{cm}$ & $(-3.0 \pm 1.0) \unit{mV}$ \\
+$(47.00 \pm 0.05) \unit{cm}$ & $(3.3 \pm 1.0) \unit{mV}$ \\
+$(46.50 \pm 0.05) \unit{cm}$ & $(4.6 \pm 1.0) \unit{mV}$ \\
+$(46.00 \pm 0.05) \unit{cm}$ & $(6.5 \pm 2.0) \unit{mV}$ \\
+$(45.50 \pm 0.05) \unit{cm}$ & $(6.0 \pm 1.0) \unit{mV}$ \\
+$(45.00 \pm 0.05) \unit{cm}$ & $(5.0 \pm 1.0) \unit{mV}$ \\
+$(44.50 \pm 0.05) \unit{cm}$ & $(5.8 \pm 1.0) \unit{mV}$ \\
+$(44.00 \pm 0.05) \unit{cm}$ & $(4.5 \pm 1.0) \unit{mV}$ \\
+$(43.50 \pm 0.05) \unit{cm}$ & $(4.5 \pm 1.0) \unit{mV}$ \\
+$(43.00 \pm 0.05) \unit{cm}$ & $(21.6 \pm 1.0) \unit{mV}$ \\
+$(42.50 \pm 0.05) \unit{cm}$ & $(31.0 \pm 1.0) \unit{mV}$ \\
+$(42.00 \pm 0.05) \unit{cm}$ & $(28.5 \pm 1.0) \unit{mV}$ \\
+$(41.50 \pm 0.05) \unit{cm}$ & $(20.2 \pm 1.0) \unit{mV}$ \\
+$(41.00 \pm 0.05) \unit{cm}$ & $(32.0 \pm 1.0) \unit{mV}$ \\
+$(40.50 \pm 0.05) \unit{cm}$ & $(77.5 \pm 1.0) \unit{mV}$ \\
+$(40.00 \pm 0.05) \unit{cm}$ & $(144.0 \pm 3.0) \unit{mV}$ \\
+$(39.50 \pm 0.05) \unit{cm}$ & $(196.0 \pm 2.0) \unit{mV}$ \\
+$(39.00 \pm 0.05) \unit{cm}$ & $(199.0 \pm 2.0) \unit{mV}$ \\
+\hline
+\end{tabular}
+\end{minipage}
+\begin{minipage}{\halfwidth}
+\centering
+\includegraphics[width=\fullwidth]{radium_ionisation_raw}
+\end{minipage}
+\caption{Rohdaten der Vermessung des \isotope[226]{Ra}-Präparates mit der Ionisationskammer. Die verstärkte Spannung ist auf der vertikalen Achse aufgetragen. Die horizontale Achse entspricht dem Entfernungswert, der auf der arbiträren Skala des Maßbandes abgelesen wurde.}
+\label{fig:radium_ionisation_raw}
+\end{table}
+
+Die Rohdaten sind in tabellarischer und graphischer Form in Abbildung \ref{fig:radium_ionisation_raw} dargestellt. Die Fehler auf die Spannung wurden den Multimetermesswerten entnommen, die Fehler auf die Distanz entstammen der Ablesungsgenauigkeit auf des Maßbandes.
+
+Auffällig ist, dass die Spannung bei großen Distanzen negativ ist. Dies liegt an einer ungenau durchgeführten Offseteinstellung. 
+
 \subsubsection{Auswertung}
+\paragraph{1. Diskussion des Graphen.}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{radium_ionisation}
+\caption{Auftragung des gemessenen Stroms gegen Distanz. Die Distanz wurde korrigiert, sodass der nächstmögliche Abstand, $39.0 \unit{cm}$ dem Nullpunkt $0$ entspricht.}
+\label{fig:radium_ionisation}
+\end{figure}
+
+Zuerst werden die Spannungen in Ströme umgerechnet. Dabei entspricht eine Spannung von $1 \unit{mV}$ der Stromstärke von $10 \unit{nA}$. Diese Daten sind in Abbildung \ref{fig:radium_ionisation} aufgetragen. Es lassen sich mehrere Plateaus erkennen. Diese entsprechen den Energiebereichen zwischen den Peaks, bei denen die Anzahl der $\alpha$-Teilchen konstant bleibt. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{radium_ionisation_diff}
+\caption{Auftragung der Änderung des Stromes $- \diff{I}{x}$ gegen die Distanz $x$. Dort, wo die Änderung des Stromes groß ist, ist gerade die Reichweite eines Peaks erreicht, deshalb ist in diesem Plot das Energiespektrum erkennbar.}
+\label{fig:radium_ionisation_diff}
+\end{figure}
+
+Besonders deutlich wird dies, wenn man die Änderung des Stromes $- \diff{I}{x}$ gegen $x$ aufträgt (Abbildung \ref{fig:radium_ionisation_diff}). Eine hohe Änderung $- \diff{I}{x}$ bedeutet, dass gerade bei dieser Distanz eine Reichweite des entsprechenden Peaks erreicht ist. Die endliche Breite der Peaks kommt daher, dass der Energieverlust von $\alpha$-Teilchen auch einem statistischen Prozess unterliegt.
+
+\paragraph{2. Bestimmung der Absorptionsschichtdicke.}
+Da die Reichweite der \isotope[214]{Po}-Teilchen $7.18 \unit{cm}$ beträgt, kommt die Stromänderung bei $9 \unit{cm}$ nicht als entsprecheder Kandidat in Frage. Daher wird zur Bestimmung der Reichweite die Änderung bei $4$ - $4.5 \unit{cm}$ benutzt. Aufgrund der geringen Statistik kann der genaue Abstand nur schlecht abgeschätzt werden, eine manuelle Abschätzung ergibt $(4.25 \pm 0.25) \unit{cm}$. 
+Nach Abzug von der vorhergesagten Reichweite von $7.18 \unit{cm}$ ergibt dies für das Luftäquivalent der Dicke des zusätzlich zum gemessenen Abstand vorhandenen absorbierenden Materials zwischen Quelle und Detektor einen Wert von
+\[
+	x_0 = (2.93 \pm 0.25) \unit{cm}
+\]
+Dabei wurde der Fehler auf den Literaturwert vernachlässigt, da er deutlich kleiner als der Messfehler des Abstandes ist.
+
+\paragraph{3. Bestimmung der mittleren Reichweite.}
+Zur Bestimmung der mittleren Reichweite wird eine lineare Anpassung durch die drei Punkte bei $3.5 \unit{cm}$, $4.0 \unit{cm}$ und $4.5 \unit{cm}$ durchgeführt, da $3.5 \unit{cm}$ noch Teil des Plateaus ist und bei $4.5 \unit{cm}$ keine Polonium-Alphateilchen den Detektor erreichen. Vorher werden diese Werte jedoch um den im vorherigen Versuchsteil bestimmten Wert $x_0$ translatiert, sodass sie nun bei $(6.42 \pm 0.25) \unit{cm}$, $(6.92 \pm 0.25) \unit{cm}$ und $(7.42 \pm 0.25) \unit{cm}$ liegen. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{radium_ionisation_po_fit}
+\includegraphics[width=\halfwidth]{radium_ionisation_po_residual}
+\caption{Lineare Anpassung zur Bestimmung der $\alpha$-Reichweite mithilfe der Messergebnisse der Ionisationskammer. Es wurden nur diese drei Datenpunkte angepasst, da $3.5 \unit{cm}$ noch Teil des Plateaus ist und bei $4.5 \unit{cm}$ keine Polonium-Alphateilchen den Detektor erreichen. Diese wurden um $x_0$ translatiert, sodass sie bei ca. $6.42$, $6.92$, $7.42 \unit{cm}$ liegen.}
+\label{fig:radium_range2_fit}
+\end{figure}
+
+Diese Anpassung ist in Abbildung \ref{fig:radium_range2_fit} zu sehen. Aus dem Ergebnis kann erneut die Reichweite berechnet werden mit
+\[
+	x = \frac{(17.8 \pm 0.7) \unit{nA} - (200 \pm 70) \unit{nA}}{(-26.5 \pm 9.5) \unit{nA/cm}} = (7.0 \pm 3.5) \unit{cm}
+\]
+Dabei entsprechen $(17.8 \pm 0.7) \unit{nA}$ der halben Intensität.
+
+\paragraph{4. Vergleich mit der Halbleiter-Messung.}
+Die Absorptionsschicht der Detektoren ist selbstverständlich unterschiedlich, da sie unterschiedlich gebaut sind. Jedoch lässt sich erkennen, dass beide Werte der gleichen Größenordnung von $\approx 3 \unit{cm}$ sind. 
+Die Bestimmung der mittleren Reichweite war mit der Ionisationskammer deutlich ungenauer als mit dem Halbleiterdetektor, jedoch stimmen auch diese Werte innerhalb ihrer Fehler gut mit dem Literaturwert von $7.18 \unit{cm}$ überein. 
+
 \subsubsection{Ergebnis}
+Die Messung mit der Ionisationskammer war deutlich ungenauer als die mit dem Halbleiterdetektor. Dies liegt besonders daran, dass aufgrund der Energieauflösung des Halbleiterdetektors der Hintergrund niedriger Energie separiert werden konnte, während die Ionisationskammer alle einfallenden geladenen Teilchen misst.
+
+Die in diesem Versuchsteil bestimmte Reichweite beträgt $(7.0 \pm 3.5) \unit{cm}$.
 
 \subsection{$\beta$-Absorption mit dem Szintillationszähler}
 \subsubsection{Aufbau und Durchführung}
