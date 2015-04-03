@@ -191,6 +191,157 @@ def radium_calib_2():
 	fit.plot_residual(box="tr")
 	plt.savefig("out/radium_calib2_residual." + SAVETYPE)
 
+def calc_radium_range():
+	peak = {
+		35:	(1100, 1800),
+		35.5: (1000, 1700),
+		36: (900, 1600),
+		36.5: (800, 1500),
+		37: (600, 1400),
+		37.5: (500, 1200),
+		38: (300, 1000),
+		38.5: (100, 700)
+	}
+
+	distances = []
+	error_distances = []
+	integrals = []
+	error_integrals = []
+
+	for distanceStr in ("35_0", "35_5", "36_0", "36_5", "37_0", "37_5", "38_0", "38_5"):
+		filename = "data/Radium%s.TKA" % distanceStr
+
+		distance = ufloat(float(distanceStr.replace("_", ".")), 0.05)
+
+		tka = TkaFile(filename)
+		lower, upper = peak[distance.n]
+
+		data = tka.data[lower:upper]
+
+		distance = distance - 35 + ufloat(3.17, 0.17)
+
+		integral = ufloat(data.sum(), math.sqrt((data+1).sum()))
+		integral_fixed = integral * distance**2
+
+		print("$({:L}) \\unit{{cm}}$ & {:d} & {:d} &  ${:dL}$ &  ${:dL} \\unit{{cm^2}}$ \\\\".format(distance, lower, upper, integral, integral_fixed))
+
+		distances.append(distance.n)
+		error_distances.append(distance.s)
+		integrals.append(integral_fixed.n)
+		error_integrals.append(integral_fixed.s)
+
+	distances = np.array(distances)
+	integrals = np.array(integrals)
+	error_distances = np.array(error_distances)
+	error_integrals = np.array(error_integrals)
+
+	plt.clf()
+	plt.minorticks_on()
+	plt.errorbar(distances, integrals, xerr=error_distances, yerr=error_integrals, fmt="s")
+
+	#plt.plot(distances, integrals, 's')
+	plt.xlabel("Distanz / cm")
+	plt.ylabel("korrigierte Summe / cm^2")
+	plt.ylim(0, plt.ylim()[1])
+	plt.savefig("out/radium_range." + SAVETYPE)
+	#plt.show()
+
+	plt.clf()
+	plt.minorticks_on()
+	scale = 1/integrals[0:3].mean()
+
+	fit = Fit(LINEAR)
+	fit.set_params(offset=1, slope=-0.5)
+	fit.set_data(xdata=distances[1:], ydata=integrals[1:]*scale, xerrors=error_distances[1:], yerrors=error_integrals[1:]*scale)
+	fit.set_labels(xlabel="Distanz / cm", ylabel="Intensität")
+	fit.iterative_fit(5)
+	fit.plot(plot_data=True, plot_fit=True, box="bl", units={"slope":"1/cm"})
+	plt.ylim(0, plt.ylim()[1])
+	plt.savefig("out/radium_range_fit." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit.plot_residual(box="tr")
+	plt.savefig("out/radium_range_residual." + SAVETYPE)
+
+	r = (0.5-fit.uvalue("offset"))/fit.uvalue("slope")
+	print("Range:", r, "cm")
+
+
+def plot_ionisation_raw():
+	distances, voltages, error_voltages = np.loadtxt("data/radium_ionisationskammer.txt", unpack=True)
+
+	# discard 38.80cm
+	distances = distances[:-1]
+	voltages = voltages[:-1]
+	error_voltages = error_voltages[:-1]
+
+	for distance, voltage, error_voltage in zip(distances, voltages, error_voltages):
+		distance = ufloat(distance, 0.05)
+		voltage = ufloat(voltage, error_voltage)
+
+		print("$({:L}) \\unit{{cm}}$ & $({:L}) \\unit{{mV}}$ \\\\".format(distance, voltage))
+
+	plt.clf()
+	plt.minorticks_on()
+	plt.errorbar(distances, voltages, xerr=0.05, yerr=error_voltages, fmt=',')
+	plt.xlabel("Distanz / cm")
+	plt.ylabel("Spannung / mV")
+	plt.savefig("out/radium_ionisation_raw." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+
+	currents = []
+	error_currents = []
+	for voltage, error_voltage in zip(voltages, error_voltages):
+		current = ufloat(voltage, error_voltage) #+ ufloat(5, 3)
+		currents.append(current.n)
+		error_currents.append(current.s)
+
+	currents = np.array(currents)
+	error_currents = np.array(error_currents)
+
+	distances -= 39
+
+	plt.clf()
+	plt.minorticks_on()
+	plt.errorbar(distances, currents, xerr=0.05, yerr=error_currents, fmt=',')
+	plt.xlabel("Distanz / cm")
+	plt.ylabel("Strom / nA")
+	plt.savefig("out/radium_ionisation." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+
+	x = distances[1:] + np.abs(np.diff(distances)/2)
+	y = - np.diff(currents) / np.diff(distances)
+	plt.plot(x, y, 's-')
+
+	plt.xlabel("Distanz / cm")
+	plt.ylabel("- Änderung des Stromes / nA / cm")
+	plt.savefig("out/radium_ionisation_diff." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit = Fit(LINEAR)
+	fit.set_data(xdata=(7.42, 6.92, 6.42), ydata=currents[9:12], xerrors=0.25, yerrors=error_currents[9:12])
+	fit.set_labels(xlabel="Distanz / cm", ylabel="Strom / nA")
+	fit.iterative_fit(5)
+	fit.plot(box="tr", units={"slope": "nA/cm", "offset": "nA"})
+	plt.savefig("out/radium_ionisation_po_fit." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit.plot_residual(box="tl")
+	plt.savefig("out/radium_ionisation_po_residual." + SAVETYPE)
+
+	middle = (ufloat(currents[9], error_currents[9])+ufloat(currents[11], error_currents[11])) / 2
+	print("Middle:",middle, "nA")
+	r = (middle - fit.uvalue("offset"))/fit.uvalue("slope")
+	print("Range:",r,"cm")
+
+
 
 if __name__=="__main__":
 	#plot_theo_alpha()
@@ -198,4 +349,6 @@ if __name__=="__main__":
 	#plot_radium_peak_distances()
 	#plot_radium_distance()
 	#fit_radium_calib()
-	radium_calib_2()
+	#radium_calib_2()
+	#calc_radium_range()
+	plot_ionisation_raw()
