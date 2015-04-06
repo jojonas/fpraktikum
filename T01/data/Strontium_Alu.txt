@@ -2,10 +2,10 @@
 # Strontium-Quelle
 # Messzeit 10s 		mittlere Schiene für Aluscheiben
 # Leermessung 9 auf 10s
-# treshhold 8,9 Gain 32
+# Treshold 8.9mV, Gain x32
 
 #Alu-Scheibennr		Counts
-0					150386		152479		152925		152840		153299		153493
+0					150386		#152479		152925		152840		153299		153493
 5					146631
 6					144385
 7					141057

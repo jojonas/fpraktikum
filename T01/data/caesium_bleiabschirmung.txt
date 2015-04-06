@@ -1,13 +1,13 @@
 # Anorganischer Szintillator
-# um BG zu entfernen, erst Threshold ohne Probe so eingestellt, dass sich bei Änderung des Thresholds nichts an der Anzahl der Ereignisse mehr ändert. ==> 1.12 mV
+# um BG zu entfernen, erst Threshold ohne Probe so eingestellt, dass sich bei Aenderung des Thresholds nichts an der Anzahl der Ereignisse mehr aendert. ==> 1.12 mV
 
 # Messzeit: 20s
-# Spalten: mm Blei (u.U. zusammengesetzt, siehe Comments), Counts, Anzahl verwendeter Blöcke (für Fehler, quadratisch addieren)
+# Spalten: mm Blei (u.U. zusammengesetzt, siehe Comments), Counts, Anzahl verwendeter Bloecke (für Fehler, quadratisch addieren)
 # Fehler Bleidicke: 0.1mm, Counts Poisson
 
-# Blöcke: 1,2,3,5,10,20 mm
+# Bloecke: 1,2,3,5,10,20 mm
 
-0	5857	1
+0	5857	0
 1	5316	1
 2	5085	1
 3	4610	1

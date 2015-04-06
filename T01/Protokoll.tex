@@ -30,8 +30,12 @@
 \author{Jonas Lieb, 312136 \\ \emph{Gruppe 20} \\ \\  RWTH Aachen}
 \maketitle
 
-%\begin{abstract}
-%\end{abstract}
+\begin{abstract}
+In diesem Versuch werden $\alpha$-, $\beta$- und $\gamma$ Strahlung mit verschiedenen Detektoren betrachtet. Eingesetzt werden ein Halbleiterdetektor, eine Ionisationskammer und zwei Szintillationsdetektoren. Es wird die Abbremsung von $\alpha$-Teilchen in Luft, die Absorption von $\beta$-Elektronen in Aluminium und die Abschwächung von $\gamma$-Strahlung in Blei vermessen. Dabei werden die Intensitäten in Abhängigkeit der Absorberdicke untersucht und entsprechende Modellparameter angepasst.
+
+Im letzten Versuchsteil werden andere Praktikumsarbeitsplätze auf Strahlenquellen und Kontamination untersucht.
+\end{abstract}
+
 \newpage
 
 \setcounter{tocdepth}{2}
@@ -43,7 +47,7 @@
 \subsubsection{Strahlung und Strahlenschutz}
 In diesem Versuch werden die drei bekannten Arten von Strahlung untersucht: $\alpha$, $\beta$ und $\gamma$-Strahlung. 
 
-Als $\alpha$-Quelle wird \isotope[226]{Ra} (Radium) verwendet. Die erwarteten Peaks sind in Tabelle \ref{tbl:radium_theo} aufgelistet. Die verwendete $\beta$-Quelle ist \isotope[90]{Sr} (Strontium), welches mit bis zu $0.549 \unit{MeV}$ in \isotope[90]{Y} zerfällt und für $\gamma$-Emission wird \isotope[137]{Cs} (Caesium) verwendet, welches Photonen der Energie $1.176 \unit{MeV}$ abstrahlt.
+Als $\alpha$-Quelle wird \isotope[226]{Ra} (Radium) verwendet. Die erwarteten Peaks sind in Tabelle \ref{tbl:radium_theo} aufgelistet. Die verwendete $\beta$-Quelle ist \isotope[90]{Sr} (Strontium), welches mit bis zu $0.546 \unit{MeV}$ in \isotope[90]{Y} zerfällt und für $\gamma$-Emission wird \isotope[137]{Cs} (Caesium) verwendet, welches Photonen der Energie $0.6617 \unit{MeV}$ abstrahlt.
 
 Es wird die Absorption der Strahlung zwischen Quelle und Detektor gemessen und mit dem Literaturwert verglichen. Der Energieverlust der geladenen Teilchen wird dabei näherungsweise durch die Bethe-Bloch Formel modelliert. Beim Versuchsteil der $\alpha$-Strahlung sind verschiedene scharfe Energiepeaks vorhanden, deren Reichweite unterschiedlich ist. Die Intensität der $\beta$-Strahlung wird durch eine Exponentialfunktion genähert. Für $\gamma$-Photonen wird eine exakte Exponentialfunktion erwartet.
 
@@ -141,7 +145,7 @@ $7.69 \unit{MeV}$ & \isotope[214]{Po} $\rightarrow$ \isotope[210]{Pb} & $7.18 \u
 \end{figure}
 
 \paragraph{1. Diskussion des Spektrums.} 
-Die erwarten Peakenergien und Reichweiten (nach NIST \cite{nist_alpha}, \emph{Projected Range}) sind in Tabelle \ref{tbl:radium_theo} dargestellt. In Abbildung \ref{fig:radium_theo} findet sich zudem ein Vergleich zwischen einer theoretischen Vorhersage. Dabei ist die geplottete Funktion eine Summe mehrerer Gaußkurven ($f(x) = A \exp\left(-(x-\mu)^2 / 2 \sigma^2 \right)$), deren Mittelwerte $\mu$ den bekannten Energien entsprechen und deren Breite mit $\sigma = 0.07 \sqrt{E}$ geschätzt ist. Die Amplitude der Gaußkurven ist für alle Peaks gleich ($A = 1$) angenommen. Es lässt sich erkennen, dass sich bei endlicher Peakbreite die Peaks bei $5.307 \unit{MeV}$ und $5.590 \unit{MeV}$  zu einem einzelnen Peak addieren. Vermutlich ist dies auch in der Messung bei Kanal $\approx 550$ der Fall. 
+Die erwarteten Peakenergien und Reichweiten (nach NIST \cite{nist_alpha}, \emph{Projected Range}) sind in Tabelle \ref{tbl:radium_theo} dargestellt. In Abbildung \ref{fig:radium_theo} findet sich zudem ein Vergleich zwischen einer theoretischen Vorhersage. Dabei ist die geplottete Funktion eine Summe mehrerer Gaußkurven ($f(x) = A \exp\left(-(x-\mu)^2 / 2 \sigma^2 \right)$), deren Mittelwerte $\mu$ den bekannten Energien entsprechen und deren Breite mit $\sigma = 0.07 \sqrt{E}$ geschätzt ist. Die Amplitude der Gaußkurven ist für alle Peaks gleich ($A = 1$) angenommen. Es lässt sich erkennen, dass sich bei endlicher Peakbreite die Peaks bei $5.307 \unit{MeV}$ und $5.590 \unit{MeV}$  zu einem einzelnen Peak addieren. Vermutlich ist dies auch in der Messung bei Kanal $\approx 550$ der Fall. 
 Außerdem lässt sich in der Messung ein starker Hintergrund feststellen, der einen Peak bei $E \rightarrow 0$ erzeugt. Dieser Hintergrundpeak dominiert das Spektrum und musste daher vor der Darstellung entfernt werden.
 
 Insgesamt lassen sich mit dieser Interpretation alle erwarteten Peaks erkennen. Da diese Feststellung allerdings nicht während der Versuchsdurchführung getroffen wurde, sondern erst in der Auswertung, wird er bei der Abschätzung der Reichweite ausgelassen.
@@ -233,8 +237,8 @@ $(3.520 \pm 0.010) \unit{cm}$ & $(35.00 \pm 0.05) \unit{cm}$ & $(3.17 \pm 0.18) 
 \label{tbl:radium_restreichweiten}
 \end{table}
 
-In diesem Versuchsteil werden die Restenergien der $\alpha$-Teilchen nach passieren verschiedener Distanzen mit den Kanalwerten der Peaks verglichen. 
-Zur Berechnung der Restreichweite wird die auf der Skala abgelesene Messdistanz zuerst mit dem Ergebnis aus Versuchsteil 2 umgerechnet, sodass z.B. $(35.00 \pm 0.05) \unit{cm}$ auf $(3.17 \pm 0.18) \unit{cm}$ abgebildet wird. Danach wird dieser Wert von der erwarteten Reichweite subtrahiert, sodass die Restreichweite feststeht. Über die Tabellen des \emph{National Institute of Standards and Technology} für Luft \cite{nist_alpha} wird nun einer Restreichweite $x$ einer Energie $E(x)$ zugeordnet. Dabei wird die Energie eines Teilchens gesucht, das genau die Restreichweite als Reichweite besitzt. Um zwischen Werten zu interpolieren, wird kubische Interpolation benutzt. 
+In diesem Versuchsteil werden die Restenergien der $\alpha$-Teilchen nach Passieren verschiedener Distanzen mit den Kanalwerten der Peaks verglichen. 
+Zur Berechnung der Restreichweite wird die auf der Skala abgelesene Messdistanz zuerst mit dem Ergebnis aus Versuchsteil 2 umgerechnet, sodass $(35.00 + x \pm 0.05) \unit{cm}$ auf $(3.17 + x \pm 0.18) \unit{cm}$ abgebildet wird. Danach wird dieser Wert von der erwarteten Reichweite subtrahiert, sodass die Restreichweite feststeht. Über die Tabellen des \emph{National Institute of Standards and Technology} für Luft \cite{nist_alpha} wird nun einer Restreichweite $x$ einer Energie $E(x)$ zugeordnet. Dabei wird die Energie eines Teilchens gesucht, das genau die Restreichweite als Reichweite besitzt. Um zwischen Werten zu interpolieren, wird kubische Interpolation benutzt. 
 
 Die größten Fehlerquellen in diesem Versuchsteil sind die Vermessung der Distanz ($\sigma = 0.05 \unit{cm}$) und der systematische Fehler des Ergebnis des 2. Versuchsteils ($\sigma = 0.17 \unit{cm}$). Zur Berechnung des Fehlers auf die Restreichweite $\sigma_x$ wird Gaußsche Fehlerfortpflanzung verwendet. Um diesen Fehler nun auf die Restenergie fortzupflanzen, werden in der NIST Datenbank ebenfalls die Werte für $E(x+\sigma_x)$ und $E(x-\sigma_x)$ berechnet und das Maximum ihrer Abweichung zu $E(x)$ als angegebener Fehler benutzt:
 \[
@@ -287,7 +291,9 @@ Ein möglicher Grund für die Fehleinschätzung in Versuchsteil 3 ist die Näher
 \paragraph{5. Bestimmung der mittleren Reichweite.}
 Da ausschließlich die Grenzen des höchstenergetischsten Peaks (\isotope[214]{Po}) eindeutig erkennbar sind, wird im Folgenden nur dieser betrachtet.
 
-Das Integral dieses Peaks wird durch die Summe der Binwerte gebildet. Die Grenzen dieser Summe $\textrm{lower}$ und $\textrm{upper}$ sind dabei manuell gewählt. Als Fehler auf jeden einzelnen Binwert $x_n$ wird die Näherung $\sigma_n = \sqrt{x_n+1}$ gewählt, sodass der Fehler auf das Integral ist
+Das Integral dieses Peaks wird durch die Summe der Binwerte gebildet. Die Grenzen dieser Summe $\textrm{lower}$ und $\textrm{upper}$ sind dabei manuell gewählt. 
+
+Der Fehler auf jeden Binwert $x_n$ ist $\sqrt{x_n}$ \footnote{Der Fehler auf Binwerte $x_n$ wird in der Teilchenphysik üblicherweise mit $\sqrt{x_n}$ genähert, allerdings gilt diese Näherung nur für $x_n \rightarrow \infty$. Um besseres Fitverhalten bei $x_n \rightarrow 0$ zu erhalten, wird hier der Fehler $\sigma_n = \sqrt{n+1}$ gewählt, sodass im Limes hoher Werte das konventionelle Poisson-konfidenzintervall von $\sqrt{x_n}$ erhalten bleibt. Diese Näherung wird auch in den Auswertungen der folgenden Versuchsteile verwendet.}. Damit ist der Fehler auf die Summe der Binwerte:
 \[
 	\sigma = \sqrt{\sum_{n=\textrm{lower}}^\textrm{upper} \sigma_n^2} = \sqrt{\sum_{n=\textrm{lower}}^\textrm{upper} \sqrt{x_n+1}^2} = \sqrt{\sum_{n=\textrm{lower}}^\textrm{upper} x_n+1} 
 \]
@@ -340,7 +346,7 @@ Eine Auftragung der korrigierten Daten aus Tabelle \ref{tbl:radium_integrale} be
 
 Über die Steigung $m$, den Offset $b$ und deren Fehler kann nun die mittlere Reichweite berechnet werden:
 \[
-	x = \frac{0.5-b}{a} = \frac{0.5 - (1.60 \pm 0.15)}{(-0.153 \pm 0.025) \unit{1/cm}} = (7.1 \pm the 1.5) \unit{cm}
+	x = \frac{0.5-b}{a} = \frac{0.5 - (1.60 \pm 0.15)}{(-0.153 \pm 0.025) \unit{1/cm}} = (7.1 \pm 1.5) \unit{cm}
 \]
 Dieses Ergebnis stimmt sehr gut mit dem Literaturwert (Tabelle \ref{tbl:radium_theo}) von $7.18 \unit{cm}$ überein.
 
@@ -452,22 +458,260 @@ Die Messung mit der Ionisationskammer war deutlich ungenauer als die mit dem Hal
 
 Die in diesem Versuchsteil bestimmte Reichweite beträgt $(7.0 \pm 3.5) \unit{cm}$.
 
-\subsection{$\beta$-Absorption mit dem Szintillationszähler}
+\subsection{$\gamma$-Spektren mit Szintillationszählern}
 \subsubsection{Aufbau und Durchführung}
+In diesem Versuchsteil wird von \isotope[137]{Cs} emittierte $\gamma$-Strahlung ($661.7 \unit{keV}$ \cite{wiki_caesium}) mit zwei verschiedenen Szintillationszählern untersucht. Es wird ein organisches Szintillationsmaterial und ein anorganisches Szintillationsmaterial, NaI(Tl), eingesetzt. 
+Für beide Szintillationsmaterialien wird die gleiche Photomultiplier-Tube verwendet, welche mit $\approx 1050 \unit{V}$ betrieben wird. Die gemessenen Ladungen werden mit einem Verstärker verstärkt und danach über einen MCA mit einem Computer verbunden, auf welchen \emph{Genie 2000} gestartet ist, ein Programm, mit dem die Daten im Toolkit-Format (\texttt{tka}) abgespeichert werden können.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|r||c|c|}
+\hline
+Material & Anorganisch & Organisch \\
+\hline \hline
+PM-Spannung & $1051 \unit{V}$ & $1050 \unit{V}$ \\
+\hline 
+Gain & $\times 16$ & $\times 128$ \\
+Differentiation & DC & DC \\
+Integration & $1 \unit{\upmu s}$ & $1 \unit{\upmu s}$ \\
+Polarity & negative & negative \\
+\hline
+Messzeit & $600 \unit{s}$ & $600 \unit{s}$ \\
+LLD & 0 & 0 \\
+\hline
+\end{tabular}
+\caption{Messeinstellungen für die Vermessung der \isotope[137]{Cs}-$\gamma$-Probe mit den Szintillationsdetektoren}
+\label{tbl:caesium_einstellungen}
+\end{table}
+
+Die Verstärkereinstellungen befinden sich in Tabelle \ref{tbl:caesium_einstellungen}. Da eine Inspektion der Daten mit einem Oszilloskop ergab, dass nur sehr selten mehrere Peaks koinzidieren, wurde die Differentiation auf DC gestellt.
+
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{caesium_Anorganisch_raw}
+\includegraphics[width=\halfwidth]{caesium_Organisch_raw}
+\includegraphics[width=\halfwidth]{caesium_Anorganisch}
+\includegraphics[width=\halfwidth]{caesium_Organisch}
+\caption{Rohdaten der Vermessung des $\gamma$-Spektrums von \isotope[137]{Cs}. Auf der linken Seite ist das Spektrum mit dem anorganischen Szintillator abgebildet, rechts mit dem organischen. Da große Peaks beide Spektren dominieren, zeigen die unteren Abbildungen nur einen skalierten Ausschnitt.}
+\label{fig:caesium_raw}
+\end{figure}
+
+Die Rohdaten der beiden Versuchsteile befinden sich in Abbildung \ref{fig:caesium_raw}. Ein großer Peak in den unteren Kanälen dominiert die Messungen stark. 
+
 \subsubsection{Auswertung}
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{caesium_Anorganisch}
+\caption{Skalierte Daten der \isotope[137]{Cs}-Messung mit dem anorganischen Szintillationsmaterial. Deutlich zu erkennen sind die Comptonkante und der Photopeak.}
+\label{fig:caesium_anorganisch}
+\end{figure}
+
+\paragraph{1. Diskussion der Spektren.} Beide Spektren sind von einem starken Untergrund dominiert. Dieser verursacht einen Gaußschen Peak in den unteren Kanälen. Bei der Messung mit dem anorganischen Szintillator (Abbildung \ref{fig:caesium_anorganisch}) lassen sich erwartete Elemente erkennen: Doppelescape Peak (ca. Kanal 750), Escape-Peak (ca. Kanal 1500), Compton-Kante (ca. Kanal 1800), Photopeak (ca. Kanal 2530).
+
+Für die Messung mit dem organischen Szintillator sind keine Features zu erkennen. Der Peak bei Kanal 5060 stammt daher, dass der Verstärker nicht das gesamte Spektrum des MCA ansprechen konnte und zu stark verstärkte Signale in eine Sättigung der Amplitude gebracht werden, sodass der MCA sie fälschlicherweise in den dazugehörigen Kanal (in diesem Fall $\approx 5060$) einteilt.
+
+\paragraph{2. Betrachtung der Nachweiswahrscheinlichkeit.} 
+Zur Berechnung der Nachweiswahrscheinlichkeit wird die Anzahl der gesamt gemessenen Ereignisse berechnet. Beim anorganischen Szintillator werden in $600 \unit{s}$ insgesamt 32064010 Ereignisse gezählt. Beim organischen Szintillator sind es 33882953 Ereignisse, also $106 \unit{\%}$ soviel. Dies könnte dafür sprechen, dass die Nachweiswahrscheinlichkeit des Plastikszintillators höher ist. Allerdings machen die 40595 tatsächlich interessanten Ereignisse (Kanalnr. größer als 500) beim anorganischen Szintillator nur $0.12 \unit{\%}$ der Ereignisse aus, beim organischen lässt sich gar kein Signal erkennen. Daher ist die Aussagekraft der Nachweiswahrscheinlichkeit bei so starkem Background eher gering.
+
 \subsubsection{Ergebnis}
+In diesem Versuchsteil konnten ein anorganischer und ein organischer Szintillator verglichen werden. Beide Spektren der \isotope[137]{Cs} Probe waren von Untergrund bei niedrigen Kanälen dominiert. Die erwarteten Muster, Comptonkante und Photopeak, waren ausschließlich in der Messung des anorganischen Szintillators zu erkennen. 
+Aufgrund des Hintergrundes ist es nicht möglich, eine zuverlässige Messung der Nachweiswahrscheinlichkeit durchzuführen.
 
 \subsection{$\gamma$-Absorption mit dem Szintillationszähler}
 \subsubsection{Aufbau und Durchführung}
+In diesem Versuchsteil wird ein anorganischer Szintillator verwendet. Erneut wird eine Cäsium-Probe betrachtet, die $\gamma$-Strahlung emittiert. Die Messeinstellungen des Versuches sind in der linken Spalte von Tabelle \ref{tbl:caesium_einstellungen} zu finden.
+Diesmal ist der Verstärker des Szintillators allerdings direkt mit einem Counter verbunden.
+
+Um den im vorherigen Versuchsteil beobachteten Peak bei niedrigen Energien auszublenden, wird die Cäsium-Probe zunächst entnommen und ein Threshold so hoch eingestellt, dass eine Änderung des Thresholds nur noch eine geringe Änderung der gezählten Ereignisse zur Folge hat. Es wird erwartet, dass der Hintergrund dort ein Minimum besitzt. Dies resultiert in einer Thresholdspannung von $1.12 \unit{mV}$.
+
+Danach werden zwischen Probe und Detektor Bleiplatten verschiedener Dicken positioniert und jeweils die Anzahl der Ereignisse in $20 \unit{s}$ gezählt. Um dabei Abschirmungsdicken zu erzeugen, die nicht mit einer einzelnen Bleiplatte möglich sind, werden diese passend kombiniert. Die Dicke der Bleiplatten wird separat mit einem Messschieber vermessen, dabei fallen leichte Variationen um $0.1 \unit{mm}$ auf, die als Fehler auf jede einzelne Platte angenommen werden.
+
+\subsubsection{Rohdaten}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c||c|}
+\hline
+Blöcke / $\unit{mm}$ & Dicke & Ereignisse \\
+\hline
+- & $0 \unit{mm}$ & 5857 \\
+1 & $1 \unit{mm}$ & 5316 \\
+2 & $2 \unit{mm}$ & 5085 \\
+3 & $3 \unit{mm}$ & 4610 \\
+1, 3 & $4 \unit{mm}$ & 4427 \\
+5 & $5 \unit{mm}$ & 4040 \\
+5, 1 & $6 \unit{mm}$ & 3706 \\
+5, 2 & $7 \unit{mm}$ & 3525 \\
+5, 3 & $8 \unit{mm}$ & 3302 \\
+5, 3, 1 & $9 \unit{mm}$ & 3129 \\
+10 & $10 \unit{mm}$ & 2925 \\
+10, 1 & $11 \unit{mm}$ & 2741 \\
+10, 2 & $12 \unit{mm}$ & 2610 \\
+\hline
+\end{tabular}
+\begin{tabular}{|c|c||c|}
+\hline
+Blöcke / $\unit{mm}$ & Dicke & Ereignisse \\
+\hline
+10, 3 & $13 \unit{mm}$ & 2444 \\
+10, 3, 1 & $14 \unit{mm}$ & 2275 \\
+10, 5 & $15 \unit{mm}$ & 2060 \\
+10, 5, 1 & $16 \unit{mm}$ & 1954 \\
+10, 5, 2 & $17 \unit{mm}$ & 1913 \\
+10, 5, 3 & $18 \unit{mm}$ & 1799 \\
+10, 5, 4 & $19 \unit{mm}$ & 1706 \\
+20 & $20 \unit{mm}$ & 1636 \\
+20, 5 & $25 \unit{mm}$ & 1285 \\
+20, 10 & $30 \unit{mm}$ & 1106 \\
+20, 10, 5 & $35 \unit{mm}$ & 901 \\
+20, 10, 5, 3, 2 & $40 \unit{mm}$ & 852 \\
+\hline
+\end{tabular}
+\caption{Rohdaten der $\gamma$-Absorptionsmessung. Die Absorberdicken werden mithilfe mehrerer Platten zusammengesetzt, diese sind in der ersten Spalte aufgelistet.}
+\label{tbl:gamma_absorb_raw}
+\end{table}
+
+Die Rohdaten befinden sich in Tabelle \ref{tbl:gamma_absorb_raw}. Im folgenden wird die Näherung $\sigma_n = \sqrt{x_n + 1}$ für die Binfehler angenommen. Der Fehler auf die Schichtdicke beträgt $\sigma_x = \sqrt{N} \cdot 0.1 \unit{mm}$, wobei $N$ die Anzahl der verwendeten Platten ist.
+
 \subsubsection{Auswertung}
-\subsubsection{Ergebnis}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{caesium_absorber_fit}
+\includegraphics[width=\halfwidth]{caesium_absorber_residual}
+\caption{Lineare Anpassung an die logarithmierte Darstellung der Messdaten. Auf der vertikalen Achse befindet sich der natürliche Logarithmus der Anzahl der Ereignisse. Auf der horizontalen Achse befindet sich die Absorptionsschichtdicke in $\unit{cm}$. $\chi^2 / \textrm{ndf} = 15.7$.}
+\label{fig:caesium_absorber_fit}
+\end{figure}
+
+Da ein exponentieller Abfall der Intensität erwartet wird, liegt es nahe, die Daten logarithmiert aufzutragen und eine lineare Anpassung durchzuführen:
+\[
+	I = I_0 e^{-\mu x} \Rightarrow \ln\left(I\right) = -\mu x + \ln\left(I_0\right)
+\]
+Dies ist in Abbildung \ref{fig:caesium_absorber_fit} gezeigt. Allerdings fällt auf dem Residuengraph auf, dass die Daten über $2 \unit{cm}$ systematisch abweichen zu scheinen. Dafür spricht auch $\chi^2 / \textrm{ndf} = 15.7$
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{caesium_absorber_fit2}
+\includegraphics[width=\halfwidth]{caesium_absorber_residual2}
+\caption{Lineare Anpassung an die logarithmierte Darstellung der Messdaten, Tiefen $> 2 \unit{cm}$ ausgenommen. $\chi^2 / \textrm{ndf} = 1.47$.}
+\label{fig:caesium_absorber_fit2}
+\end{figure}
+Deshalb werden im folgenden nur die Daten unter $2 \unit{cm}$ angepasst. Dies ist in Abbildung \ref{fig:caesium_absorber_fit2} gezeigt. Mit $\chi^2 / \textrm{ndf} = 1.47$ und statistisch streuenden Residuen ist diese Anpassung wahrscheinlicher.
+Damit ergibt sich für den Absorptionskoeffizienten
+\[
+	\mu = (0.652 \pm 0.007) \unit{1/cm}
+\]
+und mit einer Dichte von $\rho = (11.342 \pm 0.001) \unit{g / cm^3}$ \cite{wiki_blei} ergibt sich für den Massenabsorptionskoeffizienten
+\[
+	\mu' = \frac{\mu}{\rho} = (0.0575 \pm 0.0006) \unit{cm^2 / g}
+\]
+
+Die \emph{NIST X-Ray X-Ray Mass Attenuation Coefficient}-Datenbank gibt für Blei nur Werte für einige Energien an: $\mu(600 \unit{keV}) = 0.1248 \unit{cm^2 / g}$, $\mu(800 \unit{keV}) = 0.0887 \unit{cm^2 / g}$ \cite{nist_lead}. Da die Energie der hier verwendeten Strahlung allerdings $661.7 \unit{keV}$ beträgt und die Funktion $\mu(E)$ hinreichend harmlos aussieht, lässt sich schließen, dass das hier ermittelte Ergebnis weit vom Literaturwert entfernt ist. 
+
+Der höhere Massenabsorptionskoeffizient in der Literatur bedeutet, dass mehr Ereignisse hätten absorbiert werden müssen bzw. zu viele Ereignisse gemessen wurden. Ein möglicher Grund dafür ist Kontamination des Messaufbaus, Strahlung, die die Bleiplatten durch Reflektion umgangen hat, oder andere Strahlenquellen. 
+
+\subsection{$\beta$-Absorption mit dem Szintillationszähler}
+\subsubsection{Aufbau und Durchführung}
+In diesem Versuchsteil wird $\beta-$-Strahlung von \isotope[90]{Sr} der Energie $546 \unit{keV}$ \cite{wiki_strontium} mit einem Szintillator beobachtet. Dabei wird eine anderer Photomultiplier benutzt als im Vorversuch, er wird aber ebenfalls mit $1050 \unit{V}$ betrieben.
+
+Der Verstärker ist diesmal eingestellt auf einen Gain von $\times 32$. Der Threshold wird so hoch eingestellt, dass in der Messzeit von $10 \unit{s}$ ohne Probe nahezu keine Ereignisse mehr gezählt werden ($< 10$). Dies ist bei einer Spannungsschwelle von $8.9 \unit{mV}$ der Fall.
+
+Es werden schrittweise verschiedene Aluminiumplatten zwischen Strontiumquelle und Detektor geschoben und jeweils die Anzahl der Ereignisse in $10 \unit{s}$ gezählt.
+
+\subsubsection{Rohdaten}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Plattennr. & Ereignisse \\
+\hline
+- & 150386 \\
+5 & 146631 \\
+6 & 144385 \\
+7 & 141057 \\
+8 & 134514 \\
+9 & 131735 \\
+10 & 121824 \\
+11 & 111040 \\
+12 & 97784 \\
+13 & 86438 \\
+\hline
+\end{tabular}
+\begin{tabular}{|c|c|}
+\hline
+Plattennr. & Ereignisse \\
+\hline
+14 & 75555 \\
+15 & 56277 \\
+16 & 51075 \\
+17 & 38954 \\
+18 & 30708 \\
+19 & 24397 \\
+20 & 15027 \\
+21 & 6833 \\
+22 & 2048 \\
+23 & 253 \\
+\hline
+\end{tabular}
+\caption{Rohdaten des $\beta$-Absorptionsversuches. Die linke Spalte zeigt die Plattennummer; jede Plattennummer kann mithilfe der Tabelle auf \cite[S. 25]{anleitung} einer Absorberdicke zugeordnet werden.}
+\label{tbl:strontium_raw}
+\end{table}
+
+Die Rohdaten sind in tabellarischer Form in Tabelle \ref{tbl:strontium_raw} dargestellt. Da die Absorberdicke mit der Plattennummer ansteigt, lässt sich schon erkennen, dass die Anzahl der Ereignisse wie erwartet mit aufsteigender Plattennummer abnimmt.
+
+\subsubsection{Auswertung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{strontium_fit}
+\includegraphics[width=\halfwidth]{strontium_residual}
+\caption{Abschwächung der \isotope[90]{Sr} $\beta$-Strahlung durch Aluminiumplatten verschiedener Dicken. Der Anteil der initialen Intensität ist auf der vertikalen Achse aufgetragen. Es wurde eine abfallende Exponentialfunktion angepasst.}
+\label{fig:strontium_fit}
+\end{figure}
+
+Zur Auswertung müssen die Plattennummern zuerst in Schichtdicken übersetzt werden. Dies geschieht mit einer Tabelle auf \cite[S. 25]{anleitung}. 
+Um den Massenabschwächungskoeffizient zu berechnen, wird zuerst analog zur $\gamma$-Absorption eine Exponentialfunktion angenommen:
+\[
+	I = I_0 e^{-\mu x}
+\]
+Eine solche Anpassung ist in Abbildung\ref{fig:strontium_fit} gezeigt. $\chi^2 / \textrm{ndf} = 37$ und der Residuengraph zeigen, dass die Exponentialfunktion nicht hinreichend angepasst werden kann. Ein möglicher Grund dafür, dass die Absorption nicht einer einfachen Exponentialfunktion folgt, ist, dass der Wirkungsquerschnitt der Kollision der $\beta-$-Elektronen mit dem Material nicht konstant ist, sondern abhängig von der Energie. Zusätzlich spielt das breite Spektrum der Energien eine Rolle, da bei $\beta$-Zerfall außer dem Elektron ebenfalls ein Anti-Elektron-Neutrino entsteht, welches Impuls und Energie trägt.
+Wird jedoch trotzdem das vereinfachende Modell der Exponentialfunktion genutzt, ergibt sich der Absorptionskoeffizient
+\[
+	\mu = (11.53 \pm 0.05) \unit{1/cm}
+\]
+und mit einer Dichte von $\rho = (2.7 \pm 0.1) \unit{g / cm^3}$ \cite{wiki_aluminium} der Massenabsorptionskoeffizient
+\[
+	\mu' = \frac{\mu}{\rho} = (4.27 \pm 0.16) \unit{cm^2 / g}
+\]
+
+Mit Formel (14) aus \cite[S. 15]{anleitung} ergibt sich für die maximale Energie:
+\[
+	E_\textrm{max} = \frac{17}{(4.27 \pm 0.16)^{1/1.14}} \unit{MeV} = (3.36 \pm 0.11) \unit{MeV}
+\]
+Aus dieser kann mithilfe von Formel (16) die maximale Reichweite errechnet werden:
+\begin{align*}
+	R'_\textrm{max} &= 0.412 \cdot (3.36 \pm 0.11)^{1.265 - 0.0954 \cdot \ln(3.36 \pm 0.11)} \unit{g/cm^2} = (1.66 \pm  0.06) \unit{g/cm^2} \\ \Rightarrow R_\textrm{max} &= R'_\textrm{max} / \rho = (0.6143 \pm 0.0034) \unit{cm}
+\end{align*}
+
+Die durchgeführte Messung reicht nur bis ca. $0.35 \unit{cm}$, daher kann die maximale Reichweite nicht einfach überprüft werden.
 
 \subsection{Strahlenschutz}
-\subsubsection{Aufbau und Durchführung}
-\subsubsection{Auswertung}
+\subsubsection{Durchführung}
+In diesem Versuchsteil werden die Messaufbauten der Versuche I (dieser Versuch), II, III, V, VI, VII untersucht. Dabei werden die $\gamma$-Dosisleistungen gemessen und mit den erlaubten Grenzwerten verglichen. 
+Außerdem wird ein tragbares Messgerät verwendet, um Versuchsaufbauten, Werkzeuge und Messgeräte auf Kontaminationen zu überprüfen.
+Die Versuchsaufbauten sind zu diesem Zeitpunkt nicht mehr in Betrieb, daher wird keine Strahlung erwartet.
+
+Zusätzlich wird noch eine Küchenfliese vermessen, die mit radioaktiven Farbstoffen bemalt ist, außerdem ein Camping-Glühstrumpf, der radioaktives Material beinhaltet.
+
 \subsubsection{Ergebnis}
+Es kann keine Strahlung nachgewiesen werden, die stärker als der erwartete Hintergrund ist. In der Raumluft aller Versuche werden weniger als ein Zerfall pro Sekunde beobachtet, in der Nähe der Tresore erhöht sich diese Zahl wie erwartet auf bis zu $70 \unit{Bq}$. 
+Die dazu gemessenen Dosisleistungen der Raumluft liegen bei $< 100 \unit{nSv / h}$. Dies ist ca. $20 \unit{\%}$ der unteren Schwelle, die die Einrichtung eines Überwachungsbereiches erforderlich macht.
+
+An der Küchenfliese werden $500 \unit{Bq}$, am Glühstrumpf $310 \unit{Bq}$ gemessen. Zum Vergleich dazu wurde auch ein offener Probentresor vermessen, hier wurden $\approx 300 \unit{Bq}$ gemessen.
 
 \section{Zusammenfassung}
+
+In diesem Praktikumsversuch wurden $\alpha$-, $\beta$- und $\gamma$-Strahlung mit mehreren verschiedenen Detektoren vermessen. Dabei wurde besonders Wert auf die Aufarbeitung eines Absorptionsmodells gelegt. Dies war bei $\alpha$- und $\gamma$-Strahlung möglich, für $\beta$-Strahlung mangelte es einem genaueren Modell.
+Im letzten Versuchsteil wurden die Praktikumsarbeitsplätze auf Kontamination untersucht, es konnte keine solche festgestellt werden.
 
 \newpage
 \begin{thebibliography}{xxxx}
@@ -475,6 +719,11 @@ Die in diesem Versuchsteil bestimmte Reichweite beträgt $(7.0 \pm 3.5) \unit{cm
 \bibitem{nist_alpha} National Institute of Standards and Technology: stopping-power and range tables for helium ions. URL: \url{http://physics.nist.gov/PhysRefData/Star/Text/ASTAR.html} [Stand: 02.04.2015]
 \bibitem{nist_electron} National Institute of Standards and Technology: stopping-power and range tables for electrons. URL: \url{http://physics.nist.gov/PhysRefData/Star/Text/ESTAR.html} [Stand: 03.04.2015]
 \bibitem{wiki_luftdichte} Wikipedia: Luftdichte. URL: \url{http://de.wikipedia.org/wiki/Luftdichte} [Stand: 02.04.2015]
+\bibitem{wiki_caesium} Wikipedia: Caesium-137. URL: \url{http://en.wikipedia.org/wiki/Caesium-137} [Stand: 06.04.2015]
+\bibitem{wiki_blei} Wikipedia: Blei. URL: \url{http://de.wikipedia.org/wiki/Blei} [Stand: 06.04.2015]
+\bibitem{nist_lead} National Institute of Standards and Technology: X-Ray Mass Attenuation Coefficients, Lead. URL: \url{http://physics.nist.gov/PhysRefData/XrayMassCoef/ElemTab/z82.html} [Stand: 06.04.2015]
+\bibitem{wiki_strontium} Wikipedia: Strontium-90. URL: \url{http://en.wikipedia.org/wiki/Strontium-90} [Stand: 06.04.2015]
+\bibitem{wiki_aluminium} Wikipedia: Aluminium. URL: \url{http://de.wikipedia.org/wiki/Aluminium} [Stand: 06.04.2015]
 \end{thebibliography}
 
 

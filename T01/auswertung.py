@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from uncertainties import wrap as uwrap
-from uncertainties import ufloat
+from uncertainties import ufloat, umath
 
 from funcs import *
 from fits import Fit, info_box
@@ -341,14 +341,203 @@ def plot_ionisation_raw():
 	r = (middle - fit.uvalue("offset"))/fit.uvalue("slope")
 	print("Range:",r,"cm")
 
+def plot_caesium_spectra():
+	for scintillator in ("Organisch", "Anorganisch"):
+		print("===", scintillator, "===")
+		tka = TkaFile("data/Caesium_10min_" + scintillator + ".TKA")
+		channels = np.arange(1,len(tka)+1)
+		plt.clf()
+		plt.minorticks_on()
+		plt.plot(channels, tka.data, '.')
+		plt.xlabel("Kanal")
+		plt.ylabel("Anzahl")
+		plt.savefig("out/caesium_" + scintillator + "_raw." + SAVETYPE)
+		plt.ylim(0,2500)
+		plt.savefig("out/caesium_" + scintillator + "." + SAVETYPE)
+		plt.show()
 
+		print("Summe:", tka.data.sum())
+
+		#
+		# fit = Fit(GAUSS)
+		#
+		# if scintillator == "Organisch":
+		# 	lower = 100
+		# 	upper = 5000
+		# elif scintillator == "Anorganisch":
+		# 	lower = 100
+		# 	upper = 500
+		#
+		# print("Obere Summe:", tka.data[upper:].sum())
+		#
+		# fit.set_data(xdata=channels[lower:upper], ydata=tka.data[lower:upper], yerrors=np.sqrt(tka.data[lower:upper]+1))
+		# fit.set_labels(xlabel="Kanal", ylabel="Anzahl")
+		# fit.iterative_fit(5)
+		#
+		# data = tka.data - fit.eval(channels)
+		# plt.clf()
+		# plt.minorticks_on()
+		# plt.plot(channels, data, '.')
+		# plt.xlabel("Kanal")
+		# plt.ylabel("Anzahl")
+		# plt.ylim(0,2500)
+		# plt.savefig("out/caesium_" + scintillator + "_corrected." + SAVETYPE)
+
+def plot_caesium_absorber():
+	depth, events, slabs = np.loadtxt("data/caesium_bleiabschirmung.txt", unpack=True)
+	error_depth = np.sqrt(slabs) * 0.1
+	error_events = np.sqrt(events + 1)
+
+	plt.clf()
+	plt.minorticks_on()
+	plt.errorbar(depth, events, xerr=error_depth, yerr=error_events, fmt=',')
+	plt.xlabel("Tiefe / mm")
+	plt.ylabel("ln(Anzahl)")
+	plt.savefig("out/caesium_absorber_nolog." + SAVETYPE)
+
+	ln_events = np.log(events)
+	error_ln_events = np.abs(1/events)*error_events
+
+	depth /= 10 # mm=>cm
+	error_depth /= 10
+
+	plt.clf()
+	plt.minorticks_on()
+
+	func = lambda x, mu, lnI0: -x*mu + lnI0
+
+	fit = Fit(func)
+	fit.set_data(xdata=depth, ydata=ln_events, xerrors=error_depth, yerrors=error_ln_events)
+	fit.set_labels(xlabel="Tiefe / cm", ylabel="ln(Anzahl)")
+	fit.iterative_fit(5)
+	fit.plot(box="tr", units={"mu": "1/cm"})
+	plt.savefig("out/caesium_absorber_fit." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit.plot_residual(box="tr")
+	plt.savefig("out/caesium_absorber_residual." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit = fit.filtered(depth <= 2)
+	fit.iterative_fit(5)
+	fit.plot(box="tr", units={"mu": "1/cm"})
+	plt.savefig("out/caesium_absorber_fit2." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit.plot_residual(box="tr")
+	plt.savefig("out/caesium_absorber_residual2." + SAVETYPE)
+
+	mu = fit.uvalue("mu")
+	print("Absorptionskoeffizient:", mu, "1/cm")
+	mu1 = mu / ufloat(11.342, 0.001)
+	print("Massenabsorptionskoeffizient:", mu1, "cm^2/g")
+
+
+def caesium_absorb_nist():
+	energy, absorb, _ = np.loadtxt("lead.txt", unpack=True)
+	# plt.clf()
+	# plt.minorticks_on()
+	# plt.plot(energy, absorb)
+	# plt.xlabel("Energy / MeV")
+	# plt.ylabel("Absorption / cm^2/g")
+	# plt.xscale("log")
+	# plt.yscale("log")
+	# plt.show()
+
+	part = np.logical_and(energy > 0.1, energy < 10)
+	func = interp1d(energy[part], absorb[part], kind='cubic')
+
+	E = 0.6617
+	mu1 = func(E)
+	print("theor. Massenabsorptionskoeffizient:", mu1, "cm^2/g")
+	mu = mu1 * 11.342
+	print("theor. Absorptionskoeffizient:", mu, "1/cm")
+
+def plot_strontium():
+	m = {
+		0:	0,
+		5:	0.03,
+		6:	0.04,
+		7:	0.05,
+		8:	0.08,
+		9:	0.10,
+		10:	0.17,
+		11: 0.25,
+		12:	0.37,
+		13:	0.50,
+		14:	0.64,
+		15:	0.83,
+		16:	1.01,
+		17:	1.23,
+		18:	1.39,
+		19:	1.57,
+		20:	1.88,
+		21:	2.29,
+		22:	2.79,
+		23:	3.46,
+	}
+
+	nr, count = np.loadtxt("data/strontium_alu.txt", unpack=True)
+	absorb = np.zeros_like(nr)
+	for i, x in enumerate(nr):
+		absorb[i] = m[x] / 10
+
+	scale = 1/count[0]
+
+	error_count = np.sqrt(count+ 1)
+	error_absorb = 0.01 / 10
+
+
+	count *= scale
+	error_count *= scale
+
+	func = lambda x, A, mu, offset: A*np.exp(-x*mu) + offset
+
+	fit = Fit(func)
+	fit.set_data(xdata=absorb, ydata=count, xerrors=error_absorb, yerrors=error_count)
+	fit.set_params(A=1, mu=1, offset=0)
+	fit.set_labels(xlabel="Dicke / cm", ylabel="Anteil")
+	fit.iterative_fit(5)
+
+	plt.clf()
+	plt.minorticks_on()
+	plt.xlim(0,.35)
+	fit.plot(box="tr", units={"mu": "1/cm"})
+	plt.savefig("out/strontium_fit." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit.plot_residual(box="tr")
+	plt.savefig("out/strontium_residual." + SAVETYPE)
+
+	rho = ufloat(2.7, 0.1)
+	mu = fit.uvalue("mu")
+	print("Absorptionskoeffizient:", mu, "1/cm")
+	mu1 = mu / rho
+	print("Massenabsorptionskoeffizient:", mu1, "cm^2/g")
+
+	E = umath.pow(17 / mu1, 1/1.14)
+	print("Maximalenergie:", E, "MeV")
+
+	R1 = 0.412*umath.pow(E,1.265-0.0954*umath.log(E))
+	R = R1 / rho
+
+	print("Reichweite:", R1, "g/cm^2")
+	print("Reichweite:", R, "cm")
 
 if __name__=="__main__":
-	#plot_theo_alpha()
-	#plot_radium_closest()
-	#plot_radium_peak_distances()
-	#plot_radium_distance()
-	#fit_radium_calib()
-	#radium_calib_2()
-	#calc_radium_range()
+	plot_theo_alpha()
+	plot_radium_closest()
+	plot_radium_peak_distances()
+	plot_radium_distance()
+	fit_radium_calib()
+	radium_calib_2()
+	calc_radium_range()
 	plot_ionisation_raw()
+	plot_caesium_spectra()
+	plot_caesium_absorber()
+	caesium_absorb_nist()
+	plot_strontium()
