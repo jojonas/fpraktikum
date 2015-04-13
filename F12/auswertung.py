@@ -304,8 +304,17 @@ def faktor():
 	#S = "{:g}".format(s)
 	#V = "{:S}".format(v)
 
+	print("Probenvolumen:", Vprobe)
+	print("C =", C)
+
 	print("Minimale Empfindlichkeit:", s, "V")
 	print("Maximale Verstärkung: ", v)
+
+	v = 10000
+	U_int = ufloat(-1.2418, 0.0031)
+
+	C = U_int / v / Vprobe / (1-nM) / (-1)
+	print("Empirische Konstante C =", C)
 
 def load_samples(filename):
 	comma_fix = lambda s: float(s.decode("utf-8").strip().replace(",", "."))
@@ -313,6 +322,13 @@ def load_samples(filename):
 
 def plot_cold_empty(error_temperature, error_voltage):
 	temperature, voltage = load_samples("data/aufwaermen_ohne.dat")
+	plt.clf()
+	plt.minorticks_on()
+	plt.plot(temperature, voltage)
+	plt.xlabel("Temperatur / V")
+	plt.ylabel("gemessene Spannung / V")
+	plt.savefig("out/cold_empty_raw." + SAVETYPE)
+
 	time = np.arange(0, len(temperature)) / 3
 
 	plt.clf()
@@ -322,14 +338,14 @@ def plot_cold_empty(error_temperature, error_voltage):
 	fit.set_labels("Temperatur / K", "gemessene Spannung / V")
 	fit = fit.filtered(np.logical_and(time > 30, temperature < 120))
 	fit.iterative_fit(5)
-	fit.plot(box=None)
+	fit.plot(box="br", fit_color="black", data_color="red")
 	twin = secondary_y_axis(lambda x: x * 100)
 	twin.set_ylabel("Signalspannung / uV")
 	plt.savefig("out/cold_empty_fit." + SAVETYPE)
 
 	plt.clf()
 	plt.minorticks_on()
-	fit.plot_residual(box="tl")
+	fit.plot_residual(box="tr")
 	twin = secondary_y_axis(lambda x: x * 100)
 	twin.set_ylabel("Signalspannung / uV")
 	plt.savefig("out/cold_empty_residual." + SAVETYPE)
@@ -340,6 +356,16 @@ def plot_cold_noise():
 	# Realteil Chi'
 	temperature, voltage = load_samples("data/abkuehlen_supra.dat")
 	time = np.arange(0, len(temperature)) / 3
+
+	plt.clf()
+	plt.minorticks_on()
+	plt.plot(time, temperature, '.', color="black")
+	plt.xlabel("Zeit / s")
+	plt.ylabel("Temperatur / K")
+	plt.twinx()
+	plt.plot(time, voltage, '.', color="red")
+	plt.ylabel("Spannung / V")
+	plt.savefig("out/noise_raw." + SAVETYPE)
 
 	T = 1000
 
@@ -493,9 +519,11 @@ def plot_cold_supra_real(error_temperature, error_voltage):
 	fit.plot_residual(box="tl")
 	plt.savefig("out/cold_supra_real_chi_residual." + SAVETYPE)
 
+	low = ufloat(low, error_low)
+	print("Low Temperature:", low, "V")
 	print("Curie Temperature:", T_c, "K")
 
-	return ufloat(low, error_low)
+	return low
 
 def plot_sample(low, error_temperature, error_voltage):
 	temperature, voltage = load_samples("data/aufwaermen_probe.dat")
@@ -548,7 +576,7 @@ def plot_sample(low, error_temperature, error_voltage):
 	fit.plot_residual(box="tl")
 	plt.savefig("out/cold_sample_real_chiinv_residual." + SAVETYPE)
 
-	T_c = ufloat(140,0.1)
+	#T_c = ufloat(140,0.1)
 	print("Curie temperature:", T_c, "K")
 
 	temperature_difference = temperature-T_c.n
@@ -559,28 +587,31 @@ def plot_sample(low, error_temperature, error_voltage):
 	plt.plot(np.log(temperature_difference), np.log(chi), color="gray")
 	plt.xlabel("ln(T-T_c)")
 	plt.ylabel("ln(Chi)")
-	plt.show()
-	return
 
 	fit = Fit(LINEAR)
 	fit.set_data(np.log(temperature_difference), np.log(chi), xerrors=np.abs(error_temperature_difference / temperature_difference), yerrors=np.abs(error_chi / chi))
 	fit.set_labels(xlabel="ln(T-T_c)", ylabel="ln(Chi)")
 	fit = fit.filtered(np.logical_and(np.log(temperature_difference) > 1.5, np.log(temperature_difference) < 3))
 	fit.iterative_fit(5)
-	fit.plot(box="bl", color="red")
-	plt.show()
+	fit.plot(box="bl", data_color="red", fit_color="black")
+	plt.savefig("out/cold_curie_fit." + SAVETYPE)
+
+	plt.clf()
+	plt.minorticks_on()
+	fit.plot_residual(box="tl")
+	plt.savefig("out/cold_curie_residual." + SAVETYPE)
 
 if __name__=="__main__":
-	#plot_teil1()
-	#plot_tiefpass()
-	#plot_hochpass()
-	#plot_bandpass()
+	plot_teil1()
+	plot_tiefpass()
+	plot_hochpass()
+	plot_bandpass()
 	plot_integration_time()
-	#faktor()
+	faktor()
 
-	#error_temperature, error_voltage  = plot_cold_noise()
-	#fit = plot_cold_empty(error_temperature, error_voltage)
-	#plot_cold_supra_imag(fit)
-	#low = plot_cold_supra_real(error_temperature, error_voltage)
+	error_temperature, error_voltage  = plot_cold_noise()
+	fit = plot_cold_empty(error_temperature, error_voltage)
+	plot_cold_supra_imag(fit)
+	low = plot_cold_supra_real(error_temperature, error_voltage)
 
-	#plot_sample(low, error_temperature, error_voltage)
+	plot_sample(low, error_temperature, error_voltage)

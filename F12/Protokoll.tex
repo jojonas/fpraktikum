@@ -234,15 +234,237 @@ Für die folgenden Versuche wird daher eine Frequenz von $970 \unit{Hz}$ gewähl
 
 
 \section{Hauptversuch}
+\subsection{Wahl der Empfindlichkeit}
+Für die Durchführung des Hauptversuches ist es nötig, zuerst passende Einstellungen zu wählen. Zuerst berechnet man die vom Messaufbau abhängige Konstante $C$. Dabei werden die Parameter aus \cite[S. 29]{anleitung} und eine Referenzfrequenz $f_R = 980 \unit{Hz}$ eingesetzt:
+\[
+	C = \frac{2 \pi f_R \mu_0 I_0 N_\textrm{sek} N_\textrm{prim}}{l_\textrm{sek} l_\textrm{prim}} = 11082 \unit{\frac{N}{A \cdot s \cdot m^2}}
+\]
+Weiterhin gibt es eine Bedingung, die den maximalen Verstärkungsfaktor angibt. Dabei wird $\chi' = 5$ und $n_M = 0.27$ eingesetzt. Außerdem wird das Probenvolumen vermessen. Die Probe hat eine zylindrische Form, die in 2D-projiziert ein Trapez ergibt. Deshalb gibt es eine längere und eine kürzere Seite, sowie einen Durchmesser $d$. Per Messschieber wird ermittelt:
+\[
+	l_k = 2.55 \unit{mm}, l_l = 3 \unit{mm}, d = 2.9 \unit{mm} \Rightarrow V_\textrm{Probe} = \pi \left(\frac{d}{2}\right)^2 \frac{l_l + l_k}{2} = 18.3 \unit{mm^3}
+\]
+Damit ergibt sich für den maximalen Verstärkungsfaktor $v$:
+\[
+	s > C \cdot \chi' \cdot V_\textrm{Probe} \cdot (1 - n_M) = 0.74 \unit{mV} \Rightarrow v = \frac{10 \unit{V}}{0.74 \unit{mV}} = 13500
+\]
+Die nächstgröbere Verstärkung beträgt 10000, sodass $1 \unit{mV}$ auf $10 \unit{V}$ verstärkt werden. Diese Verstärkung wird im Folgenden genutzt.
+
+\subsection{Leermessung}
+\subsubsection{Aufbau und Durchführung}
+Nach der Parameterwahl wird eine Leermessung durchgeführt. Dabei befindet sich keine Probe im Probenstab. Dieser wird nun mit flüssigem Stickstoff auf bis zu $80 \unit{K}$ abgekühlt. Dann kann die Induktivität des Hartshorn-Spulensystems durch Justierung eines Potentiometers so angepasst werden, dass beide Sekundärspulen die gleiche Spannung messen und die Differenz verschwindet.
+
+Daraufhin wird der Aufbau aus dem Stickstoff herausgenommen und in ein kaltes Dewar-Gefäß gehängt. Während des langsamen Aufwärmens wird die erste Messung durchgeführt. 
+
+Dabei ist die Referenzfrequenz von $980 \unit{Hz}$ eingestellt und es wird ebenfalls der Bandpass mit $f_0 = f_R$ in Betrieb genommen. Die Integrationszeit beträgt $300 \unit{ms}$. Die Ausgangsspannung des Lock-In-Verstärkers wird mit einem separaten Multimeter gemessen, diesmal mit einem anderen Modell als in den Vorversuchen. Die Messung des Halbleiter-Temperatursensors wird von einem zum Versuch gehörenden Modul verarbeitet. Spannung und Temperatur werden alle $333 \unit{ms}$, also 3 Mal pro Sekunde von einem Computer aufgezeichnet und nach der Messung in eine Textdatei geschrieben.
+
+In der Leermessung ist die Phase auf $270 \unit{\degree}$ eingestellt, sodass eine erste Messung von $\chi''$ vorgenommen werden kann, welche später als Untergrund von den folgenden $\chi''$-Messungen subtrahiert werden kann.
+
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{cold_empty_raw}
+\caption{Rohdaten der Untergrundmessung. Mit einer Phase von $270 \unit{\degree}$ wurde der Imaginärteil der Suszeptibilität gemessen.}
+\label{fig:cold_empty_raw}
+\end{figure}
+
+Die Rohdaten sind in Abbildung \ref{fig:cold_empty_raw} dargestellt. Es fällt auf, dass der Untergrund zwar $\neq 0$ ist, jedoch im Vergleich zum vollen Messbereich ($10 \unit{V}$) nur geringe Spannungen auftreten.
+
+\subsubsection{Auswertung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{cold_empty_fit}
+\includegraphics[width=\halfwidth]{cold_empty_residual}
+\caption{Anpassung eines Polynoms 4. Grades an den Untergrund. Auf der rechten vertikalen Achse ist die unverstärkte Spannung aufgetragen. Obwohl die Residuen nicht statistisch streuen, ist diese Anpassung gelungen und besser als eine manuelle Abschätzung.}
+\label{fig:cold_empty_fit}
+\end{figure}
+
+Zur analytischen Beschreibung des Hintergrundes wird ein Polynom 4. Grades an den Untergrund angepasst. Dabei werden außerdem die ersten 30 Sekunden, also 90 Messungen verworfen, da dort die Bewegung des Stabes vom Stickstoff in das kalte Dewar-Gefäß starke Schwankungen verursacht. Außerdem wurden nur Daten unter der Temperatur von $120 \unit{K}$ angepasst, da ausschließlich dieser Bereich ($80 - 120 \unit{K}$) am Supraleiter vermessen wird. 
+
+Die Fehler auf die Messwerte werden aus einem folgenden Teil der Auswertung übernommen, dieser wurde vorher durchgeführt, wird aber aufgrund der Durchführungsreihenfolge später erwähnt und ist unabhängig vom Ergebnis dieses Teilversuches.
+
+Das hieraus gewonnene Polynom wird allerdings im nächsten Versuchsteil Verwendung finden.
+
 \subsection{Kalibrierungsmessungen am Supraleiter}
-\subsubsection{Berechnung der einzustellenden Empfindlichkeit}
+\subsubsection{Einleitung}
+In diesem Versuchsteil wird der Supraleiter vermessen. Unterhalb seiner Curietemperatur $T_C$ wird erwartet, dass der imaginäre Teil der Suszeptibilität, der Wirbelströme repräsentiert, verschwindet: $\chi'' = 0$. Es bleibt nur der Realteil, welcher aufgrund des idealen Diamagnetismus $\chi' = -1$ ist. Oberhalb der Sprungtemperatur lassen sich nur sehr begrenzte Aussagen über den Verlauf von $\chi$ machen. Eine davon ist, dass $\chi''$ einen Peak bei $T_C$ aufweist, da dort plötzlich Wirbelströme auftreten, während Teile des Supraleiters normalleitend werden. $\chi'$ hingegen springt zuerst gegen $0$ und steigt dann, wie für einen Paramagneten üblich, nahezu linear an.
+
+\subsubsection{Aufbau und Durchführung}
+Diesmal wird eine Supraleiter-Probe in den Versuchsaufbau eingebaut. Wieder wird der Probenstab in flüssigem Stickstoff abgekühlt. Während der Abkühlung wird eine Langzeitmessung durchgeführt, welche die Fehlerabschätzung auf Temperatur und Spannung möglich macht.
+
+Im abgekühlten Zustand wird nun eine Phasenanpassung versucht. Dabei wird ausgenutzt, dass die Spannung des Imaginärteils von $\chi$ verschwinden sollte. Dadurch ergibt sich eine Phase von $68 \unit{\degree}$. Auf Anweisung des Betreuers wird jedoch eine Phase von $86 \unit{\degree}$ eingestellt und im Folgenden verwendet, obwohl dies nicht zu einer Spannung von $0 \unit{V}$ führt.
+
+In zwei Schritten werden dann $\chi''$ und $\chi'$ gemessen. Für jede Komponente wird eine Messung im kalten Dewar-Gefäß von 80 bis 120 $\unit{K}$ durchgeführt. Die Phase des Referenzsignales wird dabei so angepasst, dass die entsprechende Komponente gemessen wird.
+
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{noise_raw}
+\caption{Rohdaten der Schwankungsmessung während des Abkühlens. Auf der horizontalen Achse ist die Messzeit aufgetragen. Die rote, obere Linie entspricht der Spannung (rechts Skala), die untere Linie zeigt die Temperatur (linke Skala).}
+\label{fig:noise_raw}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{cold_supra_imag}
+\includegraphics[width=\fullwidth]{cold_supra_real}
+\caption{Rohdaten der Messungen während des langsamen Aufwärmens. Oben: Messung des Imaginärteiles. Unten: Messung des Realteiles}
+\label{fig:cold_supra_raw}
+\end{figure}
+
+Die Rohdaten befinden sich in den Abbildungen \ref{fig:noise_raw} und \ref{fig:cold_supra_raw}. Die Rauschmessung zeigt den erwarteten Verlauf, sobald eine Grundtemperatur erreicht ist, ändert sich diese ab ca. $t = 1000 \unit{s}$ nicht mehr.
+
+Auf den Messungen in \ref{fig:cold_supra_raw} zeigt sich ebenfalls die Erwartung. Die zu $\chi''$ gehörende Spannung ist unterhalb einer Sprungtemperatur sehr niedrig, während des Sprunges zeigt sich ein Peak. Außerdem ist die Form des Untergrundes wiederzuerkennen, welcher in der Auswertung abgezogen werden wird. Auch die Spannung von $\chi'$ zeigt die erwartete Form: Sie ist konstant negativ unter der Sprungtemperatur, springt dann auf $0 \unit{V}$ und wächst annähernd linear.
+
+\subsubsection{Auswertung}
+\paragraph{Rauschmessung}
+Zur Auswertung der Rauschmessung werden ausschließlich Daten nach einer Abkühlzeit von $t = 1000 \unit{s}$ genutzt. Da aufgrund einer leichten Erwärmung des Aufbaues unbekannter Ursache die Temperatur linear mit der Zeit steigt, wird zunächst eine lineare Regression durchgeführt, aus der Differenz dieser mit den Daten wird die Stichprobenabweichung der Temperaturmessung und Spannungsmessung berechnet.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{temperature_noise}
+\includegraphics[width=\halfwidth]{voltage_noise}
+\caption{Rauschmessung. Auf der linken Seite: Rauschen auf die Temperatur. Nach Anpassung der Geraden und Abzug dieser ergibt sich eine Standardabweichung von $\sigma_T = 0.034 \unit{K}$. Mit der selben Vorgehensweise kann auf der rechten Seite eine Spannungsabweichung von $\sigma_U = 3.5 \e{-5} \unit{V}$ gefunden werden.}
+\label{fig:noise_fit}
+\end{figure} 
+
+Die Anpassungen sind in Abbildung \ref{fig:noise_fit} gezeigt. Daraus ergeben sich folgende Werte:
+\[
+	\sigma_T = 0.0034 \unit{K}, \sigma_U = 3.5 \e{-5} \unit{V}
+\]
+
+Diese werden im Folgenden und auch im vorherigen Versuchsteil als Fehler auf Spannung und Temperatur angenommen. Dabei wird ignoriert, dass die Fehler von der Temperatur und Spannung abhängig sein könnten.
+
+\paragraph{Messung von $\chi''$}
+Von den Ergebnissen der Messung von $\chi''$ wird zunächst das Polynom 4. Grades aus dem Vorversuch abgezogen. Damit wird der Untergrund entfernt. 
+Außerdem wird der Peakschwerpunkt des Sprunges und damit die Sprungtemperatur $T_C$ berechnet. Der Fehler wird manuell geschätzt.
+\[
+	T_C = \frac{\sum_i T_i \cdot U_i}{\sum_i U_i} = (94.11 \pm 0.20) \unit{K}
+\]
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{cold_supra_imag_corrected}
+\caption{Korrigierte Messung von $\chi''$. Der Hintergrund wurde abgezogen. Mithilfe der rot markierten Datenpunkte wird der Peakschwerpunkt berechnet. Dieser liegt bei $(94.11 \pm 0.20) \unit{K}$.}
+\label{fig:cold_supra_imag_corrected}
+\end{figure}
+
+Beides ist in Abbildung \ref{fig:cold_supra_imag_corrected} dargestellt.
+
+\paragraph{Messung von $\chi'$}
+Zur Auswertung der Messung von $\chi'$ ist es sinnvoll, zuerst die Spannungsskala in eine Skala von $\chi'$ umzusetzen. Dafür wird der kältesten Messung bei ca. $80 \unit{K}$ der Wert $\chi = -1$ des idealen Diamagneten zugewiesen. Um diesen Spannungswert und dessen Fehler zu ermitteln, wird über die ersten 10 Spannungswerte gemittelt und ihre Standardabweichung bestimmt:
+\[
+	U_\textrm{int} = (-1.2418 \pm 0.0031) \unit{V}
+\]
+Mit der Annahme, dass $0 \unit{V}$ auch einer Suszeptibilität von $\chi = 0$ entspricht, können die Daten nun neu skaliert werden (siehe Abbildung \ref{fig:cold_supra_real_chi}). Es ergibt sich das erwartete Bild.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{cold_supra_real_chi}
+\caption{Reskalierte Daten mit $\chi$ auf der vertikalen Achse.}
+\label{fig:cold_supra_real_chi}
+\end{figure}
+
+Außerdem kann mit diesem Spannungswert die Konstante $C$ empirisch ermittelt werden. Berücksichtigt man dabei einen Fehler auf das Probenvolumen von $0.7 \unit{mm^3}$, welcher aus der Auflösung des Messschiebers folgt, so ergibt sich der Wert
+\[
+	C = - \frac{U_\textrm{int}}{v V_\textrm{Probe} (1-n_M)} = (9300 \pm 400)  \unit{\frac{N}{A \cdot s \cdot m^2}} 
+\]
+
+Der vorhergesagte Wert beträgt $11082 \unit{\frac{N}{A \cdot s \cdot m^2}}$ und ist damit über $4 \sigma$ vom empirischen Wert entfernt.
+
+Um die Sprungtemperatur aus der $\chi'$-Messung zu bestimmen, wird eine lineare Anpassung mit den Daten zwischen 93 und 94.5 $\unit{K}$ durchgeführt (Abbildung \ref{fig:cold_supra_real_chi_fit}). Der Schnitt mit dieser Geraden und dem Wert $\chi = 0.5$ wird als Sprungtemperatur definiert:
+\[
+	T_C = (93.7 \pm 1.6) \unit{K}
+\]
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{cold_supra_real_chi_fit}
+\includegraphics[width=\halfwidth]{cold_supra_real_chi_residual}
+\caption{Lineare Anpassung im Bereich von 93 bis 94.5 $\unit{K}$. Durch den Schnitt mit dem Wert $\chi = 0.5$ ergibt sich die Sprungtemperatur von $(93.7 \pm 1.6) \unit{K}$.}
+\label{fig:cold_supra_real_chi_fit}
+\end{figure}
+
 
 \subsection{Messung der \gdagzn-Probe}
+\subsubsection{Aufbau und Durchführung}
+In diesem Versuchsteil wird eine Probe aus \gdagzn betrachtet, wobei der Anteil $x$ unbekannt ist. Es wird ausschließlich der Realteil $\chi'$ betrachtet. Dabei wird erwartet, dass die Probe unterhalb der Curie-Temperatur ferromagnetische Eigenschaften, also $\chi \ll 1$ aufweist, und jenseits der Temperatur paramagnetisch wird, also $\chi$ auf einen geringen Wert fällt.
 
+Vermessen wird der Temperaturbereich von 80 bis 200 $\unit{K}$, mit einer analogen Vorgehensweise wie im vorherigen Versuchsteil. Erneut werden Temperatur und Spannung vom Computer regelmäßig aufgezeichnet.
+
+\subsubsection{Rohdaten}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{cold_sample_real}
+\caption{Rohdaten der Vermessung der unbekannten Probe. Es zeigt sich wie erwartet ferromagnetisches Verhalten unter einer Sprungtemperatur von ca. $150 \unit{K}$.}
+\label{fig:cold_sample_raw}
+\end{figure}
+
+Die Rohdaten sind in Abbildung \ref{fig:cold_sample_raw} dargestellt. Wie erwartet zeigt sich eine hohe Induktionsspannung bei niedrigen Temperaturen und ein Sprung auf paramagnetisches Verhalten bei ca. $150 \unit{K}$. Außerdem ist anzumerken, dass mit $8.2 \unit{V}$ der Messbereich von $10 \unit{V}$ bestmöglich ausgenutzt wurde.
+
+\subsubsection{Auswertung}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\fullwidth]{cold_supra_real_chi}
+\caption{Neuskalierte Messung der unbekannten \gdagzn-Probe. Auf der vertikalen Achse ist mithilfe der Kalibrierung des vorhergehenden Versuchsteils die Suszeptibilität $\chi$ aufgetragen. Sie beträgt $\chi \approx 6.8$ unterhalb der Sprungtemperatur und nähert sich oberhalb einem Wert $\chi < 0.1$ an.}
+\label{fig:cold_sample_chi}
+\end{figure}
+
+Im ersten Schritt der Auswertung wird die Kalibrierung des vorhergehenden Versuchsteils angewendet. So kann auf der vertikalen Achse erneut die Suszeptibilität $\chi$ aufgetragen werden. Dies ist in Abbildung \ref{fig:cold_sample_chi} geschehen. Es zeigt sich, dass die Suszeptibilität unterhalb der Curie-Temperatur bei $\chi \approx 6.8$ liegt, die Probe also ferromagnetisch ist. 
+
+Um die Curie-Temperatur genauer zu bestimmen, werden die Daten erneut transformiert. Auf der vertikalen Achse wird $\chi^{-1}$ aufgetragen und eine Geradenanpassung des Bereiches kurz hinter der Sprungtemperatur durchgeführt (Abbildung \ref{fig:cold_sample_fit}).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{cold_sample_real_chiinv_fit}
+\includegraphics[width=\halfwidth]{cold_sample_real_chiinv_residual}
+\caption{Geradenanpassung auf die Auftragung von $\chi^{-1}$ gegen $T$. Mithilfe der Daten unter $140 \unit{K}$ und der Anpassung kann ein Schnittpunkt festgestellt werden, der die Curie-Temperatur darstellt. Diese wird so bei $(140.00 \pm 0.10) \unit{K}$ gemessen.}
+\label{fig:cold_sample_fit}
+\end{figure}
+
+Ein Grundniveau $\chi^{-1}_0$ wird bestimmt, indem über alle Werte unterhalb von $140 \unit{K}$ gemittelt wird. Der Schnittpunkt der angepassten Gerade mit diesem Grundniveau stellt die Curie-Temperatur dar. Auf diese Weise ergibt sich 
+\[
+	T_C = (140.00 \pm 0.10) \unit{K}
+\]
+
+Ein Vergleich mit einem Diagramm aus \cite[S.32]{anleitung} zeigt, dass dies einem Zinnanteil von $x \approx 0.7$ entspricht.
+
+Um den Koeffizienten $\gamma$ des Materials zu bestimmen, werden die Daten diesmal als $\ln(\chi)$ gegen $\ln(T-T_C)$ aufgetragen. Die Logarithmierung hat den Vorteil, dass der Koeffizient durch die Steigung abgelesen werden kann. Daher wird eine Geradenanpassung im mittleren Bereich der Flanke durchgeführt (Abbildung \ref{fig:cold_curie_fit}). Die Fehler auf die Temperatur und Spannung werden auf $\chi$ und die Fitparameter fortgepflanzt. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\halfwidth]{cold_curie_fit}
+\includegraphics[width=\halfwidth]{cold_curie_residual}
+\caption{Geradenanpassung auf die Auftragung von $\ln(\chi)$ gegen $\ln(T-T_C)$. Die Steigung der Gerade entspricht $-\gamma = -(0.8770 \pm 0.0014)$.}
+\label{fig:cold_curie_fit}
+\end{figure}
+
+Damit ergibt sich $\gamma = (0.8770 \pm 0.0014)$. Erwartet wurde laut \cite{anleitung} ein Wert von $\gamma \approx \frac{4}{3}$. Diese Erwartung liegt weit vom gemessenen Wert entfernt.
+
+\subsection{Ergebnisse}
+
+Im Hauptversuch wurde das in den Vorversuchen gewonnene Wissen angewandt um die komplexe magnetische Suszeptibilität eines Supraleiters und einer Probe zu messen. 
+
+Aufgrund richtig gewählter Messparameter ergaben sich die erwarteten Kurvenverläufe für $\chi'$ und $\chi''$. In der Auswertung ergaben sich zwei Werte für die Sprungtemperatur, die innerhalb ihrer Fehler miteinander verträglich sind:
+\[
+	T_C(\chi') = (93.7 \pm 1.6) \unit{K}, T_C(\chi'') = (94.11 \pm 0.20) \unit{K}
+\]
+Mit dieser Temperatur handelt es sich bei dem Supraleiter um einen Hochtemperatursupraleiter. Ein Vergleich mit dem Wikipediaartikel \cite{wiki_hochtemperatursupraleiter} zeigt, dass das Material Yttrium-Barium-Kupferoxid eine Sprungtemperatur von $92 \unit{K}$ aufweist, daher ist dieses Material ein Kandidat für den hier verwendeten Supraleiter. 
+
+Mithilfe der Kalibrierung am Supraleiter konnte eine \gdagzn-Probe ebenfalls erfolgreich vermessen werden. Hierbei ergab sich eine Sprungtemperatur von 
+\[
+	T_C = (140.00 \pm 0.10) \unit{K}
+\]
+Dies entspricht einem Zinngehalt von $x = 0.7$.
+Einzig der Parameter $\gamma$ des Curie-Modells konnte nur unbefriedigend gemessen werden. Hier ergab sich 
+\[
+	\gamma = (0.8870 \pm 0.0014)
+\]
+Dies ist weit vom Literaturwert $\gamma \approx 4/3$ entfernt.
 
 \newpage
 \begin{thebibliography}{xxxx}
 \bibitem{anleitung} Praktikumsanleitung: Versuch PH: Magnetische Phasenübergänge. URL: \url{http://institut2a.physik.rwth-aachen.de/de/teaching/praktikum/Anleitungen/magPhasen_Anleitung.pdf} [Stand: 12.04.2015]
+\bibitem{wiki_hochtemperatursupraleiter} Wikipedia: Hochtemperatursupraleiter. URL: \url{http://de.wikipedia.org/wiki/Hochtemperatursupraleiter} [Stand: 14.04.2015]
 \end{thebibliography}
 
 
